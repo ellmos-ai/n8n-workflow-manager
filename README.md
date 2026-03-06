@@ -1,4 +1,10 @@
+<p align="center">
+  <img src="ellmos-logo.jpg" alt="n8n Workflow Manager logo" width="400">
+</p>
+
 # n8n Workflow Manager
+
+*Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
