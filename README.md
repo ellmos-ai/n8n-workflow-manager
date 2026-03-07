@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="ellmos-logo.jpg" alt="n8n Workflow Manager logo" width="400">
+  <img src="n8n_workflow_manager_logo.jpg" alt="n8n Workflow Manager banner" width="700">
 </p>
 
 # n8n Workflow Manager
