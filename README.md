@@ -1,4 +1,4 @@
-<img src="assets/n8n_workflow_manager_logo.jpg" alt="n8n Workflow Manager banner" width="350">
+<img src="assets/n8n_workflow_manager_logo.png" alt="n8n Workflow Manager banner" width="350">
 
 # n8n Workflow Manager
 
