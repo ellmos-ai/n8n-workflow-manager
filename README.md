@@ -1,6 +1,8 @@
-<img src="n8n_workflow_manager_logo.jpg" alt="n8n Workflow Manager banner" width="350">
+<img src="assets/n8n_workflow_manager_logo.jpg" alt="n8n Workflow Manager banner" width="350">
 
 # n8n Workflow Manager
+
+**🇩🇪 [Deutsche Version](README_de.md)**
 
 *Part of the [ellmos-ai](https://github.com/ellmos-ai) family.*
 
@@ -14,10 +16,7 @@
 
 ## Screenshots
 
-<!-- TODO: Add screenshots -->
-| Dashboard | Workflow Viewer | Editor |
-|-----------|----------------|--------|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Viewer](docs/screenshots/viewer.png) | ![Editor](docs/screenshots/editor.png) |
+*Screenshots coming soon. Start the server with `n8n-manager serve` and open http://localhost:8100 to see the dashboard, workflow viewer, and editor.*
 
 ## Features
 
