@@ -51,6 +51,15 @@ Issues = "https://github.com/lukisch/n8n-workflow-manager/issues"
 [tool.setuptools.packages.find]
 include = ["n8nManager*"]
 
+[tool.setuptools.package-data]
+n8nManager = [
+    "*.ico",
+    "web/static/*",
+    "web/static/css/*",
+    "web/static/js/*",
+    "web/templates/*",
+]
+
 [tool.ruff]
 target-version = "py310"
 line-length = 100

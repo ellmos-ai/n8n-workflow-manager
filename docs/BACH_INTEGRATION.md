@@ -10,7 +10,7 @@ Die Integration ist optional und wird ueber `config.json` aktiviert.
 ```bash
 # BACH aktivieren
 python -m n8nManager config --set bach.enabled true
-python -m n8nManager config --set bach.db_path "C:/Users/User/OneDrive/KI&AI/BACH_v2_vanilla/system/data/bach.db"
+python -m n8nManager config --set bach.db_path "C:/path/to/BACH_v2_vanilla/system/data/bach.db"
 ```
 
 ## Workflow registrieren
