@@ -10,13 +10,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 
-**The only open-source n8n workflow manager with a visual graph viewer, REST API, and multi-server sync -- all in one Python package.**
+**A local-first n8n workflow manager with a visual graph viewer, REST API, CLI, and multi-server sync in one Python package.**
 
-> Manage, visualize, and sync n8n workflows across multiple servers from a single dashboard.
+> Manage, visualize, document, and move n8n workflows across multiple servers from a single dashboard.
 
 ## Screenshots
 
-*Screenshots coming soon. Start the server with `n8n-manager serve` and open http://localhost:8100 to see the dashboard, workflow viewer, and editor.*
+![n8n Workflow Manager dashboard](README/screenshots/dashboard.png)
+
+![n8n Workflow graph viewer](README/screenshots/workflow-viewer.png)
+
+## Start Here
+
+| You want to... | Use this |
+|---|---|
+| inspect local n8n workflow exports | Dashboard and visual workflow viewer |
+| document workflows for handoff or review | Markdown export and API docs |
+| sync workflows between multiple n8n servers | Server registry, pull, and push commands |
+| let agents create workflow drafts | `/api/workflows/build` endpoint |
+| install n8n on a remote Docker host | `n8n-manager setup` |
 
 ## Features
 
@@ -44,7 +56,7 @@ pip install n8n-workflow-manager
 Or from source:
 
 ```bash
-git clone https://github.com/lukisch/n8n-workflow-manager.git
+git clone https://github.com/ellmos-ai/n8n-workflow-manager.git
 cd n8n-workflow-manager
 pip install -e .
 ```
@@ -188,7 +200,11 @@ An MCP (Model Context Protocol) server is available as a separate package for AI
 npm install -g n8n-manager-mcp
 ```
 
-See [n8n-manager-mcp](https://github.com/lukisch/n8n-manager-mcp) for details.
+See [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp) for details.
+
+## Machine-Readable Context
+
+For LLM agents, crawlers, and directory listings, see [llms.txt](llms.txt). It summarizes the canonical repository, package purpose, useful keywords, related ellmos-ai projects, and verification commands.
 
 ## Contributing
 

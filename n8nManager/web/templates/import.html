@@ -13,7 +13,7 @@
         <pre id="result-text"></pre>
     </div>
     <div class="import-paste">
-        <h3>Oder JSON einfuegen</h3>
+        <h3>Oder JSON einfügen</h3>
         <textarea id="json-paste" rows="10" placeholder='{"nodes": [...], "connections": {...}}'></textarea>
         <button onclick="importFromPaste()" class="btn btn-primary">Importieren</button>
     </div>
@@ -41,7 +41,7 @@ async function uploadFile(file) {
 }
 async function importFromPaste() {
     const json = document.getElementById('json-paste').value;
-    try { JSON.parse(json); } catch(e) { alert('Ungueltiges JSON'); return; }
+    try { JSON.parse(json); } catch(e) { alert('Ungültiges JSON'); return; }
     const blob = new Blob([json], {type: 'application/json'});
     const file = new File([blob], 'paste.json', {type: 'application/json'});
     await uploadFile(file);

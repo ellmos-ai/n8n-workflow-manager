@@ -39,11 +39,11 @@
                     <td>{{ wf.node_count }}</td>
                     <td><span class="badge trigger">{{ wf.trigger_type or '-' }}</span></td>
                     <td><span class="badge source">{{ wf.source }}</span></td>
-                    <td>{{ '✓' if wf.is_active else '-' }}</td>
+                    <td>{{ 'Ja' if wf.is_active else '-' }}</td>
                     <td>
                         <a href="/viewer/{{ wf.id }}" class="btn btn-sm">Ansehen</a>
                         <a href="/editor/{{ wf.id }}" class="btn btn-sm btn-edit">Bearbeiten</a>
-                        <button onclick="deleteWorkflow({{ wf.id }})" class="btn btn-sm btn-danger">Loeschen</button>
+                        <button onclick="deleteWorkflow({{ wf.id }})" class="btn btn-sm btn-danger">Löschen</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -58,7 +58,7 @@
 {% block scripts %}
 <script>
 async function deleteWorkflow(id) {
-    if (!confirm('Workflow wirklich loeschen?')) return;
+    if (!confirm('Workflow wirklich löschen?')) return;
     const resp = await apiClient.delete('/api/workflows/' + id);
     if (resp.ok) location.reload();
     else alert('Fehler: ' + (resp.detail || 'Unbekannt'));

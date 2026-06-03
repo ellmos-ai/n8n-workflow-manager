@@ -10,13 +10,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 
-**Der einzige Open-Source n8n Workflow Manager mit visuellem Graph-Viewer, REST API und Multi-Server-Sync -- alles in einem Python-Paket.**
+**Ein lokaler n8n Workflow Manager mit visuellem Graph-Viewer, REST API, CLI und Multi-Server-Sync in einem Python-Paket.**
 
-> Verwalte, visualisiere und synchronisiere n8n Workflows über mehrere Server von einem einzigen Dashboard aus.
+> Verwalte, visualisiere, dokumentiere und synchronisiere n8n Workflows über mehrere Server von einem einzigen Dashboard aus.
 
 ## Screenshots
 
-*Screenshots folgen in Kürze. Starte den Server mit `n8n-manager serve` und öffne http://localhost:8100 um das Dashboard, den Workflow-Viewer und den Editor zu sehen.*
+![n8n Workflow Manager Dashboard](README/screenshots/dashboard.png)
+
+![n8n Workflow Graph-Viewer](README/screenshots/workflow-viewer.png)
+
+## Einstieg
+
+| Ziel | Einstieg |
+|---|---|
+| lokale n8n Workflow-Exporte prüfen | Dashboard und visueller Workflow-Viewer |
+| Workflows für Übergabe oder Review dokumentieren | Markdown-Export und API-Dokumentation |
+| Workflows zwischen mehreren n8n Servern synchronisieren | Server-Verwaltung, Pull- und Push-Befehle |
+| Agenten Workflow-Entwürfe erzeugen lassen | `/api/workflows/build` Endpoint |
+| n8n auf einem entfernten Docker-Host installieren | `n8n-manager setup` |
 
 ## Funktionen
 
@@ -44,7 +56,7 @@ pip install n8n-workflow-manager
 Oder aus dem Quellcode:
 
 ```bash
-git clone https://github.com/lukisch/n8n-workflow-manager.git
+git clone https://github.com/ellmos-ai/n8n-workflow-manager.git
 cd n8n-workflow-manager
 pip install -e .
 ```
@@ -188,7 +200,11 @@ Ein MCP (Model Context Protocol) Server ist als separates Paket für KI-gestütz
 npm install -g n8n-manager-mcp
 ```
 
-Siehe [n8n-manager-mcp](https://github.com/lukisch/n8n-manager-mcp) für Details.
+Siehe [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp) für Details.
+
+## Maschinenlesbarer Kontext
+
+Für LLM-Agenten, Crawler und Verzeichnisse gibt es [llms.txt](llms.txt). Die Datei fasst das kanonische Repository, den Paketnutzen, Suchbegriffe, verwandte ellmos-ai-Projekte und Verifikationsbefehle zusammen.
 
 ## Mitwirken
 

@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "n8n-workflow-manager"
 version = "0.1.0"
-description = "Visual n8n workflow manager with web UI, REST API, and multi-server sync"
+description = "Local-first n8n workflow manager with visual graph viewer, REST API, CLI, and multi-server sync"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
     {name = "Lukas Geiger", email = "lukisch@users.noreply.github.com"}
 ]
-keywords = ["n8n", "workflow", "automation", "manager", "visualization", "vis.js", "fastapi"]
+keywords = ["n8n", "workflow", "automation", "workflow-automation", "manager", "visualization", "vis.js", "fastapi", "local-first", "ai-agents"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -43,10 +43,10 @@ dev = ["pytest", "pytest-asyncio", "ruff"]
 n8n-manager = "n8nManager.n8n_manager:main"
 
 [project.urls]
-Homepage = "https://github.com/lukisch/n8n-workflow-manager"
-Documentation = "https://github.com/lukisch/n8n-workflow-manager#readme"
-Repository = "https://github.com/lukisch/n8n-workflow-manager"
-Issues = "https://github.com/lukisch/n8n-workflow-manager/issues"
+Homepage = "https://github.com/ellmos-ai/n8n-workflow-manager"
+Documentation = "https://github.com/ellmos-ai/n8n-workflow-manager#readme"
+Repository = "https://github.com/ellmos-ai/n8n-workflow-manager"
+Issues = "https://github.com/ellmos-ai/n8n-workflow-manager/issues"
 
 [tool.setuptools.packages.find]
 include = ["n8nManager*"]

@@ -4,13 +4,13 @@
 <div class="servers-page">
     <h1>Server-Verwaltung</h1>
     <div class="add-server-form">
-        <h3>Server hinzufuegen</h3>
+        <h3>Server hinzufügen</h3>
         <form onsubmit="addServer(event)">
             <input type="text" id="srv-name" placeholder="Name" required>
             <input type="url" id="srv-url" placeholder="http://host:5678" required>
             <input type="text" id="srv-key" placeholder="API-Key">
             <label><input type="checkbox" id="srv-default"> Default</label>
-            <button type="submit" class="btn btn-primary">Hinzufuegen</button>
+            <button type="submit" class="btn btn-primary">Hinzufügen</button>
         </form>
     </div>
     <table class="data-table">
@@ -24,7 +24,7 @@
                 <td>{{ srv.name }}</td>
                 <td>{{ srv.url }}</td>
                 <td><span class="badge {{ srv.status }}">{{ srv.status }}</span></td>
-                <td>{{ '★' if srv.is_default else '-' }}</td>
+                <td>{{ 'Ja' if srv.is_default else '-' }}</td>
                 <td>
                     <button onclick="pingServer({{ srv.id }})" class="btn btn-sm">Ping</button>
                     <button onclick="pullFromServer({{ srv.id }})" class="btn btn-sm">Pull</button>
