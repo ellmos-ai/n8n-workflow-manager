@@ -5,7 +5,7 @@ Thank you for your interest in contributing!
 ## Development Setup
 
 ```bash
-git clone https://github.com/lukisch/n8n-workflow-manager.git
+git clone https://github.com/ellmos-ai/n8n-workflow-manager.git
 cd n8n-workflow-manager
 pip install -e ".[dev]"
 ```
@@ -32,4 +32,4 @@ python -m n8nManager serve
 
 ## Reporting Issues
 
-Use [GitHub Issues](https://github.com/lukisch/n8n-workflow-manager/issues) to report bugs or request features.
+Use [GitHub Issues](https://github.com/ellmos-ai/n8n-workflow-manager/issues) to report bugs or request features.

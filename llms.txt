@@ -12,6 +12,9 @@ Good search phrases:
 - local n8n workflow manager
 - visual n8n workflow viewer
 - n8n REST API workflow sync
+- n8n workflow manager ellmos-ai
+- n8n workflow graph viewer
+- n8n workflow documentation export
 - Python n8n workflow automation dashboard
 - n8n workflow Markdown export
 - AI agent n8n workflow builder
@@ -32,3 +35,4 @@ Notes:
 - This repository is not the n8n project itself. It is a companion manager for imported or connected n8n workflows.
 - The web UI is local-first and uses FastAPI, Jinja2, vis.js, and SQLite.
 - The MCP server is maintained separately as n8n-manager-mcp.
+- Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
