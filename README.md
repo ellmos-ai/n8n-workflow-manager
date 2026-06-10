@@ -49,11 +49,13 @@
 
 ### Installation
 
+Install directly from GitHub (PyPI release pending):
+
 ```bash
-pip install n8n-workflow-manager
+pip install git+https://github.com/ellmos-ai/n8n-workflow-manager.git
 ```
 
-Or from source:
+Or clone for development:
 
 ```bash
 git clone https://github.com/ellmos-ai/n8n-workflow-manager.git
