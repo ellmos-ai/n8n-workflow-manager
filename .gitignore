@@ -1,9 +1,12 @@
 # Internal planning files
 PLAN.txt
 PLAN_*.txt
+TODO.md
+DONE.md
 
 __pycache__/
 *.py[cod]
+*.pyc
 *$py.class
 *.so
 dist/
@@ -12,6 +15,10 @@ build/
 *.egg
 .eggs/
 data/*.db
+n8nManager/data/*.db
+*.db
+*.db-wal
+*.db-shm
 exports/
 .env
 .venv/
