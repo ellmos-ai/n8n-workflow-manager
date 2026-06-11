@@ -37,4 +37,4 @@ Notes:
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
 
-## Last-checked: 2026-06-11
+## Last-checked: 2026-06-12

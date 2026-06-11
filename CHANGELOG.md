@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## 2026-06-12
+
+- Added a GitHub Actions smoke-test workflow for `tests/test_smoke.py` and `compileall`.
+- Synced German installation instructions with the pending PyPI release status.
+- Updated security advisory links to the canonical `ellmos-ai/n8n-workflow-manager` repository.
+- Refreshed community workflow action versions.
+
 ## 2026-06-07
 
 - Corrected contributor links to the canonical `ellmos-ai/n8n-workflow-manager` repository.
