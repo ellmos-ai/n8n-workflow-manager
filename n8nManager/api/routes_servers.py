@@ -9,6 +9,21 @@ def _get_db():
     from n8nManager.api.server import get_db
     return get_db()
 
+def redact_server(srv: dict) -> dict:
+    """Return a copy of the server dict with the API key masked.
+
+    API keys must never leave the backend in clear text. Clients that
+    need to change a key send a new value via POST/PUT; omitting the
+    field keeps the stored key unchanged.
+    """
+    out = dict(srv)
+    key = out.get("api_key") or ""
+    if len(key) > 4:
+        out["api_key"] = f"***{key[-4:]}"
+    else:
+        out["api_key"] = "***" if key else ""
+    return out
+
 class ServerCreate(BaseModel):
     name: str
     url: str
@@ -26,7 +41,7 @@ class ServerUpdate(BaseModel):
 @router.get("/servers")
 async def list_servers():
     db = _get_db()
-    servers = db.list_servers()
+    servers = [redact_server(s) for s in db.list_servers()]
     return {"data": servers, "count": len(servers)}
 
 @router.get("/servers/{server_id}")
@@ -35,7 +50,7 @@ async def get_server(server_id: int):
     srv = db.get_server(server_id)
     if not srv:
         raise HTTPException(status_code=404, detail="Server nicht gefunden")
-    return srv
+    return redact_server(srv)
 
 @router.post("/servers")
 async def create_server(body: ServerCreate):

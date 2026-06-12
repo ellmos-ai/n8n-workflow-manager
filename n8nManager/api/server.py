@@ -50,9 +50,10 @@ templates = Jinja2Templates(directory=str(WEB_DIR / "templates"))
 
 @app.get("/")
 async def web_dashboard(request: Request):
+    from n8nManager.api.routes_servers import redact_server
     db = get_db()
     workflows = db.list_workflows()
-    servers = db.list_servers()
+    servers = [redact_server(s) for s in db.list_servers()]
     return templates.TemplateResponse("dashboard.html", {
         "request": request,
         "workflows": workflows,
@@ -112,8 +113,9 @@ async def web_creator(request: Request):
 
 @app.get("/servers")
 async def web_servers(request: Request):
+    from n8nManager.api.routes_servers import redact_server
     db = get_db()
-    servers = db.list_servers()
+    servers = [redact_server(s) for s in db.list_servers()]
     return templates.TemplateResponse("servers.html", {
         "request": request,
         "servers": servers,

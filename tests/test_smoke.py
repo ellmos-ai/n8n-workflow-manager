@@ -466,6 +466,43 @@ class TestApiRoutes(unittest.TestCase):
         resp = self.client.post("/api/templates", json=payload)
         self.assertEqual(resp.status_code, 409)
 
+    def test_servers_api_redacts_key(self):
+        secret = "supersecret-api-key-9876"
+        resp = self.client.post("/api/servers", json={
+            "name": "redact-test",
+            "url": "https://n8n.example.com:5678",
+            "api_key": secret,
+        })
+        self.assertEqual(resp.status_code, 200)
+        srv_id = resp.json()["id"]
+
+        resp = self.client.get("/api/servers")
+        self.assertEqual(resp.status_code, 200)
+        self.assertNotIn(secret, resp.text)
+        entry = [s for s in resp.json()["data"] if s["id"] == srv_id][0]
+        self.assertEqual(entry["api_key"], "***9876")
+
+        resp = self.client.get(f"/api/servers/{srv_id}")
+        self.assertEqual(resp.status_code, 200)
+        self.assertNotIn(secret, resp.text)
+        self.assertEqual(resp.json()["api_key"], "***9876")
+
+        # the stored key must remain intact in the database
+        self.assertEqual(self.db.get_server(srv_id)["api_key"], secret)
+
+    def test_servers_page_does_not_leak_key(self):
+        secret = "another-secret-key-4321"
+        self.db.add_server("page-redact", "https://n8n.example.org:5678", secret)
+        resp = self.client.get("/servers")
+        self.assertEqual(resp.status_code, 200)
+        self.assertNotIn(secret, resp.text)
+
+    def test_redact_server_short_and_empty_keys(self):
+        from n8nManager.api.routes_servers import redact_server
+        self.assertEqual(redact_server({"api_key": "abc"})["api_key"], "***")
+        self.assertEqual(redact_server({"api_key": ""})["api_key"], "")
+        self.assertEqual(redact_server({})["api_key"], "")
+
     def test_creator_page_renders(self):
         resp = self.client.get("/creator")
         self.assertEqual(resp.status_code, 200)
