@@ -6,10 +6,14 @@ from typing import Optional
 class N8nClient:
     """Synchroner httpx-Client fuer n8n REST API v1."""
 
-    def __init__(self, base_url: str, api_key: str, timeout: float = 15.0):
+    def __init__(self, base_url: str, api_key: str, timeout: float = 15.0,
+                 verify_tls: bool = True):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.timeout = timeout
+        # TLS certificate verification is on by default; opt out per server
+        # (verify_tls=False) only for local self-signed setups.
+        self.verify_tls = verify_tls
         self._headers = {
             "X-N8N-API-KEY": api_key,
             "Content-Type": "application/json",
@@ -22,7 +26,7 @@ class N8nClient:
     def _request(self, method: str, path: str, **kwargs) -> dict:
         """Fuehrt HTTP-Request aus. Gibt dict zurueck oder raises."""
         try:
-            with httpx.Client(timeout=self.timeout, verify=False) as client:
+            with httpx.Client(timeout=self.timeout, verify=self.verify_tls) as client:
                 resp = client.request(method, self._url(path), headers=self._headers, **kwargs)
                 resp.raise_for_status()
                 return resp.json() if resp.content else {}

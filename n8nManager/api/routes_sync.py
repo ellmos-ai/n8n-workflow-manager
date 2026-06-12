@@ -27,7 +27,8 @@ async def push_to_server(workflow_id: int, server_id: int = 0):
     if not srv.get("api_key"):
         raise HTTPException(status_code=400, detail="Kein API-Key fuer diesen Server")
     from n8nManager.core.n8n_client import N8nClient
-    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"])
+    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
+                       verify_tls=bool(srv.get("verify_tls", 1)))
     wf_data = json.loads(wf["workflow_json"])
     if wf.get("n8n_id"):
         result = client.update_workflow(wf["n8n_id"], wf_data)
@@ -51,7 +52,8 @@ async def pull_from_server(server_id: int):
         raise HTTPException(status_code=404, detail="Server nicht gefunden")
     from n8nManager.core.n8n_client import N8nClient
     from n8nManager.core.workflow_parser import compute_content_hash
-    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"])
+    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
+                       verify_tls=bool(srv.get("verify_tls", 1)))
     result = client.list_workflows()
     if result.get("error"):
         raise HTTPException(status_code=502, detail=result.get("detail", "Pull fehlgeschlagen"))

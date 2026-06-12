@@ -38,6 +38,7 @@ class Database:
                     url TEXT NOT NULL,
                     api_key TEXT DEFAULT '',
                     is_default INTEGER DEFAULT 0,
+                    verify_tls INTEGER DEFAULT 1,
                     n8n_version TEXT DEFAULT '',
                     last_ping TEXT,
                     status TEXT DEFAULT 'unknown',
@@ -121,6 +122,10 @@ class Database:
                 "INSERT OR IGNORE INTO node_catalog (node_type, display_name, category, color) VALUES (?, ?, ?, ?)",
                 default_nodes
             )
+            # Migration: add verify_tls to databases created before the column existed
+            server_cols = [r["name"] for r in conn.execute("PRAGMA table_info(servers)").fetchall()]
+            if "verify_tls" not in server_cols:
+                conn.execute("ALTER TABLE servers ADD COLUMN verify_tls INTEGER DEFAULT 1")
             conn.commit()
 
     # ── Hilfsfunktionen ──────────────────────────────────────────────────────
@@ -244,16 +249,16 @@ class Database:
     # ── CRUD: Servers ────────────────────────────────────────────────────────
 
     def add_server(self, name: str, url: str, api_key: str = "",
-                   is_default: bool = False) -> int:
+                   is_default: bool = False, verify_tls: bool = True) -> int:
         """Fuegt Server ein. Gibt server_id zurueck."""
         now = _now()
         with self._connect() as conn:
             if is_default:
                 conn.execute("UPDATE servers SET is_default = 0")
             cur = conn.execute(
-                """INSERT INTO servers (name, url, api_key, is_default, created_at)
-                   VALUES (?, ?, ?, ?, ?)""",
-                (name, url, api_key, 1 if is_default else 0, now)
+                """INSERT INTO servers (name, url, api_key, is_default, verify_tls, created_at)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (name, url, api_key, 1 if is_default else 0, 1 if verify_tls else 0, now)
             )
             conn.commit()
             return cur.lastrowid

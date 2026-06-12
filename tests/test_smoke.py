@@ -123,6 +123,40 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(servers[0]["name"], "local")
         self.assertEqual(servers[0]["url"], "http://localhost:5678")
 
+    def test_server_verify_tls_default_on(self):
+        srv_id = self.db.add_server("tlsdefault", "https://host:5678", "key")
+        srv = self.db.get_server(srv_id)
+        self.assertEqual(srv["verify_tls"], 1)
+
+    def test_server_verify_tls_opt_out(self):
+        srv_id = self.db.add_server("tlsoff", "https://host:5678", "key", verify_tls=False)
+        srv = self.db.get_server(srv_id)
+        self.assertEqual(srv["verify_tls"], 0)
+
+    def test_verify_tls_migration_adds_column(self):
+        """Databases created before verify_tls existed get the column on init."""
+        import sqlite3
+        legacy = Path(self.tmp) / "legacy.db"
+        conn = sqlite3.connect(str(legacy))
+        conn.execute("""CREATE TABLE servers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL,
+            url TEXT NOT NULL,
+            api_key TEXT DEFAULT '',
+            is_default INTEGER DEFAULT 0,
+            n8n_version TEXT DEFAULT '',
+            last_ping TEXT,
+            status TEXT DEFAULT 'unknown',
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )""")
+        conn.execute("INSERT INTO servers (name, url) VALUES ('old', 'http://h:5678')")
+        conn.commit()
+        conn.close()
+        from n8nManager.core.database import Database
+        db = Database(legacy)
+        srv = db.get_server_by_name("old")
+        self.assertEqual(srv["verify_tls"], 1)
+
     def test_add_duplicate_server_raises(self):
         import sqlite3
         self.db.add_server("dup", "http://host:5678", "key")
@@ -349,6 +383,15 @@ class TestN8nClientShape(unittest.TestCase):
         from n8nManager.core.n8n_client import N8nClient
         c = N8nClient("http://localhost:5678/", "key")
         self.assertFalse(c.base_url.endswith("/"))
+
+    def test_verify_tls_default_true(self):
+        """TLS verification must be enabled by default."""
+        self.assertTrue(self.client.verify_tls)
+
+    def test_verify_tls_opt_out(self):
+        from n8nManager.core.n8n_client import N8nClient
+        c = N8nClient("https://localhost:5678", "key", verify_tls=False)
+        self.assertFalse(c.verify_tls)
 
 
 class TestApiRoutes(unittest.TestCase):

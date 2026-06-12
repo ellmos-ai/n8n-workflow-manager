@@ -135,7 +135,8 @@ def cmd_push(args):
         print("Kein Server konfiguriert. Nutze: n8nManager servers --add NAME URL APIKEY")
         return 1
 
-    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"])
+    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
+                       verify_tls=bool(srv.get("verify_tls", 1)))
     wf_data = json.loads(wf["workflow_json"])
 
     if wf.get("n8n_id"):
@@ -177,7 +178,8 @@ def cmd_pull(args):
         print("Kein Server konfiguriert.")
         return 1
 
-    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"])
+    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
+                       verify_tls=bool(srv.get("verify_tls", 1)))
     result = client.list_workflows()
 
     if result.get("error"):
@@ -245,7 +247,9 @@ def cmd_servers(args):
             return 1
         name, url = parts[0], parts[1]
         api_key = parts[2] if len(parts) > 2 else ""
-        srv_id = db.add_server(name=name, url=url, api_key=api_key, is_default=args.default)
+        srv_id = db.add_server(name=name, url=url, api_key=api_key,
+                               is_default=args.default,
+                               verify_tls=not args.no_verify_tls)
         print(f"Server '{name}' hinzugefuegt (ID: {srv_id})")
         return 0
 
@@ -418,6 +422,8 @@ def main():
     servers_p = subparsers.add_parser("servers", help="Server verwalten")
     servers_p.add_argument("--add", nargs="+", metavar="ARG", help="NAME URL [APIKEY]")
     servers_p.add_argument("--default", action="store_true", help="Als Default setzen")
+    servers_p.add_argument("--no-verify-tls", action="store_true",
+                           help="TLS-Zertifikatspruefung fuer diesen Server deaktivieren (nur lokale Self-Signed-Setups)")
     servers_p.set_defaults(func=cmd_servers)
 
     # config

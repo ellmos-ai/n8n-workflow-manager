@@ -88,6 +88,10 @@ n8n-manager export 1 --format md
 # Add an n8n server
 n8n-manager servers --add production https://n8n.example.com:5678 YOUR_API_KEY --default
 
+# Add a local server with a self-signed certificate (disables TLS verification
+# for this server only -- TLS certificates are verified by default)
+n8n-manager servers --add local https://localhost:5678 YOUR_API_KEY --no-verify-tls
+
 # Push workflow to server
 n8n-manager push 1
 
@@ -193,6 +197,11 @@ n8n-manager setup --host your-server-ip --ssh-key ~/.ssh/id_ed25519
 # 4. Register in n8n-manager:
 n8n-manager servers --add myserver http://your-server-ip:5678 YOUR_API_KEY --default
 ```
+
+**TLS note:** Connections to n8n servers verify TLS certificates by default. For local
+setups with self-signed certificates, register the server with `--no-verify-tls`
+(CLI) or `"verify_tls": false` (REST API). Do not disable verification for servers
+reachable over untrusted networks.
 
 ## MCP Server
 

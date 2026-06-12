@@ -14,12 +14,14 @@ class ServerCreate(BaseModel):
     url: str
     api_key: str = ""
     is_default: bool = False
+    verify_tls: bool = True
 
 class ServerUpdate(BaseModel):
     name: Optional[str] = None
     url: Optional[str] = None
     api_key: Optional[str] = None
     is_default: Optional[bool] = None
+    verify_tls: Optional[bool] = None
 
 @router.get("/servers")
 async def list_servers():
@@ -39,7 +41,8 @@ async def get_server(server_id: int):
 async def create_server(body: ServerCreate):
     db = _get_db()
     srv_id = db.add_server(
-        name=body.name, url=body.url, api_key=body.api_key, is_default=body.is_default
+        name=body.name, url=body.url, api_key=body.api_key,
+        is_default=body.is_default, verify_tls=body.verify_tls
     )
     return {"id": srv_id, "message": "Server hinzugefuegt"}
 
@@ -56,6 +59,8 @@ async def update_server(server_id: int, body: ServerUpdate):
         updates["url"] = body.url
     if body.api_key is not None:
         updates["api_key"] = body.api_key
+    if body.verify_tls is not None:
+        updates["verify_tls"] = 1 if body.verify_tls else 0
     if body.is_default is not None:
         if body.is_default:
             db.set_default_server(server_id)
@@ -74,7 +79,8 @@ async def ping_server(server_id: int):
     if not srv.get("api_key"):
         raise HTTPException(status_code=400, detail="Kein API-Key konfiguriert")
     from n8nManager.core.n8n_client import N8nClient
-    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"])
+    client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
+                       verify_tls=bool(srv.get("verify_tls", 1)))
     result = client.ping()
     from datetime import datetime
     now = datetime.utcnow().isoformat()
