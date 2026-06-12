@@ -150,6 +150,66 @@ class TestDatabase(unittest.TestCase):
         db2 = Database(Path(self.tmp) / "test.db")
         self.assertIsNotNone(db2)
 
+    def test_list_templates_empty(self):
+        templates = self.db.list_templates()
+        self.assertIsInstance(templates, list)
+        self.assertEqual(len(templates), 0)
+
+    def test_add_and_get_template(self):
+        tpl_json = json.dumps({"name": "{{name}}", "nodes": [], "connections": {}})
+        tpl_id = self.db.add_template(
+            name="My Template",
+            template_json=tpl_json,
+            description="A test template",
+            category="testing",
+            placeholders=["name"],
+        )
+        tpl = self.db.get_template(tpl_id)
+        self.assertIsNotNone(tpl)
+        self.assertEqual(tpl["name"], "My Template")
+        self.assertEqual(tpl["category"], "testing")
+        # placeholders are stored as JSON string
+        self.assertEqual(json.loads(tpl["placeholders"]), ["name"])
+
+    def test_get_template_missing_returns_none(self):
+        self.assertIsNone(self.db.get_template(99999))
+
+    def test_list_templates_category_filter(self):
+        tpl_json = json.dumps({"nodes": [], "connections": {}})
+        self.db.add_template(name="A", template_json=tpl_json, category="alpha")
+        self.db.add_template(name="B", template_json=tpl_json, category="beta")
+        self.assertEqual(len(self.db.list_templates()), 2)
+        alpha = self.db.list_templates(category="alpha")
+        self.assertEqual(len(alpha), 1)
+        self.assertEqual(alpha[0]["name"], "A")
+
+    def test_add_duplicate_template_raises(self):
+        import sqlite3
+        tpl_json = json.dumps({"nodes": [], "connections": {}})
+        self.db.add_template(name="dup", template_json=tpl_json)
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.add_template(name="dup", template_json=tpl_json)
+
+    def test_delete_template(self):
+        tpl_json = json.dumps({"nodes": [], "connections": {}})
+        tpl_id = self.db.add_template(name="gone", template_json=tpl_json)
+        self.db.delete_template(tpl_id)
+        self.assertIsNone(self.db.get_template(tpl_id))
+
+    def test_node_catalog_seeded(self):
+        """Default node catalog entries must be present after init."""
+        nodes = self.db.list_node_catalog()
+        self.assertGreater(len(nodes), 0)
+        node_types = [n["node_type"] for n in nodes]
+        self.assertIn("n8n-nodes-base.webhook", node_types)
+        self.assertIn("node_type", nodes[0])
+        self.assertIn("display_name", nodes[0])
+
+    def test_node_catalog_category_filter(self):
+        triggers = self.db.list_node_catalog(category="trigger")
+        self.assertGreater(len(triggers), 0)
+        self.assertTrue(all(n["category"] == "trigger" for n in triggers))
+
 
 class TestWorkflowParser(unittest.TestCase):
     """Workflow JSON parsing and validation."""
@@ -289,6 +349,94 @@ class TestN8nClientShape(unittest.TestCase):
         from n8nManager.core.n8n_client import N8nClient
         c = N8nClient("http://localhost:5678/", "key")
         self.assertFalse(c.base_url.endswith("/"))
+
+
+class TestApiRoutes(unittest.TestCase):
+    """FastAPI TestClient smoke tests against the real app with a temp database."""
+
+    @classmethod
+    def setUpClass(cls):
+        import importlib
+        if importlib.util.find_spec("fastapi") is None:
+            raise unittest.SkipTest("fastapi not installed")
+        from fastapi.testclient import TestClient
+        import n8nManager.api.server as server_module
+        from n8nManager.core.database import Database
+        cls.tmp = tempfile.mkdtemp()
+        cls.server_module = server_module
+        cls._old_db = server_module._db
+        server_module._db = Database(Path(cls.tmp) / "api_test.db")
+        cls.db = server_module._db
+        cls.client = TestClient(server_module.app)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server_module._db = cls._old_db
+
+    def test_api_status(self):
+        resp = self.client.get("/api/status")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json()["status"], "running")
+
+    def test_templates_list_empty_ok(self):
+        resp = self.client.get("/api/templates")
+        self.assertEqual(resp.status_code, 200)
+        body = resp.json()
+        self.assertIn("data", body)
+        self.assertIsInstance(body["data"], list)
+
+    def test_template_create_get_instantiate(self):
+        tpl_json = json.dumps({
+            "name": "{{name}}",
+            "nodes": [{"type": "n8n-nodes-base.manualTrigger", "name": "Start"}],
+            "connections": {},
+        })
+        resp = self.client.post("/api/templates", json={
+            "name": "Smoke Template",
+            "description": "via TestClient",
+            "category": "smoke",
+            "template_json": tpl_json,
+            "placeholders": ["name"],
+        })
+        self.assertEqual(resp.status_code, 200)
+        tpl_id = resp.json()["id"]
+
+        resp = self.client.get(f"/api/templates/{tpl_id}")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json()["name"], "Smoke Template")
+
+        resp = self.client.post(
+            f"/api/templates/{tpl_id}/instantiate", json={"name": "Instantiated WF"}
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("id", resp.json())
+
+    def test_template_missing_returns_404(self):
+        resp = self.client.get("/api/templates/99999")
+        self.assertEqual(resp.status_code, 404)
+
+    def test_template_duplicate_returns_409(self):
+        tpl_json = json.dumps({"nodes": [], "connections": {}})
+        payload = {"name": "Dup Template", "template_json": tpl_json}
+        resp = self.client.post("/api/templates", json=payload)
+        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post("/api/templates", json=payload)
+        self.assertEqual(resp.status_code, 409)
+
+    def test_creator_page_renders(self):
+        resp = self.client.get("/creator")
+        self.assertEqual(resp.status_code, 200)
+
+    def test_editor_page_renders(self):
+        wf_json = json.dumps({
+            "name": "Editor WF",
+            "nodes": [{"type": "n8n-nodes-base.manualTrigger", "name": "Start",
+                       "position": [0, 0]}],
+            "connections": {},
+        })
+        wf_id = self.db.add_workflow(name="Editor WF", workflow_json=wf_json)
+        resp = self.client.get(f"/editor/{wf_id}")
+        self.assertEqual(resp.status_code, 200)
 
 
 if __name__ == "__main__":

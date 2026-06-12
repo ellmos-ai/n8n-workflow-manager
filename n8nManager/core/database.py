@@ -367,3 +367,63 @@ class Database:
                 (workflow_id,)
             ).fetchall()
             return [dict(r) for r in rows]
+
+    # ── CRUD: Templates ──────────────────────────────────────────────────────
+
+    def add_template(self, name: str, template_json: str, description: str = "",
+                     category: str = "general", placeholders=None) -> int:
+        """Fuegt Template ein. placeholders (Liste) wird als JSON gespeichert. Gibt id zurueck."""
+        if placeholders is None:
+            placeholders = []
+        if not isinstance(placeholders, str):
+            placeholders = json.dumps(placeholders, ensure_ascii=False)
+        now = _now()
+        with self._connect() as conn:
+            cur = conn.execute(
+                """INSERT INTO templates
+                   (name, description, category, template_json, placeholders, created_at)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (name, description, category, template_json, placeholders, now)
+            )
+            conn.commit()
+            return cur.lastrowid
+
+    def get_template(self, template_id: int) -> Optional[dict]:
+        """Gibt Template-dict oder None zurueck."""
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT * FROM templates WHERE id = ?", (template_id,)
+            ).fetchone()
+            return self._row_to_dict(row)
+
+    def list_templates(self, category: Optional[str] = None) -> list[dict]:
+        """Listet alle Templates, optional nach Kategorie gefiltert."""
+        query = "SELECT * FROM templates"
+        params = []
+        if category is not None:
+            query += " WHERE category = ?"
+            params.append(category)
+        query += " ORDER BY name"
+        with self._connect() as conn:
+            rows = conn.execute(query, params).fetchall()
+            return [dict(r) for r in rows]
+
+    def delete_template(self, template_id: int):
+        """Loescht Template anhand ID."""
+        with self._connect() as conn:
+            conn.execute("DELETE FROM templates WHERE id = ?", (template_id,))
+            conn.commit()
+
+    # ── Node-Katalog ─────────────────────────────────────────────────────────
+
+    def list_node_catalog(self, category: Optional[str] = None) -> list[dict]:
+        """Listet den Node-Katalog, optional nach Kategorie gefiltert."""
+        query = "SELECT * FROM node_catalog"
+        params = []
+        if category is not None:
+            query += " WHERE category = ?"
+            params.append(category)
+        query += " ORDER BY category, display_name"
+        with self._connect() as conn:
+            rows = conn.execute(query, params).fetchall()
+            return [dict(r) for r in rows]

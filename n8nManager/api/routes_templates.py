@@ -33,14 +33,18 @@ async def get_template(template_id: int):
 
 @router.post("/templates")
 async def create_template(body: TemplateCreate):
+    import sqlite3
     db = _get_db()
-    tpl_id = db.add_template(
-        name=body.name,
-        description=body.description,
-        category=body.category,
-        template_json=body.template_json,
-        placeholders=body.placeholders,
-    )
+    try:
+        tpl_id = db.add_template(
+            name=body.name,
+            description=body.description,
+            category=body.category,
+            template_json=body.template_json,
+            placeholders=body.placeholders,
+        )
+    except sqlite3.IntegrityError:
+        raise HTTPException(status_code=409, detail="Template-Name existiert bereits")
     return {"id": tpl_id, "message": "Template erstellt"}
 
 @router.post("/templates/{template_id}/instantiate")
