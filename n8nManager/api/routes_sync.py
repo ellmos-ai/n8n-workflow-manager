@@ -54,7 +54,7 @@ async def pull_from_server(server_id: int):
     from n8nManager.core.workflow_parser import compute_content_hash
     client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
                        verify_tls=bool(srv.get("verify_tls", 1)))
-    result = client.list_workflows()
+    result = client.list_all_workflows()
     if result.get("error"):
         raise HTTPException(status_code=502, detail=result.get("detail", "Pull fehlgeschlagen"))
     workflows = result.get("data", [])

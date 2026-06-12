@@ -180,7 +180,7 @@ def cmd_pull(args):
 
     client = N8nClient(base_url=srv["url"], api_key=srv["api_key"],
                        verify_tls=bool(srv.get("verify_tls", 1)))
-    result = client.list_workflows()
+    result = client.list_all_workflows()
 
     if result.get("error"):
         print(f"Pull fehlgeschlagen: {result.get('detail')}")

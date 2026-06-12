@@ -394,6 +394,50 @@ class TestN8nClientShape(unittest.TestCase):
         self.assertFalse(c.verify_tls)
 
 
+class TestN8nClientPagination(unittest.TestCase):
+    """list_all_workflows must follow the n8n cursor across pages -- no network."""
+
+    def _client_with_pages(self, pages):
+        from n8nManager.core.n8n_client import N8nClient
+        client = N8nClient("http://localhost:5678", "key")
+        calls = []
+
+        def fake_list(limit=100, cursor=""):
+            calls.append(cursor)
+            return pages[len(calls) - 1]
+
+        client.list_workflows = fake_list
+        return client, calls
+
+    def test_follows_cursor_across_pages(self):
+        pages = [
+            {"data": [{"id": "1"}, {"id": "2"}], "nextCursor": "abc"},
+            {"data": [{"id": "3"}], "nextCursor": "def"},
+            {"data": [{"id": "4"}], "nextCursor": None},
+        ]
+        client, calls = self._client_with_pages(pages)
+        result = client.list_all_workflows()
+        self.assertEqual(len(result["data"]), 4)
+        self.assertEqual(calls, ["", "abc", "def"])
+
+    def test_single_page_without_cursor(self):
+        pages = [{"data": [{"id": "1"}]}]
+        client, calls = self._client_with_pages(pages)
+        result = client.list_all_workflows()
+        self.assertEqual(len(result["data"]), 1)
+        self.assertEqual(calls, [""])
+
+    def test_error_is_propagated(self):
+        pages = [
+            {"data": [{"id": "1"}], "nextCursor": "abc"},
+            {"error": True, "detail": "boom"},
+        ]
+        client, calls = self._client_with_pages(pages)
+        result = client.list_all_workflows()
+        self.assertTrue(result.get("error"))
+        self.assertEqual(calls, ["", "abc"])
+
+
 class TestApiRoutes(unittest.TestCase):
     """FastAPI TestClient smoke tests against the real app with a temp database."""
 

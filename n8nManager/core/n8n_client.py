@@ -48,6 +48,24 @@ class N8nClient:
             path += f"&cursor={cursor}"
         return self._request("GET", path)
 
+    def list_all_workflows(self, page_size: int = 100) -> dict:
+        """Follows the n8n API cursor and collects workflows across all pages.
+
+        Returns {"data": [...]} with every workflow, or the error dict of
+        the first failing page.
+        """
+        all_items: list = []
+        cursor = ""
+        while True:
+            result = self.list_workflows(limit=page_size, cursor=cursor)
+            if result.get("error"):
+                return result
+            all_items.extend(result.get("data", []))
+            cursor = result.get("nextCursor") or ""
+            if not cursor:
+                break
+        return {"data": all_items}
+
     def get_workflow(self, workflow_id: str) -> dict:
         return self._request("GET", f"/workflows/{workflow_id}")
 
