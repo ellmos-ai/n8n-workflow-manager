@@ -1,18 +1,16 @@
-<img src="assets/n8n_workflow_manager_logo.png" alt="n8n Workflow Manager Banner" width="350">
+<img src="assets/banner.svg" width="100%" alt="n8n-workflow-manager Banner">
 
 # n8n Workflow Manager
 
-**🇬🇧 [English Version](README.md)**
+**[🇬🇧 English Version](README.md)** · **🇩🇪 Deutsch**
 
-*Teil der [ellmos-ai](https://github.com/ellmos-ai) Familie.*
+> Lokaler n8n-Workflow-Manager mit Graph-Viewer, REST API, CLI und Multi-Server-Sync in einem Python-Paket.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 
-**Ein lokaler n8n Workflow Manager mit visuellem Graph-Viewer, REST API, CLI und Multi-Server-Sync in einem Python-Paket.**
-
-> Verwalte, visualisiere, dokumentiere und synchronisiere n8n Workflows über mehrere Server von einem einzigen Dashboard aus.
+**Schnelleinstieg:** [Einstieg](#einstieg) · [API-Referenz](docs/API_REFERENCE.md) · [Architektur](docs/ARCHITECTURE.md) · [Changelog](CHANGELOG.md)
 
 ## Screenshots
 

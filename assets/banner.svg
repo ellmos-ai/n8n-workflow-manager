@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c14" />
+      <stop offset="50%" stop-color="#0b1329" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <radialGradient id="leftGlow" cx="25%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ea5a0c" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#ea5a0c" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="rightGlow" cx="75%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+    
+    <!-- Flow Line Gradients -->
+    <linearGradient id="gradAB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#ea5a0c" />
+    </linearGradient>
+    <linearGradient id="gradAC" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#ea5a0c" />
+    </linearGradient>
+    <linearGradient id="gradBD" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea5a0c" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="gradCD" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea5a0c" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+    
+    <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
+    <!-- Grid Pattern -->
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#334155" opacity="0.3" />
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="340" fill="url(#bgGrad)" rx="16" />
+  
+  <!-- Grid Layer -->
+  <rect width="1200" height="340" fill="url(#grid)" rx="16" />
+
+  <!-- Ambient Glows -->
+  <rect width="1200" height="340" fill="url(#leftGlow)" rx="16" />
+  <rect width="1200" height="340" fill="url(#rightGlow)" rx="16" />
+  
+  <!-- Outer Border -->
+  <rect width="1198" height="338" x="1" y="1" fill="none" stroke="#1e293b" stroke-width="1.5" rx="15" />
+
+  <!-- ==================== LEFT HALF: WORKFLOW GRAPH ==================== -->
+  
+  <!-- Connection Paths (Background Glow) -->
+  <path d="M 184,170 C 220,170 224,100 260,100" fill="none" stroke="url(#gradAB)" stroke-width="8" opacity="0.15" />
+  <path d="M 184,170 C 220,170 224,240 260,240" fill="none" stroke="url(#gradAC)" stroke-width="8" opacity="0.15" />
+  <path d="M 324,100 C 360,100 364,170 400,170" fill="none" stroke="url(#gradBD)" stroke-width="8" opacity="0.15" />
+  <path d="M 324,240 C 360,240 364,170 400,170" fill="none" stroke="url(#gradCD)" stroke-width="8" opacity="0.15" />
+
+  <!-- Connection Paths (Foreground Sharp) -->
+  <path d="M 184,170 C 220,170 224,100 260,100" fill="none" stroke="url(#gradAB)" stroke-width="3" />
+  <path d="M 184,170 C 220,170 224,240 260,240" fill="none" stroke="url(#gradAC)" stroke-width="3" />
+  <path d="M 324,100 C 360,100 364,170 400,170" fill="none" stroke="url(#gradBD)" stroke-width="3" />
+  <path d="M 324,240 C 360,240 364,170 400,170" fill="none" stroke="url(#gradCD)" stroke-width="3" />
+
+  <!-- Secondary/Dashed Ambient Paths -->
+  <path d="M 85,170 L 120,170" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" opacity="0.4" />
+  <path d="M 464,170 L 505,170" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" opacity="0.4" />
+  <path d="M 324,100 C 350,100 360,70 380,70" fill="none" stroke="#ea5a0c" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.3" />
+  <path d="M 324,240 C 350,240 360,270 380,270" fill="none" stroke="#ea5a0c" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.3" />
+
+  <!-- Flowing Signal Dots -->
+  <circle cx="222" cy="135" r="4" fill="#ea5a0c" />
+  <circle cx="222" cy="205" r="4" fill="#ea5a0c" />
+  <circle cx="362" cy="135" r="4" fill="#10b981" />
+  <circle cx="362" cy="205" r="4" fill="#10b981" />
+
+  <!-- Node Connection Ports (Dots on Node Edges) -->
+  <circle cx="184" cy="170" r="4" fill="#38bdf8" stroke="#080c14" stroke-width="1.5" />
+  <circle cx="260" cy="100" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
+  <circle cx="324" cy="100" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
+  <circle cx="260" cy="240" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
+  <circle cx="324" cy="240" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
+  <circle cx="400" cy="170" r="4" fill="#10b981" stroke="#080c14" stroke-width="1.5" />
+
+  <!-- Node A (Trigger Node) -->
+  <g filter="url(#nodeShadow)">
+    <rect x="120" y="138" width="64" height="64" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+    <!-- Clock Icon -->
+    <circle cx="152" cy="170" r="12" fill="none" stroke="#38bdf8" stroke-width="2" />
+    <path d="M 152,164 L 152,170 L 157,173" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+
+  <!-- Node B (Switch Node) -->
+  <g filter="url(#nodeShadow)">
+    <rect x="260" y="68" width="64" height="64" rx="16" fill="#0f172a" stroke="#ea5a0c" stroke-width="2" />
+    <!-- Branch Icon -->
+    <path d="M 280,100 L 290,100 M 290,100 L 300,90 M 290,100 L 300,110" stroke="#ea5a0c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <circle cx="278" cy="100" r="2" fill="#ea5a0c" />
+    <circle cx="302" cy="90" r="2" fill="#ea5a0c" />
+    <circle cx="302" cy="110" r="2" fill="#ea5a0c" />
+  </g>
+
+  <!-- Node C (Code Node) -->
+  <g filter="url(#nodeShadow)">
+    <rect x="260" y="208" width="64" height="64" rx="16" fill="#0f172a" stroke="#ea5a0c" stroke-width="2" />
+    <!-- Code Icon -->
+    <path d="M 284,236 L 278,240 L 284,244 M 300,236 L 306,240 L 300,244 M 295,234 L 289,246" stroke="#ea5a0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+
+  <!-- Node D (Action Node) -->
+  <g filter="url(#nodeShadow)">
+    <rect x="400" y="138" width="64" height="64" rx="16" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+    <!-- Paper Plane Icon -->
+    <path d="M 419,170 L 441,159 L 433,179 L 428,172 Z M 428,172 L 441,159" stroke="#10b981" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" fill="none" />
+  </g>
+
+
+  <!-- ==================== RIGHT HALF: TYPOGRAPHY ==================== -->
+  
+  <!-- Pill Badge -->
+  <g transform="translate(540, 100)">
+    <rect width="90" height="22" rx="11" fill="#ea5a0c" fill-opacity="0.15" stroke="#ea5a0c" stroke-width="1.5" />
+    <text x="45" y="14" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#ea5a0c" letter-spacing="1.5" text-anchor="middle">CLI TOOL</text>
+  </g>
+  
+  <g transform="translate(640, 100)">
+    <rect width="110" height="22" rx="11" fill="#38bdf8" fill-opacity="0.1" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3" />
+    <text x="55" y="14" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#38bdf8" letter-spacing="1" text-anchor="middle">LOCAL-FIRST</text>
+  </g>
+
+  <!-- Title / Wordmark -->
+  <text x="540" y="176" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#ffffff" letter-spacing="-1.2" filter="url(#shadow)">
+    <tspan fill="#ea5a0c">n8n</tspan>-workflow-manager
+  </text>
+
+  <!-- Tagline -->
+  <text x="540" y="218" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#94a3b8" letter-spacing="-0.3">
+    Local-first n8n workflow management
+  </text>
+  
+  <!-- Details / Small Tag -->
+  <text x="540" y="254" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#475569" letter-spacing="-0.1">
+    Synchronize, version control, and deploy workflows from your local machine
+  </text>
+
+</svg>
