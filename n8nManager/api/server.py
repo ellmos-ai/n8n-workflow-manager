@@ -54,7 +54,7 @@ async def web_dashboard(request: Request):
     db = get_db()
     workflows = db.list_workflows()
     servers = [redact_server(s) for s in db.list_servers()]
-    return templates.TemplateResponse("dashboard.html", {
+    return templates.TemplateResponse(request, "dashboard.html", {
         "request": request,
         "workflows": workflows,
         "servers": servers,
@@ -66,7 +66,7 @@ async def web_viewer(request: Request, workflow_id: int):
     db = get_db()
     workflow = db.get_workflow(workflow_id)
     if not workflow:
-        return templates.TemplateResponse("dashboard.html", {
+        return templates.TemplateResponse(request, "dashboard.html", {
             "request": request, "workflows": [], "servers": [], "stats": {},
             "error": "Workflow nicht gefunden"
         })
@@ -74,7 +74,7 @@ async def web_viewer(request: Request, workflow_id: int):
     from n8nManager.core.workflow_parser import workflow_to_vis_graph
     wf_data = json.loads(workflow["workflow_json"])
     graph = workflow_to_vis_graph(wf_data)
-    return templates.TemplateResponse("viewer.html", {
+    return templates.TemplateResponse(request, "viewer.html", {
         "request": request,
         "workflow": workflow,
         "graph_data": json.dumps(graph),
@@ -85,7 +85,7 @@ async def web_editor(request: Request, workflow_id: int):
     db = get_db()
     workflow = db.get_workflow(workflow_id)
     if not workflow:
-        return templates.TemplateResponse("dashboard.html", {
+        return templates.TemplateResponse(request, "dashboard.html", {
             "request": request, "workflows": [], "servers": [], "stats": {},
             "error": "Workflow nicht gefunden"
         })
@@ -94,7 +94,7 @@ async def web_editor(request: Request, workflow_id: int):
     wf_data = json.loads(workflow["workflow_json"])
     graph = workflow_to_vis_graph(wf_data)
     node_catalog = db.list_node_catalog()
-    return templates.TemplateResponse("editor.html", {
+    return templates.TemplateResponse(request, "editor.html", {
         "request": request,
         "workflow": workflow,
         "graph_data": json.dumps(graph),
@@ -106,7 +106,7 @@ async def web_creator(request: Request):
     db = get_db()
     node_catalog = db.list_node_catalog()
     import json
-    return templates.TemplateResponse("creator.html", {
+    return templates.TemplateResponse(request, "creator.html", {
         "request": request,
         "node_catalog": json.dumps(node_catalog),
     })
@@ -116,14 +116,14 @@ async def web_servers(request: Request):
     from n8nManager.api.routes_servers import redact_server
     db = get_db()
     servers = [redact_server(s) for s in db.list_servers()]
-    return templates.TemplateResponse("servers.html", {
+    return templates.TemplateResponse(request, "servers.html", {
         "request": request,
         "servers": servers,
     })
 
 @app.get("/import")
 async def web_import(request: Request):
-    return templates.TemplateResponse("import.html", {"request": request})
+    return templates.TemplateResponse(request, "import.html", {"request": request})
 
 # ── API-Routen einbinden ──────────────────────────────────────────────
 from n8nManager.api.routes_workflows import router as workflows_router
