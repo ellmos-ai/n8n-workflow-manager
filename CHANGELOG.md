@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased
+
+- **Security:** API sync routes no longer expose internal upstream details in
+  HTTP error responses for push, pull, and BACH registration failures.
+
 ## 2026-06-12
 
 - **Security:** TLS certificates are now verified by default when talking to n8n servers. Local self-signed setups can opt out per server via `servers --add ... --no-verify-tls` (CLI) or `"verify_tls": false` (REST API). Existing databases are migrated automatically.

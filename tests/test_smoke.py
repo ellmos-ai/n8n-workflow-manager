@@ -438,6 +438,32 @@ class TestN8nClientPagination(unittest.TestCase):
         self.assertEqual(calls, ["", "abc"])
 
 
+class TestApiErrorSanitization(unittest.TestCase):
+    """API-Fehlerantworten dürfen keine internen Upstream-Details ausgeben."""
+
+    def test_external_error_uses_public_detail_only(self):
+        import importlib
+        if importlib.util.find_spec("fastapi") is None:
+            self.skipTest("fastapi not installed")
+        from fastapi import HTTPException
+        from n8nManager.api.routes_sync import _raise_external_error
+
+        internal_detail = "Traceback (most recent call last): secret"
+        with self.assertLogs("n8nManager.api.routes_sync", level="WARNING") as captured:
+            with self.assertRaises(HTTPException) as raised:
+                _raise_external_error(
+                    502,
+                    "Push fehlgeschlagen",
+                    "n8n push",
+                    {"error": True, "detail": internal_detail},
+                )
+
+        self.assertEqual(raised.exception.status_code, 502)
+        self.assertEqual(raised.exception.detail, "Push fehlgeschlagen")
+        self.assertNotIn("Traceback", raised.exception.detail)
+        self.assertIn(internal_detail, "\n".join(captured.output))
+
+
 class TestApiRoutes(unittest.TestCase):
     """FastAPI TestClient smoke tests against the real app with a temp database."""
 
