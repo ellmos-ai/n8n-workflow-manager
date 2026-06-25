@@ -3,7 +3,7 @@ import json
 import logging
 import sqlite3
 from pathlib import Path
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ def register_in_bach(workflow: dict, bach_db_path: str) -> dict:
         "steps": steps,
     }, ensure_ascii=False)
 
-    now = datetime.now(UTC).isoformat()
+    now = datetime.now(timezone.utc).isoformat()
 
     try:
         conn = sqlite3.connect(str(db_path))
