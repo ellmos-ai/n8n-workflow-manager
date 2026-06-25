@@ -441,22 +441,19 @@ class TestN8nClientPagination(unittest.TestCase):
 class TestApiErrorSanitization(unittest.TestCase):
     """API-Fehlerantworten dürfen keine internen Upstream-Details ausgeben."""
 
-    def test_external_error_uses_public_detail_only(self):
+    def test_external_error_logging_is_separate_from_public_detail(self):
         import importlib
         if importlib.util.find_spec("fastapi") is None:
             self.skipTest("fastapi not installed")
         from fastapi import HTTPException
-        from n8nManager.api.routes_sync import _raise_external_error
+        from n8nManager.api.routes_sync import _log_external_error
 
         internal_detail = "Traceback (most recent call last): secret"
         with self.assertLogs("n8nManager.api.routes_sync", level="WARNING") as captured:
-            with self.assertRaises(HTTPException) as raised:
-                _raise_external_error(
-                    502,
-                    "Push fehlgeschlagen",
-                    "n8n push",
-                    {"error": True, "detail": internal_detail},
-                )
+            _log_external_error("n8n push", {"error": True, "detail": internal_detail})
+
+        with self.assertRaises(HTTPException) as raised:
+            raise HTTPException(status_code=502, detail="Push fehlgeschlagen")
 
         self.assertEqual(raised.exception.status_code, 502)
         self.assertEqual(raised.exception.detail, "Push fehlgeschlagen")

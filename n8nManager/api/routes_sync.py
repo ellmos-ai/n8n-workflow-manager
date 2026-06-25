@@ -10,10 +10,9 @@ def _get_db():
     from n8nManager.api.server import get_db
     return get_db()
 
-def _raise_external_error(status_code: int, public_detail: str, context: str, result: dict) -> None:
+def _log_external_error(context: str, result: dict) -> None:
     """Loggt interne Details, ohne sie in API-Antworten offenzulegen."""
     logger.warning("%s failed: %s", context, result.get("detail") or result.get("error") or "unknown")
-    raise HTTPException(status_code=status_code, detail=public_detail)
 
 @router.post("/export/{workflow_id}/to-server")
 async def push_to_server(workflow_id: int, server_id: int = 0):
@@ -43,7 +42,8 @@ async def push_to_server(workflow_id: int, server_id: int = 0):
         result = client.create_workflow(wf_data)
     if result.get("error"):
         db.add_sync_entry(workflow_id, server_id, "push", "error", json.dumps(result))
-        _raise_external_error(502, "Push fehlgeschlagen", "n8n push", result)
+        _log_external_error("n8n push", result)
+        raise HTTPException(status_code=502, detail="Push fehlgeschlagen")
     n8n_id = str(result.get("id", ""))
     if n8n_id:
         db.update_workflow(workflow_id, n8n_id=n8n_id, server_id=server_id)
@@ -63,7 +63,8 @@ async def pull_from_server(server_id: int):
                        verify_tls=bool(srv.get("verify_tls", 1)))
     result = client.list_all_workflows()
     if result.get("error"):
-        _raise_external_error(502, "Pull fehlgeschlagen", "n8n pull", result)
+        _log_external_error("n8n pull", result)
+        raise HTTPException(status_code=502, detail="Pull fehlgeschlagen")
     workflows = result.get("data", [])
     imported = 0
     skipped = 0
@@ -109,5 +110,6 @@ async def bach_register_workflow(workflow_id: int):
     from n8nManager.export.bach_export import register_in_bach
     result = register_in_bach(wf, bach_cfg["db_path"])
     if result.get("error"):
-        _raise_external_error(500, "BACH-Registrierung fehlgeschlagen", "BACH registration", result)
+        _log_external_error("BACH registration", result)
+        raise HTTPException(status_code=500, detail="BACH-Registrierung fehlgeschlagen")
     return result
