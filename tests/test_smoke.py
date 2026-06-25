@@ -393,6 +393,19 @@ class TestN8nClientShape(unittest.TestCase):
         c = N8nClient("https://localhost:5678", "key", verify_tls=False)
         self.assertFalse(c.verify_tls)
 
+    def test_request_error_detail_is_sanitized(self):
+        import httpx
+        from unittest.mock import patch
+
+        with patch("httpx.Client.request", side_effect=httpx.ConnectError("Traceback secret")):
+            with self.assertLogs("n8nManager.core.n8n_client", level="WARNING") as captured:
+                result = self.client._request("GET", "/workflows")
+
+        self.assertTrue(result.get("error"))
+        self.assertEqual(result["detail"], "n8n API request failed")
+        self.assertNotIn("Traceback", result["detail"])
+        self.assertIn("Traceback secret", "\n".join(captured.output))
+
 
 class TestN8nClientPagination(unittest.TestCase):
     """list_all_workflows must follow the n8n cursor across pages -- no network."""
@@ -436,6 +449,26 @@ class TestN8nClientPagination(unittest.TestCase):
         result = client.list_all_workflows()
         self.assertTrue(result.get("error"))
         self.assertEqual(calls, ["", "abc"])
+
+
+class TestBachExportErrors(unittest.TestCase):
+    """BACH-Exportfehler dürfen keine internen SQLite-Details zurückgeben."""
+
+    def test_sqlite_error_detail_is_sanitized(self):
+        from n8nManager.export.bach_export import register_in_bach
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".db", delete=False, encoding="utf-8") as f:
+            f.write("not a sqlite database")
+            db_path = f.name
+
+        workflow = {"workflow_json": json.dumps({"nodes": []}), "name": "Demo"}
+        with self.assertLogs("n8nManager.export.bach_export", level="WARNING") as captured:
+            result = register_in_bach(workflow, db_path)
+
+        self.assertTrue(result.get("error"))
+        self.assertEqual(result["detail"], "SQLite-Fehler bei BACH-Registrierung")
+        self.assertNotIn("file is not a database", result["detail"])
+        self.assertIn("file is not a database", "\n".join(captured.output))
 
 
 class TestApiErrorSanitization(unittest.TestCase):

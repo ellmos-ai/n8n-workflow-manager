@@ -4,8 +4,8 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
-- **Security:** API sync routes no longer expose internal upstream details in
-  HTTP error responses for push, pull, and BACH registration failures.
+- **Security:** n8n client, BACH export, and API sync routes no longer expose
+  internal upstream details in returned error payloads or HTTP error responses.
 
 ## 2026-06-12
 

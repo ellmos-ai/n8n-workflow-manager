@@ -1,10 +1,14 @@
-"""REST-Client fuer die n8n API."""
+"""REST-Client für die n8n API."""
+import logging
+
 import httpx
 from typing import Optional
 
+logger = logging.getLogger(__name__)
+
 
 class N8nClient:
-    """Synchroner httpx-Client fuer n8n REST API v1."""
+    """Synchroner httpx-Client für n8n REST API v1."""
 
     def __init__(self, base_url: str, api_key: str, timeout: float = 15.0,
                  verify_tls: bool = True):
@@ -24,16 +28,23 @@ class N8nClient:
         return f"{self.base_url}/api/v1{path}"
 
     def _request(self, method: str, path: str, **kwargs) -> dict:
-        """Fuehrt HTTP-Request aus. Gibt dict zurueck oder raises."""
+        """Führt HTTP-Request aus und gibt ein Ergebnis-Dict zurück."""
         try:
             with httpx.Client(timeout=self.timeout, verify=self.verify_tls) as client:
                 resp = client.request(method, self._url(path), headers=self._headers, **kwargs)
                 resp.raise_for_status()
                 return resp.json() if resp.content else {}
-        except httpx.HTTPStatusError as e:
-            return {"error": True, "status_code": e.response.status_code, "detail": str(e)}
-        except httpx.RequestError as e:
-            return {"error": True, "detail": str(e)}
+        except httpx.HTTPStatusError as exc:
+            status_code = exc.response.status_code
+            logger.warning("n8n API request failed with HTTP %s: %s", status_code, exc)
+            return {
+                "error": True,
+                "status_code": status_code,
+                "detail": f"n8n API returned HTTP {status_code}",
+            }
+        except httpx.RequestError as exc:
+            logger.warning("n8n API request failed: %s", exc)
+            return {"error": True, "detail": "n8n API request failed"}
 
     def ping(self) -> dict:
         """Health-Check: GET /api/v1/workflows?limit=1"""

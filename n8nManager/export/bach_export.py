@@ -1,8 +1,11 @@
 """BACH-Integration: Workflow in toolchains-Tabelle registrieren."""
 import json
+import logging
 import sqlite3
 from pathlib import Path
-from datetime import datetime
+from datetime import UTC, datetime
+
+logger = logging.getLogger(__name__)
 
 
 def register_in_bach(workflow: dict, bach_db_path: str) -> dict:
@@ -32,7 +35,7 @@ def register_in_bach(workflow: dict, bach_db_path: str) -> dict:
         "steps": steps,
     }, ensure_ascii=False)
 
-    now = datetime.utcnow().isoformat()
+    now = datetime.now(UTC).isoformat()
 
     try:
         conn = sqlite3.connect(str(db_path))
@@ -54,5 +57,6 @@ def register_in_bach(workflow: dict, bach_db_path: str) -> dict:
             "message": f"Workflow als '{chain_name}' in BACH registriert",
             "chain_name": chain_name,
         }
-    except sqlite3.Error as e:
-        return {"error": True, "detail": f"SQLite-Fehler: {e}"}
+    except sqlite3.Error as exc:
+        logger.warning("BACH SQLite registration failed: %s", exc)
+        return {"error": True, "detail": "SQLite-Fehler bei BACH-Registrierung"}
