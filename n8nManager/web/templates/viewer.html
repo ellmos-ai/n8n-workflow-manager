@@ -28,15 +28,17 @@
 {% block scripts %}
 <script src="/static/js/graph_renderer.js"></script>
 <script>
-    const graphData = {{ graph_data | safe }};
+    const graphData = {{ graph_data | tojson }};
     const workflowId = {{ workflow.id }};
     initGraph('workflow-graph', graphData);
 
     function exportJSON() {
-        window.open('/api/workflows/' + workflowId, '_blank');
+        window.open('/api/workflows/' + workflowId + '/export', '_blank');
     }
     async function pushToServer() {
-        const resp = await apiClient.post('/api/export/' + workflowId + '/to-server');
+        const decision = prompt('Why are you pushing this workflow?');
+        if (!decision?.trim()) return;
+        const resp = await apiClient.post('/api/export/' + workflowId + '/to-server?decision=' + encodeURIComponent(decision.trim()));
         if (resp.message) alert(resp.message);
         else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
     }

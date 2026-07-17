@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "n8n-workflow-manager"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local-first n8n workflow manager with visual graph viewer, REST API, CLI, and multi-server sync"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 requires-python = ">=3.10"
 authors = [
     {name = "Lukas Geiger", email = "lukisch@users.noreply.github.com"}
@@ -17,7 +17,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -27,17 +26,25 @@ classifiers = [
     "Topic :: System :: Systems Administration",
 ]
 dependencies = [
-    "fastapi>=0.100.0",
-    "uvicorn>=0.22.0",
-    "httpx>=0.24.0",
-    "jinja2>=3.1.0",
-    "pydantic>=2.0.0",
-    "python-multipart",
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+    "httpx>=0.27,<1",
+    "jinja2>=3.1,<4",
+    "pydantic>=2.8,<3",
+    "python-multipart>=0.0.18,<1",
 ]
 
 [project.optional-dependencies]
-ssh = ["paramiko>=3.0.0"]
-dev = ["pytest", "pytest-asyncio", "ruff"]
+ssh = ["paramiko>=3,<5"]
+dev = [
+    "bandit>=1.8,<2",
+    "build>=1.2,<2",
+    "httpx2>=2.7,<3",
+    "pip-audit>=2.8,<3",
+    "pytest>=8,<10",
+    "pytest-asyncio>=0.24,<2",
+    "ruff>=0.9,<1",
+]
 
 [project.scripts]
 n8n-manager = "n8nManager.n8n_manager:main"
@@ -58,6 +65,7 @@ n8nManager = [
     "web/static/css/*",
     "web/static/js/*",
     "web/templates/*",
+    "templates/*.json",
 ]
 
 [tool.ruff]

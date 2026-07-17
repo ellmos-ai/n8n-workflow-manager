@@ -8,7 +8,7 @@
         <form onsubmit="addServer(event)">
             <input type="text" id="srv-name" placeholder="Name" required>
             <input type="url" id="srv-url" placeholder="http://host:5678" required>
-            <input type="text" id="srv-key" placeholder="API-Key">
+            <input type="password" id="srv-key" placeholder="API-Key" autocomplete="off">
             <label><input type="checkbox" id="srv-default"> Default</label>
             <button type="submit" class="btn btn-primary">Hinzufügen</button>
         </form>

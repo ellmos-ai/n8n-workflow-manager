@@ -1,0 +1,35 @@
+{
+  "name": "Scheduled HTTP Check",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {"interval": [{"field": "minutes", "minutesInterval": 15}]}
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [250, 300],
+      "id": "schedule-trigger",
+      "name": "Every 15 Minutes"
+    },
+    {
+      "parameters": {
+        "url": "{{TARGET_URL}}",
+        "method": "GET",
+        "options": {"timeout": 10000}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 300],
+      "id": "health-request",
+      "name": "Check Endpoint"
+    }
+  ],
+  "connections": {
+    "Every 15 Minutes": {
+      "main": [[{"node": "Check Endpoint", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false,
+  "tags": []
+}

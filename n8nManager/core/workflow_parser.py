@@ -1,21 +1,62 @@
-"""Parsing und Validierung von n8n Workflow JSON."""
+"""Parsing, validation, and graph conversion for n8n workflow JSON."""
 import json
 import hashlib
 from typing import Optional
 
 
 def validate_workflow(data: dict) -> tuple[bool, str]:
-    """Prueft ob ein dict ein gueltiger n8n Workflow ist. Returns (valid, error_msg)."""
+    """Validate the structural contract needed by n8n and this manager."""
     if not isinstance(data, dict):
-        return False, "Kein dict"
+        return False, "Workflow must be a JSON object"
     if "nodes" not in data:
-        return False, "Pflichtfeld 'nodes' fehlt"
+        return False, "Required field 'nodes' is missing"
     if "connections" not in data:
-        return False, "Pflichtfeld 'connections' fehlt"
+        return False, "Required field 'connections' is missing"
     if not isinstance(data["nodes"], list):
-        return False, "'nodes' muss eine Liste sein"
+        return False, "'nodes' must be an array"
     if not isinstance(data["connections"], dict):
-        return False, "'connections' muss ein dict sein"
+        return False, "'connections' must be an object"
+
+    names = set()
+    for index, node in enumerate(data["nodes"]):
+        if not isinstance(node, dict):
+            return False, f"Node {index} must be an object"
+        name = node.get("name")
+        node_type = node.get("type")
+        if not isinstance(name, str) or not name.strip():
+            return False, f"Node {index} needs a non-empty name"
+        if name in names:
+            return False, f"Duplicate node name: {name}"
+        names.add(name)
+        if not isinstance(node_type, str) or not node_type.strip():
+            return False, f"Node '{name}' needs a non-empty type"
+        if "parameters" in node and not isinstance(node["parameters"], dict):
+            return False, f"Node '{name}' parameters must be an object"
+        position = node.get("position")
+        if position is not None and (
+            not isinstance(position, list)
+            or len(position) != 2
+            or not all(isinstance(value, (int, float)) for value in position)
+        ):
+            return False, f"Node '{name}' position must contain two numbers"
+
+    for source, outputs in data["connections"].items():
+        if source not in names:
+            return False, f"Connection source does not exist: {source}"
+        if not isinstance(outputs, dict):
+            return False, f"Connections for '{source}' must be an object"
+        for output_lists in outputs.values():
+            if not isinstance(output_lists, list):
+                return False, f"Connection outputs for '{source}' must be arrays"
+            for output_list in output_lists:
+                if not isinstance(output_list, list):
+                    return False, f"Connection branch for '{source}' must be an array"
+                for connection in output_list:
+                    if not isinstance(connection, dict):
+                        return False, f"Connection from '{source}' must be an object"
+                    target = connection.get("node")
+                    if target not in names:
+                        return False, f"Connection target does not exist: {target}"
     return True, ""
 
 
@@ -29,14 +70,18 @@ def load_workflow_file(path: str) -> tuple[Optional[dict], str]:
             return None, err
         return data, ""
     except json.JSONDecodeError as e:
-        return None, f"JSON-Fehler: {e}"
+        return None, f"JSON error: {e}"
     except FileNotFoundError:
-        return None, f"Datei nicht gefunden: {path}"
+        return None, f"File not found: {path}"
+    except OSError as exc:
+        return None, f"File could not be read: {exc}"
 
 
 def compute_content_hash(workflow_json: str) -> str:
-    """SHA-256 Hash des Workflow-JSON fuer Duplikat-Erkennung."""
-    normalized = json.dumps(json.loads(workflow_json), sort_keys=True, ensure_ascii=False)
+    """Return a stable SHA-256 hash for semantically identical JSON."""
+    normalized = json.dumps(
+        json.loads(workflow_json), sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    )
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
@@ -86,6 +131,8 @@ def workflow_to_vis_graph(data: dict) -> dict:
             "font": {"color": "#ffffff"},
             "n8n_type": node_type,
             "n8n_params": node.get("parameters", {}),
+            "n8n_id": node.get("id", f"node-{i}"),
+            "type_version": node.get("typeVersion", 1),
         })
 
     connections = data.get("connections", {})
@@ -96,9 +143,9 @@ def workflow_to_vis_graph(data: dict) -> dict:
             continue
         if isinstance(outputs, dict):
             # n8n v1 format: {"main": [[{"node": "target", "type": "main", "index": 0}]]}
-            for output_type, output_lists in outputs.items():
+            for connection_type, output_lists in outputs.items():
                 if isinstance(output_lists, list):
-                    for output_list in output_lists:
+                    for source_output, output_list in enumerate(output_lists):
                         if isinstance(output_list, list):
                             for conn in output_list:
                                 target_name = conn.get("node", "")
@@ -109,6 +156,9 @@ def workflow_to_vis_graph(data: dict) -> dict:
                                         "from": source_id,
                                         "to": target_id,
                                         "arrows": "to",
+                                        "connection_type": connection_type,
+                                        "source_output": source_output,
+                                        "target_input": int(conn.get("index", 0)),
                                     })
                                     edge_id += 1
 
@@ -126,7 +176,4 @@ def _get_node_color(node_type: str) -> str:
         return "#9b59b6"  # Violett - AI
     elif "email" in t or "slack" in t or "telegram" in t or "send" in t:
         return "#28a745"  # Gruen - Aktion
-    elif "bach" in t:
-        return "#e74c3c"  # Rot - BACH
-    else:
-        return "#4285f4"  # Blau - Verarbeitung
+    return "#4285f4"  # Blau - Verarbeitung

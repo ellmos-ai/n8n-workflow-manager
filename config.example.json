@@ -1,0 +1,12 @@
+{
+  "api_host": "127.0.0.1",
+  "api_port": 8100,
+  "cors_origins": [],
+  "trusted_hosts": ["127.0.0.1", "localhost", "[::1]"],
+  "default_server": null,
+  "db_path": "n8n_manager.db",
+  "n8n": {
+    "api_version": "v1",
+    "default_port": 5678
+  }
+}

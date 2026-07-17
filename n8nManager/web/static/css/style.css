@@ -140,6 +140,9 @@ body {
     font-size: 0.8rem;
 }
 .catalog-btn:hover { border-color: var(--accent); }
+.property-field { display: block; margin-bottom: 0.8rem; color: var(--text-secondary); }
+.property-field span { display: block; margin-bottom: 0.25rem; }
+.property-field input, .property-field textarea { width: 100%; }
 
 /* Forms */
 input[type="text"], input[type="url"], textarea, select {

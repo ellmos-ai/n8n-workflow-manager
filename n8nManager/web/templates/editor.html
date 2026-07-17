@@ -28,9 +28,10 @@
 <script src="/static/js/graph_renderer.js"></script>
 <script src="/static/js/workflow_editor.js"></script>
 <script>
-    const graphData = {{ graph_data | safe }};
-    const nodeCatalog = {{ node_catalog | safe }};
+    const graphData = {{ graph_data | tojson }};
+    const nodeCatalog = {{ node_catalog | tojson }};
+    const workflowData = {{ workflow_data | tojson }};
     const workflowId = {{ workflow.id }};
-    initEditor('editor-graph', graphData, nodeCatalog, workflowId);
+    initEditor('editor-graph', graphData, nodeCatalog, workflowId, workflowData);
 </script>
 {% endblock %}

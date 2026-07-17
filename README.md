@@ -1,241 +1,154 @@
-<img src="assets/banner.svg" width="100%" alt="n8n-workflow-manager Banner">
+<img src="assets/banner.svg" width="100%" alt="n8n-workflow-manager banner">
 
 # n8n Workflow Manager
 
-**[🇩🇪 Deutsche Version](README_de.md)** · **🇬🇧 English**
+**[Deutsche Version](README_de.md)** · **English**
 
-> Local-first n8n workflow management — visual graph viewer, REST API, CLI, and multi-server sync in one Python package.
+> Local-first workflow review, editing, history, and multi-server sync for n8n.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Quick links:** [Start Here](#start-here) · [API Reference](docs/API_REFERENCE.md) · [Architecture](docs/ARCHITECTURE.md) · [Changelog](CHANGELOG.md)
+## What it does
 
-## Screenshots
+- Visual graph viewer and working browser editor for n8n workflow JSON.
+- SQLite-backed version history and decision audit for every mutation.
+- Rollback through the REST API or CLI.
+- Per-workflow/per-server pull/push bindings using the n8n public API and cursor pagination.
+- JSON and Markdown export, validated imports, and bundled generic templates.
+- FastAPI REST API, Swagger UI, and a terminal CLI.
 
-![n8n Workflow Manager dashboard](README/screenshots/dashboard.png)
+The application is local-first: it binds to `127.0.0.1` by default and stores
+configuration and runtime data in per-user directories rather than inside the
+installed package or source checkout.
 
-![n8n Workflow graph viewer](README/screenshots/workflow-viewer.png)
-
-## Start Here
-
-| You want to... | Use this |
-|---|---|
-| inspect local n8n workflow exports | Dashboard and visual workflow viewer |
-| document workflows for handoff or review | Markdown export and API docs |
-| sync workflows between multiple n8n servers | Server registry, pull, and push commands |
-| let agents create workflow drafts | `/api/workflows/build` endpoint |
-| install n8n on a remote Docker host | `n8n-manager setup` |
-
-## Features
-
-- **Visual Workflow Viewer** -- Interactive graph visualization powered by vis.js. Zoom, pan, click nodes for details.
-- **Web Dashboard** -- Overview of all workflows with status, tags, and quick actions.
-- **Workflow Editor** -- Add, connect, and configure nodes in-browser with drag-and-drop.
-- **Multi-Server Management** -- Connect to multiple n8n instances. Push/pull workflows between them.
-- **REST API + Swagger** -- Full CRUD API with auto-generated documentation at `/docs`.
-- **CLI** -- Manage workflows from the terminal: import, export, push, pull, list, and more.
-- **Duplicate Detection** -- Content-hash based deduplication prevents importing the same workflow twice.
-- **Version History** -- Track changes to workflows over time with automatic versioning.
-- **Workflow Builder API** -- Programmatically create workflows via POST request (great for AI agents).
-- **Remote n8n Setup** -- Install n8n on remote servers via SSH + Docker with a single command.
-- **JSON + Markdown Export** -- Export workflows as clean JSON or human-readable Markdown documentation.
-- **Workflow Templates** -- Pre-built templates for common automation patterns.
-
-## Quick Start
-
-### Installation
-
-Install directly from GitHub (PyPI release pending):
+## Install and start
 
 ```bash
 pip install git+https://github.com/ellmos-ai/n8n-workflow-manager.git
+n8n-manager serve
 ```
 
-Or clone for development:
+Open <http://127.0.0.1:8100>. Interactive API documentation is at
+<http://127.0.0.1:8100/docs>.
+
+For development:
 
 ```bash
 git clone https://github.com/ellmos-ai/n8n-workflow-manager.git
 cd n8n-workflow-manager
-pip install -e .
+python -m pip install -e ".[dev]"
+python -m pytest -q
 ```
 
-### Usage
+## CLI examples
+
+Mutations that can replace or remove state require a short decision. It is
+stored with workflow history.
 
 ```bash
-# Start the web UI + API server
-n8n-manager serve
-
-# Open in browser: http://localhost:8100
-# Swagger API docs: http://localhost:8100/docs
-```
-
-### CLI Examples
-
-```bash
-# Import a workflow from JSON file
-n8n-manager import my-workflow.json
-
-# List all workflows
+n8n-manager import workflow.json --decision "Import reviewed customer workflow"
 n8n-manager list
-
-# Export as Markdown documentation
+n8n-manager history 1
 n8n-manager export 1 --format md
 
-# Add an n8n server
-n8n-manager servers --add production https://n8n.example.com:5678 YOUR_API_KEY --default
-
-# Add a local server with a self-signed certificate (disables TLS verification
-# for this server only -- TLS certificates are verified by default)
-n8n-manager servers --add local https://localhost:5678 YOUR_API_KEY --no-verify-tls
-
-# Push workflow to server
-n8n-manager push 1
-
-# Pull all workflows from server
+n8n-manager servers --add production https://n8n.example.com YOUR_API_KEY --default
+n8n-manager push 1 --decision "Deploy reviewed version"
 n8n-manager pull
-
-# Check system status
-n8n-manager status
-
-# Install n8n on a remote server
-n8n-manager setup --host 1.2.3.4 --ssh-key ~/.ssh/id_ed25519
+n8n-manager rollback 1 2 --decision "Restore last known-good version"
 ```
 
-### Docker
+TLS verification is on by default. `--no-verify-tls` exists for controlled
+local environments with self-signed certificates; do not use it across
+untrusted networks.
+
+## Builder API
 
 ```bash
-docker-compose up -d
-# Open http://localhost:8100
-```
-
-## API for AI Agents
-
-The `/api/workflows/build` endpoint allows programmatic workflow creation:
-
-```bash
-curl -X POST http://localhost:8100/api/workflows/build \
+curl -X POST http://127.0.0.1:8100/api/workflows/build \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "My Workflow",
+    "name": "Webhook forwarder",
+    "decision": "Create a reviewed draft",
     "nodes": [
-      {"type": "n8n-nodes-base.webhook", "name": "Trigger", "parameters": {"path": "/hook"}},
-      {"type": "n8n-nodes-base.httpRequest", "name": "Fetch", "parameters": {"url": "https://api.example.com"}}
+      {"type": "n8n-nodes-base.webhook", "name": "Trigger", "parameters": {"path": "hook"}},
+      {"type": "n8n-nodes-base.httpRequest", "name": "Forward", "parameters": {"url": "https://api.example.com"}}
     ],
-    "connections": [{"from_node": "Trigger", "to_node": "Fetch"}]
+    "connections": [{"from_node": "Trigger", "to_node": "Forward"}]
   }'
 ```
 
-Full API documentation available at `/docs` (Swagger UI) when the server is running.
+See [API_REFERENCE.md](docs/API_REFERENCE.md) for the mutation and history
+contracts.
 
-## Architecture
+## Configuration and data
 
-```
-n8n-workflow-manager/
-├── core/           # Config, Database, Parser, n8n Client, Builder
-├── api/            # FastAPI server + REST routes
-├── web/            # Jinja2 templates + vis.js frontend
-├── setup/          # SSH helper + n8n Docker installer
-├── export/         # JSON, Markdown export
-├── templates/      # Pre-built workflow templates
-├── data/           # SQLite database (auto-created)
-└── docs/           # Documentation
-```
+`n8n-manager status` prints the effective paths. Relative `db_path` values are
+resolved below the user data directory.
 
-### Tech Stack
+| Platform | Configuration | Runtime data |
+|---|---|---|
+| Windows | `%APPDATA%\n8n-workflow-manager` | `%LOCALAPPDATA%\n8n-workflow-manager` |
+| macOS | `~/Library/Application Support/n8n-workflow-manager` | same directory |
+| Linux | `${XDG_CONFIG_HOME:-~/.config}/n8n-workflow-manager` | `${XDG_DATA_HOME:-~/.local/share}/n8n-workflow-manager` |
 
-| Component | Technology |
-|-----------|-----------|
-| Backend | Python 3.10+ / FastAPI / Uvicorn |
-| Frontend | Jinja2 / vis.js (CDN) / Vanilla JS |
-| Database | SQLite (WAL mode) |
-| n8n Client | httpx |
-| Remote Setup | SSH + Docker |
+Overrides: `N8N_MANAGER_CONFIG`, `N8N_MANAGER_CONFIG_DIR`, and
+`N8N_MANAGER_DATA_DIR`. Start with [config.example.json](config.example.json).
+The default `trusted_hosts` accepts only loopback Host headers; explicitly list
+the reviewed public hostname when using an authenticated reverse proxy.
 
-### Node Color Coding
-
-| Color | Category | Examples |
-|-------|----------|----------|
-| Orange | Trigger | Webhook, Schedule, Manual |
-| Blue | Processing | HTTP Request, Code, Set |
-| Yellow | Logic | IF, Switch, Merge |
-| Purple | AI | LangChain Agent, LLM Chain |
-| Green | Action | Email, Slack, Telegram |
-
-## Configuration
+## Docker
 
 ```bash
-# Show current config
-n8n-manager config --show
-
-# Change API port
-n8n-manager config --set api_port 9000
+docker compose up --build -d
 ```
 
-Configuration is stored in `config.json`. Key settings:
+The Compose port is bound to `127.0.0.1:8100`, and state is mounted below
+`runtime/`. The image runs as an unprivileged user.
 
-| Key | Default | Description |
-|-----|---------|-------------|
-| `api_port` | 8100 | Web UI / API port |
-| `db_path` | `data/n8n_manager.db` | SQLite database path |
-| `default_server` | null | Default n8n server name |
+## Remote n8n setup
 
-## Remote n8n Setup
-
-Install n8n on any Linux server with Docker:
+The setup command expects Docker to have been installed according to the remote
+host's operating-system policy. It installs a pinned official n8n image on a
+loopback-only port; it does not run a remote `curl | sh` installer.
 
 ```bash
-n8n-manager setup --host your-server-ip --ssh-key ~/.ssh/id_ed25519
-
-# After installation:
-# 1. Open http://your-server-ip:5678 in browser
-# 2. Create n8n account
-# 3. Go to Settings > API > Create API Key
-# 4. Register in n8n-manager:
-n8n-manager servers --add myserver http://your-server-ip:5678 YOUR_API_KEY --default
+n8n-manager setup --host your-server --user deploy --ssh-key ~/.ssh/id_ed25519
+# Follow the printed ssh -L ... tunnel command, then open http://127.0.0.1:5678
 ```
 
-**TLS note:** Connections to n8n servers verify TLS certificates by default. For local
-setups with self-signed certificates, register the server with `--no-verify-tls`
-(CLI) or `"verify_tls": false` (REST API). Do not disable verification for servers
-reachable over untrusted networks.
+SSH uses batch mode and `StrictHostKeyChecking=accept-new`. For public service,
+provide an authenticated TLS reverse proxy. Do not expose either n8nManager or
+the generated n8n listener directly to the internet.
 
-## MCP Server
+## Manager + MCP pairing
 
-An MCP (Model Context Protocol) server is available as a separate package for AI-powered workflow management:
+`n8n-workflow-manager` and
+[n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp) are designed as
+a pair: the MCP server is the AI action layer, while this project is the human
+state-and-history layer with visual review, per-workflow decisions, versions,
+and rollback. A client can read `/api/workflows/{id}/history` before submitting
+the required decision for a mutation.
+
+The authoritative decision log lives here and is client-independent, so the
+same review trail can cover the MCP server, `curl`, the CLI, or the web UI.
+Conversational context can additionally come from a pull-based history index
+such as [ctx](https://github.com/ctxrs/ctx) (Apache-2.0).
+
+## Verification
+
+The release contract is documented in [RELEASE_GATE.md](RELEASE_GATE.md). The
+core local gates are:
 
 ```bash
-npm install -g n8n-manager-mcp
+python -m pytest -q
+python -m ruff check n8nManager tests
+python -m bandit -q -r n8nManager -lll
+python -m pip_audit
+python -m build
 ```
-
-See [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp) for details.
-
-## Machine-Readable Context
-
-For LLM agents, crawlers, and directory listings, see [llms.txt](llms.txt). It summarizes the canonical repository, package purpose, useful keywords, related ellmos-ai projects, and verification commands.
-
-## Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-- [n8n](https://n8n.io/) -- The workflow automation platform
-- [vis.js](https://visjs.org/) -- Network visualization library
-- [FastAPI](https://fastapi.tiangolo.com/) -- Modern Python web framework
-
----
-
-## Haftung / Liability
-
-Dieses Projekt ist eine **unentgeltliche Open-Source-Schenkung** im Sinne der §§ 516 ff. BGB. Die Haftung des Urhebers ist gemäß **§ 521 BGB** auf **Vorsatz und grobe Fahrlässigkeit** beschränkt. Ergänzend gelten die Haftungsausschlüsse aus GPL-3.0 / MIT / Apache-2.0 §§ 15–16 (je nach gewählter Lizenz).
-
-Nutzung auf eigenes Risiko. Keine Wartungszusage, keine Verfügbarkeitsgarantie, keine Gewähr für Fehlerfreiheit oder Eignung für einen bestimmten Zweck.
-
-This project is an unpaid open-source donation. Liability is limited to intent and gross negligence (§ 521 German Civil Code). Use at your own risk. No warranty, no maintenance guarantee, no fitness-for-purpose assumed.
-
+MIT; see [LICENSE](LICENSE). Use at your own risk; no warranty or maintenance
+commitment is provided.

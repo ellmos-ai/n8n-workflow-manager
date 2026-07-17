@@ -1,2 +1,3 @@
-"""n8nManager -- n8n Workflow Manager fuer BACH"""
-__version__ = "0.1.0"
+"""Local-first n8n workflow manager."""
+
+__version__ = "0.2.0"

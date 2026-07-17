@@ -1,0 +1,39 @@
+{
+  "name": "Webhook Forwarder",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "{{WEBHOOK_PATH}}",
+        "httpMethod": "POST"
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "id": "webhook-trigger",
+      "name": "Receive Webhook"
+    },
+    {
+      "parameters": {
+        "url": "{{TARGET_URL}}",
+        "method": "POST",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json) }}"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 300],
+      "id": "forward-request",
+      "name": "Forward Request"
+    }
+  ],
+  "connections": {
+    "Receive Webhook": {
+      "main": [[{"node": "Forward Request", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false,
+  "tags": []
+}

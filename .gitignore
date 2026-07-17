@@ -1,7 +1,6 @@
 # Internal planning files
 PLAN.txt
 PLAN_*.txt
-TODO.md
 DONE.md
 
 __pycache__/
@@ -20,6 +19,7 @@ n8nManager/data/*.db
 *.db-wal
 *.db-shm
 exports/
+runtime/
 .env
 .venv/
 env/

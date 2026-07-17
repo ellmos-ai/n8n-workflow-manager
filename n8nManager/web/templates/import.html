@@ -33,6 +33,9 @@ function handleFile(e) {
 async function uploadFile(file) {
     const form = new FormData();
     form.append('file', file);
+    const decision = prompt('Warum wird dieser Workflow importiert?', 'Imported through the web UI');
+    if (!decision?.trim()) return;
+    form.append('decision', decision.trim());
     const resp = await fetch('/api/import', {method: 'POST', body: form});
     const data = await resp.json();
     document.getElementById('import-result').classList.remove('hidden');

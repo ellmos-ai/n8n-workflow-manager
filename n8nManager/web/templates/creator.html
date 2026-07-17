@@ -28,7 +28,7 @@
 <script src="/static/js/graph_renderer.js"></script>
 <script src="/static/js/workflow_editor.js"></script>
 <script>
-    const nodeCatalog = {{ node_catalog | safe }};
+    const nodeCatalog = {{ node_catalog | tojson }};
     initCreator('creator-graph', nodeCatalog);
 </script>
 {% endblock %}

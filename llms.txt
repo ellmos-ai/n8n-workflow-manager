@@ -6,7 +6,7 @@ CLI command: n8n-manager
 Primary audience: n8n users, workflow automation teams, local-first AI agents, and developers who need to inspect, document, create, or sync n8n workflows.
 
 Summary:
-n8n Workflow Manager is a local-first Python package that combines a web dashboard, visual workflow graph viewer, REST API, CLI, SQLite storage, Markdown/JSON exports, and multi-server n8n sync. It can import n8n workflow JSON, display graph structure with vis.js, push or pull workflows from configured n8n servers, and expose a builder endpoint for agent-generated workflow drafts.
+n8n Workflow Manager is a local-first Python package that combines a working visual editor, REST API, CLI, SQLite decision/version history, rollback, Markdown/JSON exports, validated templates, and server-scoped n8n sync. Mutating operations record intent, and clients can read history before changing a workflow.
 
 Good search phrases:
 - local n8n workflow manager
@@ -28,13 +28,16 @@ Related projects:
 Verification commands:
 - python -m pytest -q
 - python -m compileall -q n8nManager tests
+- python -m ruff check n8nManager tests
+- python -m bandit -q -r n8nManager -lll
+- python -m build
 - python -m n8nManager status
 - python -m n8nManager serve --port 8100
 
 Notes:
 - This repository is not the n8n project itself. It is a companion manager for imported or connected n8n workflows.
-- The web UI is local-first and uses FastAPI, Jinja2, vis.js, and SQLite.
+- The web UI is local-first and binds to 127.0.0.1 unless an operator explicitly acknowledges remote exposure.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
 
-## Last-checked: 2026-06-12
+## Last-checked: 2026-07-17

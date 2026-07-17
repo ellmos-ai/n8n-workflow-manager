@@ -59,7 +59,11 @@
 <script>
 async function deleteWorkflow(id) {
     if (!confirm('Workflow wirklich löschen?')) return;
-    const resp = await apiClient.delete('/api/workflows/' + id);
+    const decision = prompt('Warum wird dieser Workflow gelöscht?');
+    if (!decision?.trim()) return;
+    const confirmActive = confirm('Falls der Workflow aktiv ist: Löschung ausdrücklich bestätigen?');
+    const url = '/api/workflows/' + id + '?decision=' + encodeURIComponent(decision.trim()) + '&confirm_active=' + confirmActive;
+    const resp = await apiClient.delete(url);
     if (resp.ok) location.reload();
     else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
 }

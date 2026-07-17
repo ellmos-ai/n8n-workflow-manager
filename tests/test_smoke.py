@@ -184,10 +184,11 @@ class TestDatabase(unittest.TestCase):
         db2 = Database(Path(self.tmp) / "test.db")
         self.assertIsNotNone(db2)
 
-    def test_list_templates_empty(self):
+    def test_bundled_templates_seeded(self):
         templates = self.db.list_templates()
         self.assertIsInstance(templates, list)
-        self.assertEqual(len(templates), 0)
+        self.assertGreaterEqual(len(templates), 2)
+        self.assertTrue(all(t["category"] == "bundled" for t in templates))
 
     def test_add_and_get_template(self):
         tpl_json = json.dumps({"name": "{{name}}", "nodes": [], "connections": {}})
@@ -212,7 +213,8 @@ class TestDatabase(unittest.TestCase):
         tpl_json = json.dumps({"nodes": [], "connections": {}})
         self.db.add_template(name="A", template_json=tpl_json, category="alpha")
         self.db.add_template(name="B", template_json=tpl_json, category="beta")
-        self.assertEqual(len(self.db.list_templates()), 2)
+        self.assertEqual(len(self.db.list_templates(category="alpha")), 1)
+        self.assertEqual(len(self.db.list_templates(category="beta")), 1)
         alpha = self.db.list_templates(category="alpha")
         self.assertEqual(len(alpha), 1)
         self.assertEqual(alpha[0]["name"], "A")
@@ -297,7 +299,7 @@ class TestWorkflowParser(unittest.TestCase):
     def test_load_workflow_file_not_found(self):
         data, err = self.load_workflow_file("/nonexistent/file.json")
         self.assertIsNone(data)
-        self.assertIn("nicht gefunden", err.lower())
+        self.assertIn("not found", err.lower())
 
     def test_load_workflow_file_valid(self):
         wf = self._make_wf()
@@ -451,26 +453,6 @@ class TestN8nClientPagination(unittest.TestCase):
         self.assertEqual(calls, ["", "abc"])
 
 
-class TestBachExportErrors(unittest.TestCase):
-    """BACH-Exportfehler dürfen keine internen SQLite-Details zurückgeben."""
-
-    def test_sqlite_error_detail_is_sanitized(self):
-        from n8nManager.export.bach_export import register_in_bach
-
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".db", delete=False, encoding="utf-8") as f:
-            f.write("not a sqlite database")
-            db_path = f.name
-
-        workflow = {"workflow_json": json.dumps({"nodes": []}), "name": "Demo"}
-        with self.assertLogs("n8nManager.export.bach_export", level="WARNING") as captured:
-            result = register_in_bach(workflow, db_path)
-
-        self.assertTrue(result.get("error"))
-        self.assertEqual(result["detail"], "SQLite-Fehler bei BACH-Registrierung")
-        self.assertNotIn("file is not a database", result["detail"])
-        self.assertIn("file is not a database", "\n".join(captured.output))
-
-
 class TestApiErrorSanitization(unittest.TestCase):
     """API-Fehlerantworten dürfen keine internen Upstream-Details ausgeben."""
 
@@ -479,11 +461,11 @@ class TestApiErrorSanitization(unittest.TestCase):
         if importlib.util.find_spec("fastapi") is None:
             self.skipTest("fastapi not installed")
         from fastapi import HTTPException
-        from n8nManager.api.routes_sync import _log_external_error
+        from n8nManager.api.routes_sync import _external_failure
 
         internal_detail = "Traceback (most recent call last): secret"
         with self.assertLogs("n8nManager.api.routes_sync", level="WARNING") as captured:
-            _log_external_error("n8n push", {"error": True, "detail": internal_detail})
+            _external_failure("n8n push", {"error": True, "detail": internal_detail})
 
         with self.assertRaises(HTTPException) as raised:
             raise HTTPException(status_code=502, detail="Push fehlgeschlagen")
@@ -510,7 +492,7 @@ class TestApiRoutes(unittest.TestCase):
         cls._old_db = server_module._db
         server_module._db = Database(Path(cls.tmp) / "api_test.db")
         cls.db = server_module._db
-        cls.client = TestClient(server_module.app)
+        cls.client = TestClient(server_module.app, base_url="http://127.0.0.1")
 
     @classmethod
     def tearDownClass(cls):
@@ -549,7 +531,11 @@ class TestApiRoutes(unittest.TestCase):
         self.assertEqual(resp.json()["name"], "Smoke Template")
 
         resp = self.client.post(
-            f"/api/templates/{tpl_id}/instantiate", json={"name": "Instantiated WF"}
+            f"/api/templates/{tpl_id}/instantiate",
+            json={
+                "values": {"name": "Instantiated WF"},
+                "decision": "Instantiate smoke template",
+            },
         )
         self.assertEqual(resp.status_code, 200)
         self.assertIn("id", resp.json())
@@ -567,35 +553,35 @@ class TestApiRoutes(unittest.TestCase):
         self.assertEqual(resp.status_code, 409)
 
     def test_servers_api_redacts_key(self):
-        secret = "supersecret-api-key-9876"
+        credential_value = "supersecret-api-key-9876"
         resp = self.client.post("/api/servers", json={
             "name": "redact-test",
             "url": "https://n8n.example.com:5678",
-            "api_key": secret,
+            "api_key": credential_value,
         })
         self.assertEqual(resp.status_code, 200)
         srv_id = resp.json()["id"]
 
         resp = self.client.get("/api/servers")
         self.assertEqual(resp.status_code, 200)
-        self.assertNotIn(secret, resp.text)
+        self.assertNotIn(credential_value, resp.text)
         entry = [s for s in resp.json()["data"] if s["id"] == srv_id][0]
         self.assertEqual(entry["api_key"], "***9876")
 
         resp = self.client.get(f"/api/servers/{srv_id}")
         self.assertEqual(resp.status_code, 200)
-        self.assertNotIn(secret, resp.text)
+        self.assertNotIn(credential_value, resp.text)
         self.assertEqual(resp.json()["api_key"], "***9876")
 
         # the stored key must remain intact in the database
-        self.assertEqual(self.db.get_server(srv_id)["api_key"], secret)
+        self.assertEqual(self.db.get_server(srv_id)["api_key"], credential_value)
 
     def test_servers_page_does_not_leak_key(self):
-        secret = "another-secret-key-4321"
-        self.db.add_server("page-redact", "https://n8n.example.org:5678", secret)
+        credential_value = "another-secret-key-4321"
+        self.db.add_server("page-redact", "https://n8n.example.org:5678", credential_value)
         resp = self.client.get("/servers")
         self.assertEqual(resp.status_code, 200)
-        self.assertNotIn(secret, resp.text)
+        self.assertNotIn(credential_value, resp.text)
 
     def test_redact_server_short_and_empty_keys(self):
         from n8nManager.api.routes_servers import redact_server

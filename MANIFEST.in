@@ -1,0 +1,13 @@
+include CHANGELOG.md
+include CONTRIBUTING.md
+include Dockerfile
+include RELEASE_GATE.md
+include SECURITY.md
+include TODO.md
+include config.example.json
+include docker-compose.yml
+include llms.txt
+recursive-include assets *.svg
+recursive-include docs *.md
+recursive-include README *.png
+recursive-include n8nManager/templates *.json

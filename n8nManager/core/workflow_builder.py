@@ -1,6 +1,5 @@
 """Programmatisches Erstellen von n8n Workflows."""
 import json
-from typing import Optional
 
 
 class WorkflowBuilder:

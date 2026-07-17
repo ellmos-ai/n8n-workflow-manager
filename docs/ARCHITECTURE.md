@@ -1,92 +1,70 @@
-# n8nManager Architektur
+# n8nManager architecture
 
-## Ueberblick
+## Layers
 
-n8nManager ist ein FastAPI-basiertes Tool zur Verwaltung von n8n Workflows.
-Es folgt dem MODULAR_AGENTS-Pattern (standalone + BACH-integrierbar).
-
-## Schichten
-
-```
-+------------------------------------------+
-|       Web-UI (Jinja2 + vis.js)           |
-+------------------------------------------+
-|       REST API (FastAPI)                 |
-+------------------------------------------+
-|  Core: Config | Database | Parser | Client | Builder
-+------------------------------------------+
-|  Setup: SSH | Docker | n8n Installer     |
-+------------------------------------------+
-|  Export: JSON | Markdown | BACH          |
-+------------------------------------------+
-|       SQLite (WAL-Modus)                 |
-+------------------------------------------+
+```text
+Browser UI (Jinja2 + vis.js)
+            |
+FastAPI routes and same-origin mutation guard
+            |
+Workflow validation | history/decisions | n8n API client
+            |
+SQLite WAL database in the per-user data directory
 ```
 
-## Datenbank
+The package also provides a CLI, JSON/Markdown exporters, generic resource
+templates, and a conservative SSH wrapper for an existing remote Docker host.
 
-6 Tabellen:
-- `workflows` -- Workflow-JSON + Metadaten (Content-Hash, Nodes, Trigger)
-- `servers` -- n8n Server-Instanzen (URL, API-Key, Default)
-- `sync_history` -- Import/Export-Protokoll
-- `templates` -- Workflow-Vorlagen mit Platzhaltern
-- `workflow_versions` -- Aenderungsverlauf
-- `node_catalog` -- Bekannte n8n Node-Typen + Farben
+## Persistence model
 
-## Design-Entscheidungen
+| Table | Purpose |
+|---|---|
+| `workflows` | Current normalized workflow JSON and derived metadata |
+| `workflow_versions` | Immutable numbered workflow snapshots |
+| `workflow_decisions` | Mutation intent and action audit; survives workflow deletion |
+| `workflow_remotes` | Independent remote n8n ID for each workflow/server pair |
+| `servers` | n8n endpoint, redacted-at-output API key, TLS policy |
+| `sync_history` | Pull/push results |
+| `templates` | Validated bundled or user-created workflow templates |
+| `node_catalog` | Node metadata used by the visual editor |
 
-### Warum FastAPI + Jinja2 statt React?
-- `&` im Pfad `KI&AI` bricht npm-Scripts (bekanntes Problem)
-- BACH-Oekosystem ist 100% Python
-- vis.js ueber CDN braucht keinen Build-Schritt
-- FastAPI liefert automatische Swagger-Docs
+Workflow creation writes the current row, initial version, and initial decision
+in one transaction. Updates write a new version and decision in the same
+transaction. Deletion clears dependent versions safely, retains the decision
+audit, and detaches sync history.
 
-### Warum vis.js?
-- Robuste Graphen-Bibliothek fuer interaktive Netzwerke
-- CDN-faehig (kein npm Build noetig)
-- Manipulation-Modus fuer Editor-Funktionalitaet
-- Gute Dokumentation
+Remote identity is the tuple `(server_id, n8n_id)`, while
+`(workflow_id, server_id)` identifies a local workflow's binding on a given
+server. A content hash detects unchanged data but is not an identity key.
 
-### Warum SQLite statt JSON-Dateien?
-- Konsistentes Pattern mit ApiProber und BACH
-- WAL-Modus fuer gleichzeitige Lese-/Schreibzugriffe
-- Strukturierte Queries (Duplikat-Check, Versionierung)
-- Content-Hash fuer Deduplizierung
+## Runtime paths
 
-## n8n Workflow-Format
+Configuration and data paths are derived through `platform`, `APPDATA` /
+`LOCALAPPDATA`, or XDG variables. Environment overrides make containers and
+tests deterministic. Package-local configuration is only a read-only legacy
+fallback; new writes are atomic and go to the user configuration path.
 
-n8n Workflows bestehen aus:
-- `nodes`: Array von Node-Objekten (type, name, parameters, position)
-- `connections`: Dict mit Source-Node -> Target-Node Mappings
-- `settings`: Ausfuehrungseinstellungen
-- `active`: Boolean
-- `tags`: Array von Tag-Objekten
+## n8n API boundary
 
-## vis.js Graph-Mapping
+- HTTP(S) instance URLs are validated and normalized.
+- Redirects are not followed.
+- API keys are sent through `X-N8N-API-KEY` and redacted from REST output.
+- Pull follows `nextCursor`, rejects repeated cursors, and has a maximum page guard.
+- Push removes server-owned workflow fields before create/update.
+- Activate/deactivate are POST operations.
 
-| n8n | vis.js |
-|-----|--------|
-| node.name | node.label |
-| node.position[x,y] | node.x, node.y |
-| node.type | node.color (Farbkodierung) |
-| connections[source] | edge (from -> to) |
+## Web editor and rendering
 
-### Farbkodierung
-- Orange (#ff6d5a): Trigger/Webhook
-- Blau (#4285f4): Verarbeitung/HTTP/Code
-- Gelb (#ffcc00): Bedingung (IF/Switch)
-- Violett (#9b59b6): AI/LangChain
-- Gruen (#28a745): Aktion (Email/Slack)
-- Rot (#e74c3c): BACH
+Workflow data enters scripts through Jinja's `tojson`, which escapes script
+terminators. The editor retains node IDs, types, versions, parameters,
+positions, and connection indexes, and persists changes through the validated
+workflow API with a required decision.
 
-## API-Design
+## Deployment boundary
 
-REST-Endpoints unter `/api/`:
-- CRUD fuer Workflows, Server, Templates
-- `/api/workflows/build` -- Programmatische Erstellung (Claude Code)
-- `/api/export/{id}/to-server` -- Push zu n8n
-- `/api/pull/{id}` -- Pull von n8n
-- `/api/bach/register-workflow` -- BACH-Integration
-- `/api/status` -- System-Info
-
-Swagger-UI automatisch auf `/docs`.
+The default host is loopback. Browser mutations must be same-origin unless an
+origin is explicitly configured. A trusted-host middleware separately rejects
+unconfigured Host headers, closing the DNS-rebinding path. Remote binding is fail-closed unless
+`N8N_MANAGER_ALLOW_REMOTE=1`; operators are responsible for an authenticated
+TLS reverse proxy. The Docker image is non-root and Compose publishes only on
+host loopback.

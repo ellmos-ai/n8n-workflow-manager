@@ -1,5 +1,7 @@
 """Markdown-Export fuer Workflows."""
 import json
+import os
+import tempfile
 from pathlib import Path
 
 
@@ -51,7 +53,16 @@ def export_workflow_markdown(workflow: dict, output_path: str) -> str:
                                 lines.append(f"- {source} -> {target}")
     lines.append("")
 
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    fd, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write("\n".join(lines))
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
     return str(path)
