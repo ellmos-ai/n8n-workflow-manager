@@ -53,6 +53,10 @@ n8n-manager servers --add production https://n8n.example.com YOUR_API_KEY --defa
 n8n-manager push 1 --decision "Geprüfte Version ausrollen"
 n8n-manager pull
 n8n-manager rollback 1 2 --decision "Letzte stabile Version wiederherstellen"
+
+n8n-manager status                       # effektive Pfade, Datenbank- und Serverstand
+n8n-manager config --show                # aufgelöste Konfiguration ansehen
+n8n-manager config --set db_path ./my.db # einzelne Einstellung ändern
 ```
 
 Die TLS-Prüfung ist standardmäßig aktiv. `--no-verify-tls` ist nur für
