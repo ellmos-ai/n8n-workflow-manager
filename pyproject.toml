@@ -71,3 +71,11 @@ n8nManager = [
 [tool.ruff]
 target-version = "py310"
 line-length = 100
+
+[tool.ruff.lint]
+# Pin the rule set explicitly. Without this, `ruff check` follows whatever the
+# installed ruff considers its default, so a new ruff release can turn a green
+# CI red without a single line of code changing -- which is exactly what happened
+# on 2026-07-24 (ruff 0.15 added UP045, N999, RUF0xx and others to the defaults).
+# Widening this list is a deliberate decision, not a side effect of an upgrade.
+select = ["E4", "E7", "E9", "F"]
