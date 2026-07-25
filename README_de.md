@@ -4,7 +4,13 @@
 
 **[English version](README.md)** · **Deutsch**
 
-> Lokale Prüfung, Bearbeitung, Historie und Multi-Server-Synchronisation für n8n-Workflows.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Pytest](https://img.shields.io/badge/Pytest-195%20passed-brightgreen.svg)](tests)
+[![LLM-Kontext](https://img.shields.io/badge/LLM--Kontext-llms.txt-blue.svg)](llms.txt)
+
+> [!NOTE]
+> Für automatisierte KI-Agenten und CI-Workflows bietet `n8n-workflow-manager` einen maschinenlesbaren Index in [`llms.txt`](llms.txt). Alle ändernden Operationen erfordern eine explizite `--decision`-Begründung zur Nachvollziehbarkeit.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)

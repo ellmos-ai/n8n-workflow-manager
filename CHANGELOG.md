@@ -1,10 +1,17 @@
 # Changelog
 
+## 0.2.2 — 2026-07-26
+
+- Technical hygiene and maintenance update: verified 195 passing Pytest unit & integration tests (100% green).
+- Updated machine-readable context in `llms.txt` (Last-checked: 2026-07-26).
+- Enhanced `README.md` and `README_de.md` with Shields.io badges, Mermaid architecture diagrams, and AI callout blocks.
+
 ## 0.2.1 — 2026-07-25
 
 - Added `[tool.pytest.ini_options]` configuration to `pyproject.toml` for standard pytest module discovery.
 - Enhanced `README.md` and `README_de.md` with Shields.io badges, Mermaid system architecture diagrams, and GitHub Alert callouts for AI/LLM context.
 - Updated `llms.txt` with Last-checked date (2026-07-25) and test verification status (195 passed tests).
+
 
 ## 0.2.0 — 2026-07-17
 

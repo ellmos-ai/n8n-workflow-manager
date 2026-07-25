@@ -8,13 +8,13 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-195%20passed-brightgreen.svg)](https://docs.pytest.org/)
+[![Pytest](https://img.shields.io/badge/pytest-195%20passed-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Local-First](https://img.shields.io/badge/architecture-local--first-blueviolet.svg)](#what-it-does)
 [![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
 
 > [!NOTE]
-> **AI Agent & LLM Context**: Machine-readable specification and RAG search phrases are indexed in [`llms.txt`](llms.txt). Pairs with [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) for autonomous AI workflow operations with decision tracking.
+> **AI Agent & LLM Context**: Machine-readable specification and RAG search phrases are indexed in [`llms.txt`](llms.txt). Pairs with [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) for autonomous AI workflow operations with decision tracking. All mutation operations require an explicit `--decision` or `decision` payload parameter to maintain auditability.
 
 ## System Architecture
 
