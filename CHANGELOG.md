@@ -1,6 +1,13 @@
 # Changelog
 
+## 0.2.1 — 2026-07-25
+
+- Added `[tool.pytest.ini_options]` configuration to `pyproject.toml` for standard pytest module discovery.
+- Enhanced `README.md` and `README_de.md` with Shields.io badges, Mermaid system architecture diagrams, and GitHub Alert callouts for AI/LLM context.
+- Updated `llms.txt` with Last-checked date (2026-07-25) and test verification status (195 passed tests).
+
 ## 0.2.0 — 2026-07-17
+
 
 - Added transactional workflow versions, decision audit, history API/CLI, and rollback.
 - Fixed workflow deletion after version creation and retained delete decisions for audit.

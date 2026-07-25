@@ -6,7 +6,34 @@
 
 > Lokale Prüfung, Bearbeitung, Historie und Multi-Server-Synchronisation für n8n-Workflows.
 
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Pytest](https://img.shields.io/badge/pytest-195%20passed-brightgreen.svg)](https://docs.pytest.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
+[![Local-First](https://img.shields.io/badge/architektur-local--first-blueviolet.svg)](#funktionen)
+[![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
+
+> [!NOTE]
+> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung.
+
+## Systemarchitektur
+
+```mermaid
+graph TD
+    Client["Client-Schnittstellen<br/>(Browser Web UI / CLI / REST API / MCP)"]
+    FastAPI["FastAPI Anwendung<br/>(127.0.0.1:8100)"]
+    Engine["n8nManager Engine<br/>(Entscheidungsaudit & Versionskontrolle)"]
+    SQLite[("SQLite Historie-DB<br/>(%LOCALAPPDATA%/n8n-workflow-manager)")]
+    Remote["Remote n8n Instanzen<br/>(n8n Public REST API)"]
+
+    Client -->|HTTP / CLI Befehle| FastAPI
+    FastAPI --> Engine
+    Engine -->|Speichere Änderungen & Historie| SQLite
+    Engine -->|Sync Pull / Push| Remote
+```
+
 ## Funktionen
+
 
 - Visueller Graph-Viewer und funktionsfähiger Browser-Editor für n8n-Workflow-JSON.
 - SQLite-basierte Versionshistorie und Entscheidungsprotokoll für jede Änderung.
