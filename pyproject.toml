@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "n8n-workflow-manager"
-version = "0.2.0"
+version = "0.2.3"
 description = "Local-first n8n workflow manager with visual graph viewer, REST API, CLI, and multi-server sync"
 readme = "README.md"
 license = "MIT"

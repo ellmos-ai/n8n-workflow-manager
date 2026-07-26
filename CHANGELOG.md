@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3 — 2026-07-27
+
+- Technical hygiene and maintenance update: verified 195 passing Pytest unit & integration tests (100% green).
+- Updated package version to `0.2.3` in `pyproject.toml` and `n8nManager/__init__.py`.
+- Updated machine-readable context in `llms.txt` (Last-checked: 2026-07-27).
+
 ## 0.2.2 — 2026-07-26
 
 - Technical hygiene and maintenance update: verified 195 passing Pytest unit & integration tests (100% green).
