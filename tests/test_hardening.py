@@ -640,3 +640,20 @@ def test_json_and_markdown_exports_end_with_newline(tmp_path):
     md_path = export_workflow_markdown(stored, str(tmp_path / "workflow.md"))
     assert __import__("pathlib").Path(json_path).read_bytes().endswith(b"\n")
     assert __import__("pathlib").Path(md_path).read_bytes().endswith(b"\n")
+
+
+def test_csp_headers_and_vendored_vis_network():
+    from n8nManager.api.server import app
+    client = TestClient(app, base_url="http://127.0.0.1")
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert "Content-Security-Policy" in resp.headers
+    assert "default-src 'self'" in resp.headers["Content-Security-Policy"]
+    assert "X-Content-Type-Options" in resp.headers
+    assert resp.headers["X-Frame-Options"] == "DENY"
+    assert "/static/js/vis-network.min.js" in resp.text
+    assert "unpkg.com" not in resp.text
+
+    vis_resp = client.get("/static/js/vis-network.min.js")
+    assert vis_resp.status_code == 200
+    assert len(vis_resp.content) > 500000
