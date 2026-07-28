@@ -26,7 +26,7 @@ Related projects:
 - https://github.com/ellmos-ai - parent organization.
 
 Verification commands:
-- python -m pytest -q (195 passed tests)
+- python -m pytest -q (196 passed tests)
 - python -m compileall -q n8nManager tests
 - python -m ruff check n8nManager tests
 - python -m bandit -q -r n8nManager -lll
@@ -39,6 +39,6 @@ Notes:
 - The web UI is local-first and binds to 127.0.0.1 unless an operator explicitly acknowledges remote exposure.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
-- Verification status: 195/195 Pytest unit & integration tests passing (100% green).
+- Verification status: 196/196 Pytest unit & integration tests passing (100% green).
 
 ## Last-checked: 2026-07-28

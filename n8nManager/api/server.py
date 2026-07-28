@@ -129,7 +129,11 @@ async def add_security_headers(request: Request, call_next):
         "img-src 'self' data:; "
         "font-src 'self'; "
         "connect-src 'self'; "
-        "frame-ancestors 'none';"
+        "frame-ancestors 'none'; "
+        "object-src 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self'; "
+        "manifest-src 'self';"
     )
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"

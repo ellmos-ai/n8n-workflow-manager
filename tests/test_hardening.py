@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sqlite3
 from importlib.resources import files
@@ -648,12 +649,24 @@ def test_csp_headers_and_vendored_vis_network():
     resp = client.get("/")
     assert resp.status_code == 200
     assert "Content-Security-Policy" in resp.headers
-    assert "default-src 'self'" in resp.headers["Content-Security-Policy"]
-    assert "X-Content-Type-Options" in resp.headers
+    csp = resp.headers["Content-Security-Policy"]
+    for directive in (
+        "default-src 'self'",
+        "connect-src 'self'",
+        "frame-ancestors 'none'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "manifest-src 'self'",
+    ):
+        assert directive in csp
+    assert resp.headers["X-Content-Type-Options"] == "nosniff"
     assert resp.headers["X-Frame-Options"] == "DENY"
     assert "/static/js/vis-network.min.js" in resp.text
     assert "unpkg.com" not in resp.text
 
     vis_resp = client.get("/static/js/vis-network.min.js")
     assert vis_resp.status_code == 200
-    assert len(vis_resp.content) > 500000
+    assert hashlib.sha256(vis_resp.content).hexdigest() == (
+        "fd730e304a5b877a937a896be9536e7974dc473d8ac87fa66644bce52cb5f8e4"
+    )
