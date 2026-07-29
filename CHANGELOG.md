@@ -2,12 +2,13 @@
 
 ## Unreleased
 
+- Fixed SHA-256 test assertion in `tests/test_hardening.py` by normalizing CRLF line endings to LF for cross-platform Windows compatibility.
 - Vendored the pinned vis-network 10.1.0 browser asset for fully offline use
   and verified its SHA-256 against the upstream distribution.
 - Added a hardened CSP baseline plus anti-framing and MIME-sniffing headers.
   Existing inline template code still requires `'unsafe-inline'`; eliminating
   it is a separate template refactor.
-- Verified 196 passing Pytest unit & integration tests.
+- Technical hygiene check: verified 196/196 passing Pytest unit & integration tests (100% green).
 
 ## 0.2.3 — 2026-07-27
 

@@ -41,4 +41,4 @@ Notes:
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
 - Verification status: 196/196 Pytest unit & integration tests passing (100% green).
 
-## Last-checked: 2026-07-28
+## Last-checked: 2026-07-29

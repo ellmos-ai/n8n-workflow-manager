@@ -667,6 +667,8 @@ def test_csp_headers_and_vendored_vis_network():
 
     vis_resp = client.get("/static/js/vis-network.min.js")
     assert vis_resp.status_code == 200
-    assert hashlib.sha256(vis_resp.content).hexdigest() == (
+    vis_content = vis_resp.content.replace(b"\r\n", b"\n")
+    assert hashlib.sha256(vis_content).hexdigest() == (
         "fd730e304a5b877a937a896be9536e7974dc473d8ac87fa66644bce52cb5f8e4"
     )
+
