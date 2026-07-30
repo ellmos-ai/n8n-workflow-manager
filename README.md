@@ -1,4 +1,4 @@
-<img src="assets/banner.svg" width="100%" alt="n8n-workflow-manager banner">
+<img src="assets/banner.png" width="100%" alt="n8n-workflow-manager banner">
 
 # n8n Workflow Manager
 
