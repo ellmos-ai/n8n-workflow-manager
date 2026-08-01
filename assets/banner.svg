@@ -1,159 +1,295 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2816 1536" width="2816" height="1536">
   <defs>
-    <!-- Gradients -->
+    <!-- Background Gradients -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#080c14" />
-      <stop offset="50%" stop-color="#0b1329" />
+      <stop offset="0%" stop-color="#050811" />
+      <stop offset="40%" stop-color="#0a1128" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-    <radialGradient id="leftGlow" cx="25%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ea5a0c" stop-opacity="0.15" />
+
+    <!-- Radial Glow Effects -->
+    <radialGradient id="leftGlow" cx="28%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#ea5a0c" stop-opacity="0.18" />
       <stop offset="100%" stop-color="#ea5a0c" stop-opacity="0" />
     </radialGradient>
-    <radialGradient id="rightGlow" cx="75%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.1" />
+
+    <radialGradient id="rightGlow" cx="75%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.14" />
       <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
     </radialGradient>
-    
-    <!-- Flow Line Gradients -->
-    <linearGradient id="gradAB" x1="0%" y1="0%" x2="100%" y2="0%">
+
+    <radialGradient id="bottomGlow" cx="50%" cy="85%" r="45%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Connection Path Gradients -->
+    <linearGradient id="grad12" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#38bdf8" />
       <stop offset="100%" stop-color="#ea5a0c" />
     </linearGradient>
-    <linearGradient id="gradAC" x1="0%" y1="0%" x2="100%" y2="0%">
+
+    <linearGradient id="grad13" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#ea5a0c" />
+      <stop offset="100%" stop-color="#c084fc" />
     </linearGradient>
-    <linearGradient id="gradBD" x1="0%" y1="0%" x2="100%" y2="0%">
+
+    <linearGradient id="grad24" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#ea5a0c" />
-      <stop offset="100%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#f97316" />
     </linearGradient>
-    <linearGradient id="gradCD" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#ea5a0c" />
+
+    <linearGradient id="grad34" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+
+    <linearGradient id="grad45" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f97316" />
       <stop offset="100%" stop-color="#10b981" />
     </linearGradient>
 
-    <!-- Drop Shadow Filter -->
+    <linearGradient id="dividerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#334155" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#ea5a0c" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#334155" stop-opacity="0.1" />
+    </linearGradient>
+
+    <!-- Filters -->
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5" />
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#000000" flood-opacity="0.6" />
     </filter>
-    
-    <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
+
+    <filter id="nodeShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+
+    <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
 
     <!-- Grid Pattern -->
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <circle cx="2" cy="2" r="1" fill="#334155" opacity="0.3" />
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="2" fill="#334155" opacity="0.35" />
     </pattern>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="340" fill="url(#bgGrad)" rx="16" />
+  <!-- Canvas Background -->
+  <rect width="2816" height="1536" fill="url(#bgGrad)" rx="32" />
   
-  <!-- Grid Layer -->
-  <rect width="1200" height="340" fill="url(#grid)" rx="16" />
+  <!-- Tech Grid Overlay -->
+  <rect width="2816" height="1536" fill="url(#grid)" rx="32" />
 
-  <!-- Ambient Glows -->
-  <rect width="1200" height="340" fill="url(#leftGlow)" rx="16" />
-  <rect width="1200" height="340" fill="url(#rightGlow)" rx="16" />
+  <!-- Ambient Glow Layers -->
+  <rect width="2816" height="1536" fill="url(#leftGlow)" rx="32" />
+  <rect width="2816" height="1536" fill="url(#rightGlow)" rx="32" />
+  <rect width="2816" height="1536" fill="url(#bottomGlow)" rx="32" />
   
   <!-- Outer Border -->
-  <rect width="1198" height="338" x="1" y="1" fill="none" stroke="#1e293b" stroke-width="1.5" rx="15" />
+  <rect width="2810" height="1530" x="3" y="3" fill="none" stroke="#1e293b" stroke-width="3" rx="30" />
 
-  <!-- ==================== LEFT HALF: WORKFLOW GRAPH ==================== -->
+  <!-- ==================== LEFT SECTION: GRAPH NETWORK ==================== -->
   
-  <!-- Connection Paths (Background Glow) -->
-  <path d="M 184,170 C 220,170 224,100 260,100" fill="none" stroke="url(#gradAB)" stroke-width="8" opacity="0.15" />
-  <path d="M 184,170 C 220,170 224,240 260,240" fill="none" stroke="url(#gradAC)" stroke-width="8" opacity="0.15" />
-  <path d="M 324,100 C 360,100 364,170 400,170" fill="none" stroke="url(#gradBD)" stroke-width="8" opacity="0.15" />
-  <path d="M 324,240 C 360,240 364,170 400,170" fill="none" stroke="url(#gradCD)" stroke-width="8" opacity="0.15" />
+  <!-- Connection Paths (Background Thick Glow) -->
+  <path d="M 360,768 C 450,768 470,480 560,480" fill="none" stroke="url(#grad12)" stroke-width="16" opacity="0.18" filter="url(#glowEffect)" />
+  <path d="M 360,768 C 450,768 470,1056 560,1056" fill="none" stroke="url(#grad13)" stroke-width="16" opacity="0.18" filter="url(#glowEffect)" />
+  <path d="M 700,480 C 790,480 810,768 900,768" fill="none" stroke="url(#grad24)" stroke-width="16" opacity="0.18" filter="url(#glowEffect)" />
+  <path d="M 700,1056 C 790,1056 810,768 900,768" fill="none" stroke="url(#grad34)" stroke-width="16" opacity="0.18" filter="url(#glowEffect)" />
+  <path d="M 1040,768 C 1130,768 1150,768 1240,768" fill="none" stroke="url(#grad45)" stroke-width="16" opacity="0.18" filter="url(#glowEffect)" />
 
-  <!-- Connection Paths (Foreground Sharp) -->
-  <path d="M 184,170 C 220,170 224,100 260,100" fill="none" stroke="url(#gradAB)" stroke-width="3" />
-  <path d="M 184,170 C 220,170 224,240 260,240" fill="none" stroke="url(#gradAC)" stroke-width="3" />
-  <path d="M 324,100 C 360,100 364,170 400,170" fill="none" stroke="url(#gradBD)" stroke-width="3" />
-  <path d="M 324,240 C 360,240 364,170 400,170" fill="none" stroke="url(#gradCD)" stroke-width="3" />
+  <!-- Connection Paths (Foreground Sharp Lines) -->
+  <path d="M 360,768 C 450,768 470,480 560,480" fill="none" stroke="url(#grad12)" stroke-width="5" />
+  <path d="M 360,768 C 450,768 470,1056 560,1056" fill="none" stroke="url(#grad13)" stroke-width="5" />
+  <path d="M 700,480 C 790,480 810,768 900,768" fill="none" stroke="url(#grad24)" stroke-width="5" />
+  <path d="M 700,1056 C 790,1056 810,768 900,768" fill="none" stroke="url(#grad34)" stroke-width="5" />
+  <path d="M 1040,768 C 1130,768 1150,768 1240,768" fill="none" stroke="url(#grad45)" stroke-width="5" />
 
-  <!-- Secondary/Dashed Ambient Paths -->
-  <path d="M 85,170 L 120,170" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" opacity="0.4" />
-  <path d="M 464,170 L 505,170" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" opacity="0.4" />
-  <path d="M 324,100 C 350,100 360,70 380,70" fill="none" stroke="#ea5a0c" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.3" />
-  <path d="M 324,240 C 350,240 360,270 380,270" fill="none" stroke="#ea5a0c" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.3" />
+  <!-- Secondary Dashed Ambient Paths -->
+  <path d="M 140,768 L 220,768" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="8 8" opacity="0.45" />
+  <path d="M 1380,768 L 1450,768" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="8 8" opacity="0.45" />
+  <path d="M 700,480 C 760,480 780,360 840,360" fill="none" stroke="#ea5a0c" stroke-width="3" stroke-dasharray="6 6" opacity="0.35" />
+  <path d="M 700,1056 C 760,1056 780,1176 840,1176" fill="none" stroke="#c084fc" stroke-width="3" stroke-dasharray="6 6" opacity="0.35" />
 
-  <!-- Flowing Signal Dots -->
-  <circle cx="222" cy="135" r="4" fill="#ea5a0c" />
-  <circle cx="222" cy="205" r="4" fill="#ea5a0c" />
-  <circle cx="362" cy="135" r="4" fill="#10b981" />
-  <circle cx="362" cy="205" r="4" fill="#10b981" />
+  <!-- Flow Signals / Pulsing Circles -->
+  <circle cx="455" cy="624" r="8" fill="#ea5a0c" filter="url(#glowEffect)" />
+  <circle cx="455" cy="912" r="8" fill="#c084fc" filter="url(#glowEffect)" />
+  <circle cx="800" cy="624" r="8" fill="#f97316" filter="url(#glowEffect)" />
+  <circle cx="800" cy="912" r="8" fill="#f97316" filter="url(#glowEffect)" />
+  <circle cx="1140" cy="768" r="8" fill="#10b981" filter="url(#glowEffect)" />
 
-  <!-- Node Connection Ports (Dots on Node Edges) -->
-  <circle cx="184" cy="170" r="4" fill="#38bdf8" stroke="#080c14" stroke-width="1.5" />
-  <circle cx="260" cy="100" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
-  <circle cx="324" cy="100" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
-  <circle cx="260" cy="240" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
-  <circle cx="324" cy="240" r="4" fill="#ea5a0c" stroke="#080c14" stroke-width="1.5" />
-  <circle cx="400" cy="170" r="4" fill="#10b981" stroke="#080c14" stroke-width="1.5" />
+  <!-- Edge Connection Ports -->
+  <circle cx="360" cy="768" r="7" fill="#38bdf8" stroke="#050811" stroke-width="3" />
+  <circle cx="560" cy="480" r="7" fill="#ea5a0c" stroke="#050811" stroke-width="3" />
+  <circle cx="700" cy="480" r="7" fill="#ea5a0c" stroke="#050811" stroke-width="3" />
+  <circle cx="560" cy="1056" r="7" fill="#c084fc" stroke="#050811" stroke-width="3" />
+  <circle cx="700" cy="1056" r="7" fill="#c084fc" stroke="#050811" stroke-width="3" />
+  <circle cx="900" cy="768" r="7" fill="#f97316" stroke="#050811" stroke-width="3" />
+  <circle cx="1040" cy="768" r="7" fill="#f97316" stroke="#050811" stroke-width="3" />
+  <circle cx="1240" cy="768" r="7" fill="#10b981" stroke="#050811" stroke-width="3" />
 
-  <!-- Node A (Trigger Node) -->
+  <!-- Floating Data Badges on Paths -->
+  <g transform="translate(425, 595)">
+    <rect width="70" height="24" rx="12" fill="#0f172a" stroke="#ea5a0c" stroke-width="1.5" />
+    <text x="35" y="16" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="700" fill="#ea5a0c" text-anchor="middle">JSON</text>
+  </g>
+
+  <g transform="translate(1110, 735)">
+    <rect width="80" height="24" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="1.5" />
+    <text x="40" y="16" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="700" fill="#10b981" text-anchor="middle">200 OK</text>
+  </g>
+
+  <!-- NODE 1: Trigger / Cron (Cyan) -->
   <g filter="url(#nodeShadow)">
-    <rect x="120" y="138" width="64" height="64" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+    <rect x="220" y="704" width="140" height="128" rx="28" fill="#0f172a" stroke="#38bdf8" stroke-width="3.5" />
+    <circle cx="290" cy="750" r="22" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="2.5" />
     <!-- Clock Icon -->
-    <circle cx="152" cy="170" r="12" fill="none" stroke="#38bdf8" stroke-width="2" />
-    <path d="M 152,164 L 152,170 L 157,173" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <circle cx="290" cy="750" r="14" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+    <path d="M 290,742 L 290,750 L 296,754" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <text x="290" y="796" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc" text-anchor="middle">Cron Trigger</text>
+    <text x="290" y="814" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">Schedule Event</text>
   </g>
 
-  <!-- Node B (Switch Node) -->
+  <!-- NODE 2: Switch / Filter (Orange) -->
   <g filter="url(#nodeShadow)">
-    <rect x="260" y="68" width="64" height="64" rx="16" fill="#0f172a" stroke="#ea5a0c" stroke-width="2" />
+    <rect x="560" y="416" width="140" height="128" rx="28" fill="#0f172a" stroke="#ea5a0c" stroke-width="3.5" />
+    <circle cx="630" cy="462" r="22" fill="#ea5a0c" fill-opacity="0.15" stroke="#ea5a0c" stroke-width="2.5" />
     <!-- Branch Icon -->
-    <path d="M 280,100 L 290,100 M 290,100 L 300,90 M 290,100 L 300,110" stroke="#ea5a0c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-    <circle cx="278" cy="100" r="2" fill="#ea5a0c" />
-    <circle cx="302" cy="90" r="2" fill="#ea5a0c" />
-    <circle cx="302" cy="110" r="2" fill="#ea5a0c" />
+    <path d="M 618,462 L 630,462 M 630,462 L 642,450 M 630,462 L 642,474" stroke="#ea5a0c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <circle cx="615" cy="462" r="2.5" fill="#ea5a0c" />
+    <circle cx="644" cy="450" r="2.5" fill="#ea5a0c" />
+    <circle cx="644" cy="474" r="2.5" fill="#ea5a0c" />
+    <text x="630" y="508" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc" text-anchor="middle">Filter &amp; Route</text>
+    <text x="630" y="526" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">Switch Node</text>
   </g>
 
-  <!-- Node C (Code Node) -->
+  <!-- NODE 3: Code / JS Transform (Purple) -->
   <g filter="url(#nodeShadow)">
-    <rect x="260" y="208" width="64" height="64" rx="16" fill="#0f172a" stroke="#ea5a0c" stroke-width="2" />
-    <!-- Code Icon -->
-    <path d="M 284,236 L 278,240 L 284,244 M 300,236 L 306,240 L 300,244 M 295,234 L 289,246" stroke="#ea5a0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <rect x="560" y="992" width="140" height="128" rx="28" fill="#0f172a" stroke="#c084fc" stroke-width="3.5" />
+    <circle cx="630" cy="1038" r="22" fill="#c084fc" fill-opacity="0.15" stroke="#c084fc" stroke-width="2.5" />
+    <!-- Code Brackets Icon -->
+    <path d="M 621,1033 L 614,1038 L 621,1043 M 639,1033 L 646,1038 L 639,1043 M 633,1031 L 627,1045" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <text x="630" y="1084" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc" text-anchor="middle">JS Transform</text>
+    <text x="630" y="1102" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">Code Node</text>
   </g>
 
-  <!-- Node D (Action Node) -->
+  <!-- NODE 4: n8n Core API (Neon Orange) -->
   <g filter="url(#nodeShadow)">
-    <rect x="400" y="138" width="64" height="64" rx="16" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+    <rect x="900" y="704" width="140" height="128" rx="28" fill="#0f172a" stroke="#f97316" stroke-width="3.5" />
+    <circle cx="970" cy="750" r="22" fill="#f97316" fill-opacity="0.15" stroke="#f97316" stroke-width="2.5" />
+    <!-- Workflow Nodes Icon -->
+    <rect x="958" y="740" width="10" height="10" rx="2" stroke="#f97316" stroke-width="2" fill="none" />
+    <rect x="972" y="740" width="10" height="10" rx="2" stroke="#f97316" stroke-width="2" fill="none" />
+    <rect x="965" y="754" width="10" height="10" rx="2" stroke="#f97316" stroke-width="2" fill="none" />
+    <path d="M 963,750 L 970,754 M 977,750 L 970,754" stroke="#f97316" stroke-width="1.8" />
+    <text x="970" y="796" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc" text-anchor="middle">n8n API Core</text>
+    <text x="970" y="814" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">Workflow Engine</text>
+  </g>
+
+  <!-- NODE 5: Action / Deploy (Emerald Green) -->
+  <g filter="url(#nodeShadow)">
+    <rect x="1240" y="704" width="140" height="128" rx="28" fill="#0f172a" stroke="#10b981" stroke-width="3.5" />
+    <circle cx="1310" cy="750" r="22" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2.5" />
     <!-- Paper Plane Icon -->
-    <path d="M 419,170 L 441,159 L 433,179 L 428,172 Z M 428,172 L 441,159" stroke="#10b981" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" fill="none" />
+    <path d="M 1297,750 L 1321,738 L 1312,760 L 1307,752 Z M 1307,752 L 1321,738" stroke="#10b981" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" />
+    <text x="1310" y="796" font-family="'Inter', system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc" text-anchor="middle">Sync &amp; Deploy</text>
+    <text x="1310" y="814" font-family="'Inter', system-ui, sans-serif" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">Action Node</text>
   </g>
 
 
-  <!-- ==================== RIGHT HALF: TYPOGRAPHY ==================== -->
+  <!-- ==================== RIGHT SECTION: TYPOGRAPHY & BRANDING ==================== -->
   
-  <!-- Pill Badge -->
-  <g transform="translate(540, 100)">
-    <rect width="90" height="22" rx="11" fill="#ea5a0c" fill-opacity="0.15" stroke="#ea5a0c" stroke-width="1.5" />
-    <text x="45" y="14" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" fill="#ea5a0c" letter-spacing="1.5" text-anchor="middle">CLI TOOL</text>
-  </g>
-  
-  <g transform="translate(640, 100)">
-    <rect width="110" height="22" rx="11" fill="#38bdf8" fill-opacity="0.1" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3" />
-    <text x="55" y="14" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#38bdf8" letter-spacing="1" text-anchor="middle">LOCAL-FIRST</text>
+  <!-- Pill Badges -->
+  <g transform="translate(1500, 430)">
+    <!-- Badge 1: CLI TOOL -->
+    <g transform="translate(0, 0)">
+      <rect width="160" height="48" rx="24" fill="#ea5a0c" fill-opacity="0.15" stroke="#ea5a0c" stroke-width="2.5" />
+      <text x="80" y="30" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="16" font-weight="800" fill="#ea5a0c" letter-spacing="2" text-anchor="middle">CLI TOOL</text>
+    </g>
+    
+    <!-- Badge 2: LOCAL-FIRST -->
+    <g transform="translate(180, 0)">
+      <rect width="190" height="48" rx="24" fill="#38bdf8" fill-opacity="0.12" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5 5" />
+      <text x="95" y="30" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#38bdf8" letter-spacing="1.5" text-anchor="middle">LOCAL-FIRST</text>
+    </g>
+
+    <!-- Badge 3: MCP PROTOCOL -->
+    <g transform="translate(390, 0)">
+      <rect width="190" height="48" rx="24" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-width="2" />
+      <text x="95" y="30" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#10b981" letter-spacing="1.5" text-anchor="middle">MCP READY</text>
+    </g>
   </g>
 
-  <!-- Title / Wordmark -->
-  <text x="540" y="176" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#ffffff" letter-spacing="-1.2" filter="url(#shadow)">
-    <tspan fill="#ea5a0c">n8n</tspan>-workflow-manager
+  <!-- Title / Main Brand Wordmark -->
+  <text x="1500" y="580" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="88" font-weight="800" letter-spacing="-2" filter="url(#shadow)">
+    <tspan fill="#ea5a0c">n8n</tspan><tspan fill="#ffffff">-workflow-manager</tspan>
   </text>
 
   <!-- Tagline -->
-  <text x="540" y="218" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#94a3b8" letter-spacing="-0.3">
-    Local-first n8n workflow management
+  <text x="1500" y="660" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="38" font-weight="600" fill="#cbd5e1" letter-spacing="-0.5">
+    Local-First n8n Workflow Orchestration &amp; Sync
   </text>
-  
-  <!-- Details / Small Tag -->
-  <text x="540" y="254" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#475569" letter-spacing="-0.1">
-    Synchronize, version control, and deploy workflows from your local machine
-  </text>
+
+  <!-- Gradient Separator Line -->
+  <rect x="1500" y="710" width="1080" height="3" rx="1.5" fill="url(#dividerGrad)" />
+
+  <!-- Feature Bullet Points -->
+  <g transform="translate(1500, 770)">
+    <!-- Feature 1 -->
+    <g transform="translate(0, 0)">
+      <circle cx="20" cy="20" r="16" fill="#ea5a0c" fill-opacity="0.15" stroke="#ea5a0c" stroke-width="2" />
+      <path d="M 16,14 L 24,20 L 16,26" stroke="#ea5a0c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <text x="56" y="27" font-family="'Inter', system-ui, sans-serif" font-size="24" font-weight="500" fill="#94a3b8">
+        Bi-directional sync between local Git repos &amp; n8n instances
+      </text>
+    </g>
+
+    <!-- Feature 2 -->
+    <g transform="translate(0, 65)">
+      <circle cx="20" cy="20" r="16" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="2" />
+      <path d="M 16,14 L 24,20 L 16,26" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <text x="56" y="27" font-family="'Inter', system-ui, sans-serif" font-size="24" font-weight="500" fill="#94a3b8">
+        Version control, diff inspection &amp; automated JSON formatting
+      </text>
+    </g>
+
+    <!-- Feature 3 -->
+    <g transform="translate(0, 130)">
+      <circle cx="20" cy="20" r="16" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2" />
+      <path d="M 16,14 L 24,20 L 16,26" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <text x="56" y="27" font-family="'Inter', system-ui, sans-serif" font-size="24" font-weight="500" fill="#94a3b8">
+        CLI + MCP protocol interface for AI agents &amp; dev workflows
+      </text>
+    </g>
+  </g>
+
+  <!-- Bottom Status Indicator Bar -->
+  <g transform="translate(1500, 1020)" filter="url(#nodeShadow)">
+    <rect width="1080" height="88" rx="24" fill="#0f172a" stroke="#334155" stroke-width="2" />
+    
+    <!-- Status Item 1: Server Status -->
+    <g transform="translate(50, 44)">
+      <circle cx="0" cy="0" r="7" fill="#10b981" filter="url(#glowEffect)" />
+      <text x="20" y="6" font-family="'Inter', system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Status: <tspan fill="#10b981">Online &amp; Synced</tspan></text>
+    </g>
+
+    <!-- Divider -->
+    <line x1="360" y1="20" x2="360" y2="68" stroke="#334155" stroke-width="2" />
+
+    <!-- Status Item 2: Protocol -->
+    <g transform="translate(410, 44)">
+      <circle cx="0" cy="0" r="7" fill="#38bdf8" filter="url(#glowEffect)" />
+      <text x="20" y="6" font-family="'Inter', system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Protocol: <tspan fill="#38bdf8">MCP &amp; REST v1.0</tspan></text>
+    </g>
+
+    <!-- Divider -->
+    <line x1="740" y1="20" x2="740" y2="68" stroke="#334155" stroke-width="2" />
+
+    <!-- Status Item 3: Runtime -->
+    <g transform="translate(790, 44)">
+      <circle cx="0" cy="0" r="7" fill="#ea5a0c" filter="url(#glowEffect)" />
+      <text x="20" y="6" font-family="'Inter', system-ui, sans-serif" font-size="18" font-weight="700" fill="#f8fafc">Stack: <tspan fill="#ea5a0c">TypeScript / Node</tspan></text>
+    </g>
+  </g>
 
 </svg>
