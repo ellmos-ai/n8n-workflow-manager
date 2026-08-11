@@ -1,7 +1,10 @@
-# Internal planning files
+# Internal planning and pipeline files
 PLAN.txt
 PLAN_*.txt
 DONE.md
+BEFUNDE.md
+LOCK*.txt
+_after-care/
 
 __pycache__/
 *.py[cod]

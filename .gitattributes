@@ -1,0 +1,13 @@
+# Normalize line endings so a Windows checkout does not report every tracked
+# file as fully modified (phantom diff). Text files are stored with LF.
+* text=auto eol=lf
+
+# Binary assets must never be touched by the normalizer.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
