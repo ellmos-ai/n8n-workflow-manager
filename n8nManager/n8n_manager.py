@@ -328,7 +328,9 @@ def build_parser() -> argparse.ArgumentParser:
     export_parser.add_argument("--format", choices=["json", "md"], default="json")
     export_parser.set_defaults(func=cmd_export)
 
-    push_parser = commands.add_parser("push", help="Push a workflow to n8n")
+    push_parser = commands.add_parser(
+        "push", help="Push a workflow to n8n (overwrites it on the remote server)"
+    )
     push_parser.add_argument("workflow_id", type=int)
     push_parser.add_argument("--server")
     push_parser.add_argument("--decision", required=True)
@@ -343,7 +345,9 @@ def build_parser() -> argparse.ArgumentParser:
     history_parser.add_argument("--limit", type=int, default=100)
     history_parser.set_defaults(func=cmd_history)
 
-    rollback_parser = commands.add_parser("rollback", help="Restore a workflow version")
+    rollback_parser = commands.add_parser(
+        "rollback", help="Restore a workflow version (replaces the current local state)"
+    )
     rollback_parser.add_argument("workflow_id", type=int)
     rollback_parser.add_argument("version", type=int)
     rollback_parser.add_argument("--decision", required=True)
@@ -351,7 +355,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     commands.add_parser("status", help="Show local state").set_defaults(func=cmd_status)
     servers_parser = commands.add_parser("servers", help="List or add servers")
-    servers_parser.add_argument("--add", nargs="+", metavar="ARG")
+    servers_parser.add_argument(
+        "--add",
+        nargs="+",
+        metavar="ARG",
+        help=(
+            "NAME URL API_KEY -- the API key is stored unencrypted in the user "
+            "data directory; protect that directory like an SSH key (see SECURITY.md)"
+        ),
+    )
     servers_parser.add_argument("--default", action="store_true")
     servers_parser.add_argument("--no-verify-tls", action="store_true")
     servers_parser.set_defaults(func=cmd_servers)
