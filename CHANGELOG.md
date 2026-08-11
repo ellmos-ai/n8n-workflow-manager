@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+- Added `THIRD_PARTY_LICENSES.md` for the bundled vis-network 10.1.0 browser
+  library, documented that the MIT option of its dual license is the one
+  exercised here, and shipped the file with the distributions via `MANIFEST.in`.
+  The repository `LICENSE` now states that it covers only this project's own code.
+- Added a trademark and independence notice ("n8n" is a trademark of its
+  respective owner; this project is unaffiliated) to `README.md`, `README_de.md`,
+  `llms.txt` and the web UI footer.
+- Documented the destructive reach of `push`, `rollback` and `delete` and the
+  unencrypted API-key storage in both READMEs, in the CLI help of
+  `servers --add`, and on the server management page -- previously this was only
+  stated in `SECURITY.md`.
+- Translated the web UI to English. It was German-only while the CLI, REST API
+  and documentation were English, and it mixed both languages internally.
+  `<html lang>` corrected from `de` to `en`.
+- Corrected the pytest badge in both READMEs from 195 to the actual 196 tests and
+  removed a duplicated badge and callout block from `README_de.md`.
+- Pinned line endings via `.gitattributes` and stopped tracking the internal
+  `BEFUNDE.md` working file.
+
 - Fixed SHA-256 test assertion in `tests/test_hardening.py` by normalizing CRLF line endings to LF for cross-platform Windows compatibility.
 - Vendored the pinned vis-network 10.1.0 browser asset for fully offline use
   and verified its SHA-256 against the upstream distribution.

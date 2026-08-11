@@ -6,9 +6,14 @@
 
 > Local-first workflow review, editing, history, and multi-server sync for n8n.
 
+> [!IMPORTANT]
+> Independent community project. Not affiliated with, endorsed by, or sponsored
+> by n8n GmbH. "n8n" is a trademark of its respective owner and is used here only
+> to describe the software this tool interoperates with.
+
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-195%20passed-brightgreen.svg)](tests)
+[![Pytest](https://img.shields.io/badge/pytest-196%20passed-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Local-First](https://img.shields.io/badge/architecture-local--first-blueviolet.svg)](#what-it-does)
 [![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
@@ -66,6 +71,14 @@ python -m pytest -q
 ```
 
 ## CLI examples
+
+> [!WARNING]
+> `push`, `rollback` and `delete` change or remove workflows **on the connected
+> n8n server**, not just in the local database. Point them at a production
+> instance only when you know which server is the default (`n8n-manager status`).
+> API keys you register with `servers --add` are stored **unencrypted** in the
+> per-user data directory; protect that directory the same way you would protect
+> an SSH key. See [SECURITY.md](SECURITY.md).
 
 Mutations that can replace or remove state require a short decision. It is
 stored with workflow history.
@@ -160,6 +173,11 @@ the required decision for a mutation.
 
 The authoritative decision log lives here and is client-independent, so the
 same review trail can cover the MCP server, `curl`, the CLI, or the web UI.
+
+If you are running n8n as part of a self-hosted stack rather than standalone,
+[ellmos-stack](https://github.com/ellmos-ai/ellmos-stack) brings up n8n together
+with Ollama and a document index via Docker Compose; this manager then connects
+to that instance like to any other n8n server.
 Conversational context can additionally come from a pull-based history index
 such as [ctx](https://github.com/ctxrs/ctx) (Apache-2.0).
 
@@ -180,3 +198,8 @@ python -m build
 
 MIT; see [LICENSE](LICENSE). Use at your own risk; no warranty or maintenance
 commitment is provided.
+
+That license covers the code written for this project. The repository and the
+built distributions also ship the browser library **vis-network** (dual licensed
+Apache-2.0 or MIT; used here under the MIT option), which keeps its own
+copyright holders. Full notices: [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

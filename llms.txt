@@ -35,10 +35,11 @@ Verification commands:
 - python -m n8nManager serve --port 8100
 
 Notes:
-- This repository is not the n8n project itself. It is a companion manager for imported or connected n8n workflows.
+- This repository is not the n8n project itself. It is a companion manager for imported or connected n8n workflows. It is an independent community project, not affiliated with, endorsed by, or sponsored by n8n GmbH; "n8n" is a trademark of its respective owner.
+- The web UI, CLI, REST API and documentation are English. The bundled browser library vis-network is third-party code under its own license, see THIRD_PARTY_LICENSES.md.
 - The web UI is local-first and binds to 127.0.0.1 unless an operator explicitly acknowledges remote exposure.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
 - Verification status: 196/196 Pytest unit & integration tests passing (100% green).
 
-## Last-checked: 2026-07-29
+## Last-checked: 2026-08-11
