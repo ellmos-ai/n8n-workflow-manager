@@ -5,14 +5,14 @@
     <div class="viewer-header">
         <h1>{{ workflow.name }}</h1>
         <div class="viewer-meta">
-            <span class="badge">{{ workflow.node_count }} Nodes</span>
-            <span class="badge trigger">{{ workflow.trigger_type or 'Kein Trigger' }}</span>
+            <span class="badge">{{ workflow.node_count }} nodes</span>
+            <span class="badge trigger">{{ workflow.trigger_type or 'No trigger' }}</span>
             <span class="badge source">{{ workflow.source }}</span>
         </div>
         <div class="viewer-actions">
-            <a href="/editor/{{ workflow.id }}" class="btn">Bearbeiten</a>
-            <button onclick="exportJSON()" class="btn">JSON Export</button>
-            <button onclick="pushToServer()" class="btn btn-primary">Push to Server</button>
+            <a href="/editor/{{ workflow.id }}" class="btn">Edit</a>
+            <button onclick="exportJSON()" class="btn">Export JSON</button>
+            <button onclick="pushToServer()" class="btn btn-primary">Push to server</button>
         </div>
     </div>
     {% if workflow.description %}
@@ -20,7 +20,7 @@
     {% endif %}
     <div id="workflow-graph" class="graph-container"></div>
     <div id="node-details" class="node-details hidden">
-        <h3 id="detail-name">Node Details</h3>
+        <h3 id="detail-name">Node details</h3>
         <pre id="detail-params"></pre>
     </div>
 </div>
@@ -40,7 +40,7 @@
         if (!decision?.trim()) return;
         const resp = await apiClient.post('/api/export/' + workflowId + '/to-server?decision=' + encodeURIComponent(decision.trim()));
         if (resp.message) alert(resp.message);
-        else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
+        else alert('Error: ' + (resp.detail || 'Unknown'));
     }
 </script>
 {% endblock %}

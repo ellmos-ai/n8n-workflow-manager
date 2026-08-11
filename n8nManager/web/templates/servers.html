@@ -1,21 +1,25 @@
 {% extends "base.html" %}
-{% block title %}Server - n8nManager{% endblock %}
+{% block title %}Servers - n8nManager{% endblock %}
 {% block content %}
 <div class="servers-page">
-    <h1>Server-Verwaltung</h1>
+    <h1>Server management</h1>
     <div class="add-server-form">
-        <h3>Server hinzufügen</h3>
+        <h3>Add a server</h3>
+        <p class="empty-state">
+            The API key is stored unencrypted in the user data directory.
+            Protect that directory like an SSH key.
+        </p>
         <form onsubmit="addServer(event)">
             <input type="text" id="srv-name" placeholder="Name" required>
             <input type="url" id="srv-url" placeholder="http://host:5678" required>
-            <input type="password" id="srv-key" placeholder="API-Key" autocomplete="off">
+            <input type="password" id="srv-key" placeholder="API key" autocomplete="off">
             <label><input type="checkbox" id="srv-default"> Default</label>
-            <button type="submit" class="btn btn-primary">Hinzufügen</button>
+            <button type="submit" class="btn btn-primary">Add</button>
         </form>
     </div>
     <table class="data-table">
         <thead>
-            <tr><th>ID</th><th>Name</th><th>URL</th><th>Status</th><th>Default</th><th>Aktionen</th></tr>
+            <tr><th>ID</th><th>Name</th><th>URL</th><th>Status</th><th>Default</th><th>Actions</th></tr>
         </thead>
         <tbody>
             {% for srv in servers %}
@@ -24,7 +28,7 @@
                 <td>{{ srv.name }}</td>
                 <td>{{ srv.url }}</td>
                 <td><span class="badge {{ srv.status }}">{{ srv.status }}</span></td>
-                <td>{{ 'Ja' if srv.is_default else '-' }}</td>
+                <td>{{ 'Yes' if srv.is_default else '-' }}</td>
                 <td>
                     <button onclick="pingServer({{ srv.id }})" class="btn btn-sm">Ping</button>
                     <button onclick="pullFromServer({{ srv.id }})" class="btn btn-sm">Pull</button>
@@ -47,16 +51,16 @@ async function addServer(e) {
     };
     const resp = await apiClient.post('/api/servers', data);
     if (resp.id) location.reload();
-    else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
+    else alert('Error: ' + (resp.detail || 'Unknown'));
 }
 async function pingServer(id) {
     const resp = await apiClient.post('/api/servers/' + id + '/ping');
-    alert(resp.status ? 'Status: ' + resp.status : 'Fehler: ' + (resp.detail || 'Unbekannt'));
+    alert(resp.status ? 'Status: ' + resp.status : 'Error: ' + (resp.detail || 'Unknown'));
     location.reload();
 }
 async function pullFromServer(id) {
     const resp = await apiClient.post('/api/pull/' + id);
-    alert(resp.message || resp.detail || 'Unbekannt');
+    alert(resp.message || resp.detail || 'Unknown');
     location.reload();
 }
 </script>

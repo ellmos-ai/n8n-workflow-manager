@@ -13,7 +13,7 @@
         </div>
         <div class="stat-card">
             <span class="stat-number">{{ stats.servers or 0 }}</span>
-            <span class="stat-label">Server</span>
+            <span class="stat-label">Servers</span>
         </div>
     </div>
     <div class="section">
@@ -26,9 +26,9 @@
                     <th>Name</th>
                     <th>Nodes</th>
                     <th>Trigger</th>
-                    <th>Quelle</th>
-                    <th>Aktiv</th>
-                    <th>Aktionen</th>
+                    <th>Source</th>
+                    <th>Active</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,18 +39,18 @@
                     <td>{{ wf.node_count }}</td>
                     <td><span class="badge trigger">{{ wf.trigger_type or '-' }}</span></td>
                     <td><span class="badge source">{{ wf.source }}</span></td>
-                    <td>{{ 'Ja' if wf.is_active else '-' }}</td>
+                    <td>{{ 'Yes' if wf.is_active else '-' }}</td>
                     <td>
-                        <a href="/viewer/{{ wf.id }}" class="btn btn-sm">Ansehen</a>
-                        <a href="/editor/{{ wf.id }}" class="btn btn-sm btn-edit">Bearbeiten</a>
-                        <button onclick="deleteWorkflow({{ wf.id }})" class="btn btn-sm btn-danger">Löschen</button>
+                        <a href="/viewer/{{ wf.id }}" class="btn btn-sm">View</a>
+                        <a href="/editor/{{ wf.id }}" class="btn btn-sm btn-edit">Edit</a>
+                        <button onclick="deleteWorkflow({{ wf.id }})" class="btn btn-sm btn-danger">Delete</button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <p class="empty-state">Keine Workflows vorhanden. <a href="/import">Importiere</a> oder <a href="/creator">erstelle</a> einen.</p>
+        <p class="empty-state">No workflows yet. <a href="/import">Import</a> or <a href="/creator">create</a> one.</p>
         {% endif %}
     </div>
 </div>
@@ -58,14 +58,14 @@
 {% block scripts %}
 <script>
 async function deleteWorkflow(id) {
-    if (!confirm('Workflow wirklich löschen?')) return;
-    const decision = prompt('Warum wird dieser Workflow gelöscht?');
+    if (!confirm('Really delete this workflow?')) return;
+    const decision = prompt('Why is this workflow being deleted?');
     if (!decision?.trim()) return;
-    const confirmActive = confirm('Falls der Workflow aktiv ist: Löschung ausdrücklich bestätigen?');
+    const confirmActive = confirm('If the workflow is active: confirm deletion explicitly?');
     const url = '/api/workflows/' + id + '?decision=' + encodeURIComponent(decision.trim()) + '&confirm_active=' + confirmActive;
     const resp = await apiClient.delete(url);
     if (resp.ok) location.reload();
-    else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
+    else alert('Error: ' + (resp.detail || 'Unknown'));
 }
 </script>
 {% endblock %}

@@ -191,3 +191,4 @@ h2 { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 0.5rem; }
 .creator-header { display: flex; justify-content: space-between; align-items: center; }
 .editor-header { display: flex; justify-content: space-between; align-items: center; }
 .description { color: var(--text-secondary); margin: 0.5rem 0; }
+.site-footer { max-width: 1400px; margin: 2rem auto 1rem; padding: 1rem 2rem 0; border-top: 1px solid var(--border, #333); color: var(--text-secondary); text-align: center; }

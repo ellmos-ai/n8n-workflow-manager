@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +17,8 @@
         </div>
         <div class="nav-links">
             <a href="/" class="nav-link">Dashboard</a>
-            <a href="/creator" class="nav-link">Erstellen</a>
-            <a href="/servers" class="nav-link">Server</a>
+            <a href="/creator" class="nav-link">Create</a>
+            <a href="/servers" class="nav-link">Servers</a>
             <a href="/import" class="nav-link">Import</a>
             <a href="/docs" class="nav-link" target="_blank">API Docs</a>
         </div>
@@ -26,6 +26,12 @@
     <main class="container">
         {% block content %}{% endblock %}
     </main>
+    <footer class="site-footer">
+        <small>
+            Independent community project &mdash; not affiliated with, endorsed by,
+            or sponsored by n8n GmbH. &quot;n8n&quot; is a trademark of its respective owner.
+        </small>
+    </footer>
     <script src="/static/js/api_client.js"></script>
     {% block scripts %}{% endblock %}
 </body>

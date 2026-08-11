@@ -2,20 +2,20 @@
 {% block title %}Import - n8nManager{% endblock %}
 {% block content %}
 <div class="import-page">
-    <h1>Workflow importieren</h1>
+    <h1>Import a workflow</h1>
     <div class="import-dropzone" id="dropzone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-        <p>n8n JSON-Datei hier ablegen</p>
-        <p>oder</p>
+        <p>Drop an n8n JSON file here</p>
+        <p>or</p>
         <input type="file" id="file-input" accept=".json" onchange="handleFile(event)">
     </div>
     <div id="import-result" class="hidden">
-        <h3>Import-Ergebnis</h3>
+        <h3>Import result</h3>
         <pre id="result-text"></pre>
     </div>
     <div class="import-paste">
-        <h3>Oder JSON einfügen</h3>
+        <h3>Or paste JSON</h3>
         <textarea id="json-paste" rows="10" placeholder='{"nodes": [...], "connections": {...}}'></textarea>
-        <button onclick="importFromPaste()" class="btn btn-primary">Importieren</button>
+        <button onclick="importFromPaste()" class="btn btn-primary">Import</button>
     </div>
 </div>
 {% endblock %}
@@ -33,7 +33,7 @@ function handleFile(e) {
 async function uploadFile(file) {
     const form = new FormData();
     form.append('file', file);
-    const decision = prompt('Warum wird dieser Workflow importiert?', 'Imported through the web UI');
+    const decision = prompt('Why is this workflow being imported?', 'Imported through the web UI');
     if (!decision?.trim()) return;
     form.append('decision', decision.trim());
     const resp = await fetch('/api/import', {method: 'POST', body: form});
@@ -44,7 +44,7 @@ async function uploadFile(file) {
 }
 async function importFromPaste() {
     const json = document.getElementById('json-paste').value;
-    try { JSON.parse(json); } catch(e) { alert('Ungültiges JSON'); return; }
+    try { JSON.parse(json); } catch(e) { alert('Invalid JSON'); return; }
     const blob = new Blob([json], {type: 'application/json'});
     const file = new File([blob], 'paste.json', {type: 'application/json'});
     await uploadFile(file);

@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Workflow erstellen - n8nManager{% endblock %}
+{% block title %}Create workflow - n8nManager{% endblock %}
 {% block content %}
 <div class="creator">
     <div class="creator-header">
-        <h1>Neuen Workflow erstellen</h1>
+        <h1>Create a new workflow</h1>
         <div>
-            <input type="text" id="workflow-name" placeholder="Workflow-Name" class="input-lg" value="Neuer Workflow">
-            <button onclick="saveNewWorkflow()" class="btn btn-primary">Speichern</button>
+            <input type="text" id="workflow-name" placeholder="Workflow name" class="input-lg" value="New workflow">
+            <button onclick="saveNewWorkflow()" class="btn btn-primary">Save</button>
         </div>
     </div>
     <div class="editor-layout">
         <div class="editor-sidebar">
-            <h3>Node-Katalog</h3>
+            <h3>Node catalog</h3>
             <div id="node-catalog-list"></div>
         </div>
         <div id="creator-graph" class="graph-container"></div>
         <div class="editor-properties">
-            <h3>Eigenschaften</h3>
+            <h3>Properties</h3>
             <div id="property-panel">
-                <p class="empty-state">Nodes aus dem Katalog hinzufügen</p>
+                <p class="empty-state">Add nodes from the catalog</p>
             </div>
         </div>
     </div>
