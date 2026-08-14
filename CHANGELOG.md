@@ -29,6 +29,14 @@
   it is a separate template refactor.
 - Technical hygiene check: verified 196/196 passing Pytest unit & integration tests (100% green).
 
+## 0.2.4 — 2026-08-14
+
+- Technical hygiene and maintenance update: verified 196/196 passing Pytest unit & integration tests (100% green).
+- Updated package version to `0.2.4` in `pyproject.toml` and `n8nManager/__init__.py`.
+- Added `ellmos-ai` Ecosystem and `open-bricks` Umbrella Shields.io badges to `README.md` and `README_de.md`.
+- Updated machine-readable context in `llms.txt` (Last-checked: 2026-08-14).
+- Verified `ruff check` (100% clean) and `python -m compileall` across modules.
+
 ## 0.2.3 — 2026-07-27
 
 - Technical hygiene and maintenance update: verified 195 passing Pytest unit & integration tests (100% green).
