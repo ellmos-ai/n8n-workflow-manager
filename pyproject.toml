@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "n8n-workflow-manager"
-version = "0.2.4"
+version = "0.2.5"
 description = "Local-first n8n workflow manager with visual graph viewer, REST API, CLI, and multi-server sync"
 readme = "README.md"
 license = "MIT"
@@ -54,6 +54,9 @@ Homepage = "https://github.com/ellmos-ai/n8n-workflow-manager"
 Documentation = "https://github.com/ellmos-ai/n8n-workflow-manager#readme"
 Repository = "https://github.com/ellmos-ai/n8n-workflow-manager"
 Issues = "https://github.com/ellmos-ai/n8n-workflow-manager/issues"
+Security = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/SECURITY.md"
+"Parent Organization" = "https://github.com/ellmos-ai"
+"Umbrella Ecosystem" = "https://github.com/open-bricks"
 
 [tool.setuptools.packages.find]
 include = ["n8nManager*"]

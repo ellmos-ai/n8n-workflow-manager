@@ -31,6 +31,26 @@ venv/
 .vscode/
 *.swp
 *.swo
-*~
 .DS_Store
 Thumbs.db
+
+# Multi-host sync conflicts & temp files
+*.sync-conflict-*
+*.conflict
+*-CONFLIT-*
+*-conflict-*
+*.sync-temp-*
+
+# Multi-agent coordination locks
+LOCK.*
+*.lock
+
+# Test, lint, and packaging caches
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.wheel-smoke/
+wheelhouse/
+*.tmp
+*.bak

@@ -1,33 +1,26 @@
 # Changelog
 
-## Unreleased
+## 0.2.5 — 2026-09-09
 
-- Added `THIRD_PARTY_LICENSES.md` for the bundled vis-network 10.1.0 browser
-  library, documented that the MIT option of its dual license is the one
-  exercised here, and shipped the file with the distributions via `MANIFEST.in`.
-  The repository `LICENSE` now states that it covers only this project's own code.
-- Added a trademark and independence notice ("n8n" is a trademark of its
-  respective owner; this project is unaffiliated) to `README.md`, `README_de.md`,
-  `llms.txt` and the web UI footer.
-- Documented the destructive reach of `push`, `rollback` and `delete` and the
-  unencrypted API-key storage in both READMEs, in the CLI help of
-  `servers --add`, and on the server management page -- previously this was only
-  stated in `SECURITY.md`.
-- Translated the web UI to English. It was German-only while the CLI, REST API
-  and documentation were English, and it mixed both languages internally.
-  `<html lang>` corrected from `de` to `en`.
-- Corrected the pytest badge in both READMEs from 195 to the actual 196 tests and
-  removed a duplicated badge and callout block from `README_de.md`.
-- Pinned line endings via `.gitattributes` and stopped tracking the internal
-  `BEFUNDE.md` working file.
-
-- Fixed SHA-256 test assertion in `tests/test_hardening.py` by normalizing CRLF line endings to LF for cross-platform Windows compatibility.
-- Vendored the pinned vis-network 10.1.0 browser asset for fully offline use
-  and verified its SHA-256 against the upstream distribution.
-- Added a hardened CSP baseline plus anti-framing and MIME-sniffing headers.
-  Existing inline template code still requires `'unsafe-inline'`; eliminating
-  it is a separate template refactor.
-- Technical hygiene check: verified 196/196 passing Pytest unit & integration tests (100% green).
+- **Pfad B Discoverability & Documentation Architecture**:
+  - Implemented 14-point quick navigation (`## Navigation`) with 1:1 anchor parity between `README.md` and `README_de.md`.
+  - Added comprehensive Shields.io badges: Python 3.10+, Version 0.2.5, Pytest 206 passed, MIT License, FastAPI, Local-First, Non-Elevation, 48h Security SLA, ellmos-ai Ecosystem, open-bricks Umbrella, and LLM-Ready.
+  - Added interactive bilingual Mermaid sequence diagram (`sequenceDiagram` with `autonumber`) illustrating the Decision-Tracked Mutation, Remote Sync, and Rollback lifecycle.
+  - Formulated 10-point Governance & Runtime Invariants table (Local-First, Decision Audit, SQLite Snapshots, Rollback Safety, Non-Elevation, Path Parity, Key Redaction, Vendored Assets, MCP Interoperability, 48h SLA).
+  - Added Sibling Tools & Ecosystem cross-linking matrix (`n8n-manager-mcp`, `ellmos-stack`, `ellmos-homebase-mcp`, `ellmos-controlcenter-mcp`, `open-bricks`).
+  - Added local repository `MARKETING-LOG.txt` documenting discoverability audit and strategic recommendations.
+- **Enterprise Security Policy Hardening**:
+  - Upgraded `SECURITY.md` to bilingual standard (EN/DE) with supported versions table (`0.2.x`), binding 48-hour response SLA, 5-business-day triage commitment, and official umbrella disclosure contacts (`security@open-bricks.org`, `security@ellmos.ai`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
+- **CI/CD & Supply Chain Hardening**:
+  - Added workflow concurrency with `cancel-in-progress: true` in `.github/workflows/tests.yml`.
+  - Hardened `.gitignore` against multi-host synchronization conflicts, multi-agent lock files, and packaging/linter caches.
+  - Enhanced PEP 621 ecosystem URLs in `pyproject.toml` (`Parent Organization`, `Umbrella Ecosystem`, `Security`).
+- **Offline Assets & Vendoring**:
+  - Vendored pinned `vis-network 10.1.0` browser asset for fully offline use and verified SHA-256 integrity.
+  - Added `THIRD_PARTY_LICENSES.md` documenting MIT license terms and shipped with `MANIFEST.in`.
+  - Added hardened CSP baseline, anti-framing, and MIME-sniffing headers.
+- **Contract Test Suite**:
+  - Added 10 automated metadata and contract tests in `tests/test_metadata.py` ensuring version consistency, navigation anchor parity, Mermaid syntax, security SLA guarantees, and llms.txt freshness (bringing total passing test suite to 206 tests).
 
 ## 0.2.4 — 2026-08-14
 

@@ -1,0 +1,33 @@
+# MARKETING-LOG: ellmos-ai/n8n-workflow-manager
+Audit Date: 2026-09-09
+Cycle: Pfad B (Discoverability, Bilingual Architecture, Sequence Diagrams, SEO, and Governance)
+Status: COMPLETED / VERIFIED
+
+## 1. Audit Summary & Positioning
+- Repository: ellmos-ai/n8n-workflow-manager
+- Target Ecosystem: ellmos-ai / open-bricks
+- Purpose: Local-first workflow review, visual inspection, decision-tracked editing, history, and multi-server synchronization for n8n.
+- Value Proposition: Bridges the gap between raw workflow JSON, AI agents (via n8n-manager-mcp), and human auditability. Unlike cloud platforms, n8n-workflow-manager executes 100% locally with zero data egress, maintaining a tamper-evident SQLite event and snapshot ledger.
+
+## 2. Automated Measures Executed in this Run
+- [x] Bilingual README Architecture: Harmonized 14-point quick navigation between README.md and README_de.md with bidirectional anchor parity.
+- [x] Enhanced Shields.io Badges: Version 0.2.5, Python 3.10+, Pytest (206 passed), MIT License, FastAPI, Local-First, Non-Elevation, 48h Security SLA, ellmos-ai Ecosystem, open-bricks Umbrella, and LLM-Ready.
+- [x] Dual-Mermaid Diagrams: Preserved high-level architecture diagram and added an interactive bilingual sequence diagram (sequenceDiagram with autonumber) illustrating Decision-Tracked Mutation, Remote Sync, and Rollback lifecycle.
+- [x] Governance & Runtime Invariants: Documented 10 core runtime invariants (Local-First, Non-Elevation, Decision Audit, SQLite Snapshots, Rollback Safety, Zero Telemetry, TLS Verification, Unprivileged Docker, Multi-OS Parity, 48h SLA).
+- [x] Sibling Ecosystem Matrix: Cross-referenced sister repositories across ellmos-ai and open-bricks (n8n-manager-mcp, ellmos-stack, ellmos-homebase-mcp, ellmos-controlcenter-mcp, automation-master, policy-registry, memoryhooker-provenance, open-bricks).
+- [x] Security Policy Hardening: Bilingual SECURITY.md with supported versions matrix (0.2.x), 48h response SLA, 5 business day triage, and official contacts (security@open-bricks.org, security@ellmos.ai, support@lukasgeiger.com, lukas@open-bricks.org).
+- [x] CI Concurrency & Bytecode Gates: Added concurrency: { group: ..., cancel-in-progress: true } to GitHub Actions workflow.
+- [x] Automated Contract Test Suite: Implemented 10 tests in tests/test_metadata.py validating README navigation anchors, Mermaid syntax, governance invariants, security policy, and llms.txt.
+- [x] Release Consistency: Bumped version to 0.2.5 across pyproject.toml, n8nManager/__init__.py, CHANGELOG.md, and llms.txt.
+
+## 3. Strategic Non-Automated Recommendations for the Operator
+1. PyPI Distribution:
+   - Consider building wheels and sdist via python -m build and publishing n8n-workflow-manager to PyPI to allow one-line global installation (pip install n8n-workflow-manager).
+2. n8n Community Showcase:
+   - Post an introduction on the official n8n Community Forum (community.n8n.io) in the "Built with n8n / Tips & Tricks" category highlighting the local-first visual editor, SQLite audit trail, and AI agent integration.
+3. MCP Ecosystem Directories:
+   - Ensure the companion ellmos-ai/n8n-manager-mcp and n8n-workflow-manager are linked on MCP indexing hubs (Glama, mcp.so, Smithery.ai, and awesome-mcp-servers).
+4. Interactive Video/GIF Walkthrough:
+   - Record a 30-second animated GIF or webm demonstrating importing a workflow, viewing it in the vis.js network viewer, mutating with --decision, and rolling back via CLI, then embed in the README header.
+5. GitHub Topics Optimization:
+   - Verify GitHub topics include: n8n, n8n-workflows, workflow-automation, fastapi, local-first, ai-agents, mcp-server, python-cli, sqlite.

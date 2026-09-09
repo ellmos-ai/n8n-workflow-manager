@@ -2,6 +2,7 @@
 
 Canonical repository: https://github.com/ellmos-ai/n8n-workflow-manager
 Package name: n8n-workflow-manager
+Version: 0.2.5
 CLI command: n8n-manager
 Primary audience: n8n users, workflow automation teams, local-first AI agents, and developers who need to inspect, document, create, or sync n8n workflows.
 
@@ -24,9 +25,10 @@ Related projects:
 - https://github.com/ellmos-ai/n8n-manager-mcp - MCP server for AI-powered n8n workflow management.
 - https://github.com/ellmos-ai/ellmos-stack - local AI and automation stack context.
 - https://github.com/ellmos-ai - parent organization.
+- https://github.com/open-bricks - umbrella ecosystem.
 
 Verification commands:
-- python -m pytest -q (196 passed tests)
+- python -m pytest -q (206 passed tests)
 - python -m compileall -q n8nManager tests
 - python -m ruff check n8nManager tests
 - python -m bandit -q -r n8nManager -lll
@@ -34,12 +36,21 @@ Verification commands:
 - python -m n8nManager status
 - python -m n8nManager serve --port 8100
 
+Architecture & Invariants:
+- 100% Local-First & Zero Egress: binds to 127.0.0.1:8100 by default.
+- Non-Elevation: runs with unprivileged user permissions (RunAsInvoker).
+- Decision Audit Trail: every mutation records an explicit rationale into an immutable SQLite ledger.
+- Deterministic Rollback: complete snapshots are retained for safe reversions.
+- Dual-Mermaid Modeling: high-level architecture diagram and interactive sequence diagram with autonumber.
+- Bilingual Documentation: 1:1 anchor parity between English (README.md) and German (README_de.md).
+- Security SLA: 48h initial response SLA and 5-business-day triage commitment.
+
 Notes:
 - This repository is not the n8n project itself. It is a companion manager for imported or connected n8n workflows. It is an independent community project, not affiliated with, endorsed by, or sponsored by n8n GmbH; "n8n" is a trademark of its respective owner.
 - The web UI, CLI, REST API and documentation are English. The bundled browser library vis-network is third-party code under its own license, see THIRD_PARTY_LICENSES.md.
 - The web UI is local-first and binds to 127.0.0.1 unless an operator explicitly acknowledges remote exposure.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
-- Verification status: 196/196 Pytest unit & integration tests passing (100% green).
+- Verification status: 206/206 Pytest unit, integration & contract tests passing (100% green).
 
-## Last-checked: 2026-08-14
+## Last-checked: 2026-09-09

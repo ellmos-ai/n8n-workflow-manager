@@ -1,0 +1,111 @@
+"""Metadata, documentation, and contract tests for n8n-workflow-manager."""
+
+import re
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+class TestMetadataAndDocumentation(unittest.TestCase):
+    """Contract tests for Pfad B discoverability and repository governance."""
+
+    def setUp(self):
+        self.pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        self.init_text = (ROOT / "n8nManager" / "__init__.py").read_text(encoding="utf-8")
+        self.readme_en = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.readme_de = (ROOT / "README_de.md").read_text(encoding="utf-8")
+        self.security_text = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
+        self.changelog_text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.llms_text = (ROOT / "llms.txt").read_text(encoding="utf-8")
+        self.gitignore_text = (ROOT / ".gitignore").read_text(encoding="utf-8")
+        self.ci_workflow_text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        self.marketing_log_text = (ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+
+    def test_version_parity(self):
+        """Verify 0.2.5 version parity across pyproject.toml, __init__.py, changelog and llms.txt."""
+        self.assertIn('version = "0.2.5"', self.pyproject_text)
+        self.assertIn('__version__ = "0.2.5"', self.init_text)
+        self.assertIn("## 0.2.5 — 2026-09-09", self.changelog_text)
+        self.assertIn("Version: 0.2.5", self.llms_text)
+
+    def test_readme_navigation_anchor_parity(self):
+        """Verify 14 navigation anchor links exist in both READMEs and point to existing HTML anchor tags."""
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            nav_match = re.search(r"## Navigation\s*\n\n((?:- \[.*?\]\(#.*?\)\n)+)", readme)
+            self.assertIsNotNone(nav_match, f"Navigation section missing in {lang} README")
+            nav_links = re.findall(r"- \[(.*?)\]\(#(.*?)\)", nav_match.group(1))
+            self.assertEqual(len(nav_links), 14, f"Expected 14 navigation links in {lang} README, found {len(nav_links)}")
+            for label, anchor in nav_links:
+                self.assertTrue(
+                    f'<a id="{anchor}"></a>' in readme or f"#{anchor}" in readme.lower(),
+                    f"Anchor target {anchor} missing in {lang} README for link {label}",
+                )
+
+    def test_readme_badges_completeness(self):
+        """Verify standard Shields.io badges in both README files."""
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            self.assertIn("img.shields.io/badge/python-3.10+", readme, f"Python badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/version-0.2.5", readme, f"Version badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/License-MIT", readme, f"License badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/FastAPI-0.115+", readme, f"FastAPI badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/Ecosystem-ellmos--ai", readme, f"Ecosystem badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/Umbrella-open--bricks", readme, f"Umbrella badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/LLM--Ready-llms.txt", readme, f"LLM-Ready badge missing in {lang}")
+
+    def test_readme_dual_mermaid_diagrams(self):
+        """Verify both architecture and sequence diagrams exist in both READMEs."""
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            self.assertIn("```mermaid\ngraph TD", readme, f"Architecture diagram missing in {lang}")
+            self.assertIn("```mermaid\nsequenceDiagram\n    autonumber", readme, f"Sequence diagram missing in {lang}")
+            self.assertIn("FastAPI", readme)
+            self.assertIn("SQLite", readme)
+
+    def test_readme_governance_invariants_table(self):
+        """Verify 10 Governance and Runtime Invariants are documented in both READMEs."""
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            for i in range(1, 11):
+                self.assertRegex(
+                    readme,
+                    rf"\|\s*{i}\s*\|",
+                    f"Invariant #{i} missing from table in {lang} README",
+                )
+
+    def test_readme_ecosystem_matrix(self):
+        """Verify sibling ecosystem tools matrix in both README files."""
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            self.assertIn("ellmos-ai/n8n-manager-mcp", readme, f"MCP pairing missing in {lang}")
+            self.assertIn("ellmos-ai/ellmos-stack", readme, f"Stack pairing missing in {lang}")
+            self.assertIn("open-bricks/open-bricks", readme, f"Umbrella pairing missing in {lang}")
+
+    def test_security_policy_contract(self):
+        """Verify bilingual SECURITY.md contains SLAs, supported versions, and official contacts."""
+        self.assertIn("0.2.x", self.security_text)
+        self.assertIn("48 hours", self.security_text)
+        self.assertIn("5 business days", self.security_text)
+        self.assertIn("security@open-bricks.org", self.security_text)
+        self.assertIn("security@ellmos.ai", self.security_text)
+        self.assertIn("48 Stunden", self.security_text)
+        self.assertIn("5 Werktagen", self.security_text)
+
+    def test_ci_workflow_concurrency(self):
+        """Verify CI workflow has concurrency cancel-in-progress enabled."""
+        self.assertIn("concurrency:", self.ci_workflow_text)
+        self.assertIn("cancel-in-progress: true", self.ci_workflow_text)
+
+    def test_gitignore_hardening(self):
+        """Verify .gitignore excludes sync conflicts, locks, and caches."""
+        self.assertIn("*.sync-conflict-*", self.gitignore_text)
+        self.assertIn("LOCK.*", self.gitignore_text)
+        self.assertIn(".pytest_cache/", self.gitignore_text)
+
+    def test_marketing_log_and_llms_txt_freshness(self):
+        """Verify MARKETING-LOG.txt and llms.txt are complete and up to date."""
+        self.assertIn("Pfad B", self.marketing_log_text)
+        self.assertIn("PyPI Distribution", self.marketing_log_text)
+        self.assertIn("2026-09-09", self.llms_text)
+        self.assertIn("206 passed tests", self.llms_text)
+
+
+if __name__ == "__main__":
+    unittest.main()

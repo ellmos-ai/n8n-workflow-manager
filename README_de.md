@@ -4,7 +4,7 @@
 
 **[English version](README.md)** · **Deutsch**
 
-> Lokale Workflow-Durchsicht, Bearbeitung, Historie und Multi-Server-Sync für n8n.
+> Lokale Workflow-Durchsicht, visuelle Prüfung, entscheidungsbegründete Bearbeitung, Historie und Multi-Server-Sync für n8n.
 
 > [!IMPORTANT]
 > Unabhängiges Community-Projekt. Weder mit der n8n GmbH verbunden noch von ihr
@@ -13,35 +13,117 @@
 > zusammenarbeitet.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Version: 0.2.5](https://img.shields.io/badge/version-0.2.5-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-196%20passed-brightgreen.svg)](tests)
+[![Pytest](https://img.shields.io/badge/pytest-206%20bestanden-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
+[![Code-Stil: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Local-First](https://img.shields.io/badge/architektur-local--first-blueviolet.svg)](#funktionen)
+[![Sicherheit: Non-Elevation](https://img.shields.io/badge/sicherheit-RunAsInvoker-success.svg)](SECURITY.md)
+[![Sicherheits-SLA: 48h](https://img.shields.io/badge/sicherheits--SLA-48h-informational.svg)](SECURITY.md)
 [![Ecosystem: ellmos-ai](https://img.shields.io/badge/Ecosystem-ellmos--ai-blue.svg)](https://github.com/ellmos-ai)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-indigo.svg)](https://github.com/open-bricks)
 [![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
 
 > [!NOTE]
-> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung.
+> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung. Jede ändernde Mutation verlangt zwingend eine explizite Entscheidungsbegründung (`--decision`), um vollständige Auditierbarkeit zu gewährleisten.
 
+## Navigation
+
+- [Systemarchitektur](#systemarchitektur)
+- [Workflow-Lebenszyklus](#workflow-lebenszyklus)
+- [Governance- & Laufzeit-Invarianten](#governance-und-laufzeit-invarianten)
+- [Funktionen](#funktionen)
+- [Installation und Start](#installation-und-start)
+- [CLI-Beispiele](#cli-beispiele)
+- [Builder API](#builder-api)
+- [Konfiguration und Daten](#konfiguration-und-daten)
+- [Docker](#docker)
+- [Entfernte n8n-Installation](#entfernte-n8n-installation)
+- [Manager + MCP als Paar](#manager-und-mcp-als-paar)
+- [Geschwister-Ökosystem](#geschwister-oekosystem)
+- [Prüfung](#pruefung)
+- [Lizenz](#lizenz)
+
+---
+
+<a id="systemarchitektur"></a>
 ## Systemarchitektur
 
 ```mermaid
 graph TD
     Client["Client-Schnittstellen<br/>(Browser Web UI / CLI / REST API / MCP)"]
-    FastAPI["FastAPI Anwendung<br/>(127.0.0.1:8100)"]
-    Engine["n8nManager Engine<br/>(Entscheidungsaudit & Versionskontrolle)"]
+    FastAPI["FastAPI-Anwendung<br/>(127.0.0.1:8100)"]
+    Engine["n8nManager-Engine<br/>(Entscheidungsaudit & Versionskontrolle)"]
     SQLite[("SQLite Historie-DB<br/>(%LOCALAPPDATA%/n8n-workflow-manager)")]
-    Remote["Remote n8n Instanzen<br/>(n8n Public REST API)"]
+    Remote["Remote n8n-Instanzen<br/>(n8n Public REST API)"]
 
-    Client -->|HTTP / CLI Befehle| FastAPI
+    Client -->|"HTTP / CLI-Befehle"| FastAPI
     FastAPI --> Engine
-    Engine -->|Speichere Änderungen & Historie| SQLite
-    Engine -->|Sync Pull / Push| Remote
+    Engine -->|"Speichere Änderungen & Historie"| SQLite
+    Engine -->|"Sync Pull / Push"| Remote
 ```
 
-## Funktionen
+---
 
+<a id="workflow-lebenszyklus"></a>
+## Workflow-Lebenszyklus
+
+Das folgende Sequenzdiagramm illustriert, wie Änderungen (wie das Erstellen oder Modifizieren eines Workflows) eine explizite Entscheidungsbegründung erfordern, unveränderliche Snapshots in SQLite speichern, mit Remote-Servern synchronisieren und ein deterministisches Rollback ermöglichen.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as "Operator / KI-Agent (MCP)"
+    participant API as "FastAPI-Gateway (127.0.0.1:8100)"
+    participant Engine as "n8nManager Engine"
+    participant SQLite as "SQLite Historie-DB"
+    participant n8n as "Remote n8n-API"
+
+    Note over User,n8n: "1. Entscheidungsbegründete Änderung & Sync-Push"
+    User->>API: "POST /api/workflows/build (Name, Nodes, Decision)"
+    API->>Engine: "Validiere Workflow-Graph & Payload"
+    Engine->>SQLite: "Erfasse Revisions-Snapshot & Entscheidungsbegründung"
+    SQLite-->>Engine: "Gespeichert als Version N"
+    Engine->>n8n: "Sync Push Workflow (Öffentliche REST-API)"
+    n8n-->>Engine: "HTTP 200 OK (Remote Workflow-ID)"
+    Engine-->>API: "Erfolgsquittung & Aktualisierte Version"
+    API-->>User: "JSON-Status (ID, Version, Audit-Hash)"
+
+    Note over User,n8n: "2. Sicherer Rollback-Ablauf"
+    User->>API: "POST /api/workflows/{id}/rollback (Zielversion, Decision)"
+    API->>Engine: "Lade Snapshot der Zielversion"
+    Engine->>SQLite: "Frage Historie-Snapshot ab (Version K)"
+    SQLite-->>Engine: "Historisches Workflow-JSON-Payload"
+    Engine->>SQLite: "Protokolliere Rollback-Ereignis im Audit-Trail"
+    Engine->>n8n: "Übertrage wiederhergestellten Zustand an Server"
+    n8n-->>Engine: "HTTP 200 OK (Aktiver Zustand wiederhergestellt)"
+    Engine-->>API: "Rollback bestätigt"
+    API-->>User: "Wiederherstellungsquittung"
+```
+
+---
+
+<a id="governance-und-laufzeit-invarianten"></a>
+## Governance- & Laufzeit-Invarianten
+
+| # | Invariante | Beschreibung | Durchsetzungs-Mechanismus |
+|---|---|---|---|
+| 1 | **100% Local-First & Null Telemetrie** | Vollständige Ausführung auf Loopback `127.0.0.1` ohne externe Tracking- oder Telemetriesignale. | FastAPI Host-Bindung & Test-Suite |
+| 2 | **Pflicht-Entscheidungsaudit** | Jede zustandsändernde Operation (`import`, `build`, `push`, `rollback`, `delete`) verlangt eine Begründung (`--decision`). | CLI-Prüfung & REST-Validierung |
+| 3 | **SQLite Ereignis- & Snapshot-Ledger** | Vollständige JSON-Snapshots aller Versionen werden dauerhaft und unveränderlich in SQLite geführt. | `n8nManager.core.database`-Schema |
+| 4 | **Deterministische Rollback-Garantie** | Jeder frühere Versionsstand kann verlustfrei geprüft und restauriert werden. | `/api/workflows/{id}/rollback` & CLI `rollback` |
+| 5 | **Keine Administratorrechte** | Läuft vollständig im Benutzerkontext (RunAsInvoker); unprivilegierter Benutzer im Docker-Container. | User-Space & Docker `USER appuser` |
+| 6 | **Plattform-Pfadparität** | Verwendet native Konfigurations- und Datenpfade unter Windows, macOS und Linux. | Platformdirs-Auflösung |
+| 7 | **API-Schlüssel-Maskierung** | Sensible Server-Token werden in UI und API maskiert und nur in lokalen Benutzerdaten gehalten. | Serialisierungs-Maskierung |
+| 8 | **Lokale Offline-Bibliotheken** | Frontend-Komponenten (vis-network 10.1.0) sind lokal gebündelt für uneingeschränkten Offline-Betrieb. | Statisch eingebettete vis-network Assets |
+| 9 | **Agenten- & MCP-Interoperabilität** | Nahtlose Kopplung mit `n8n-manager-mcp` für autonome KI-Steuerung bei voller menschlicher Nachvollziehbarkeit. | REST-Verträge & `llms.txt` |
+| 10 | **48-Stunden Sicherheits-SLA** | Koordinierte Schwachstellenbehandlung und schnelle Patches im ellmos-ai- & open-bricks-Verbund. | [SECURITY.md](SECURITY.md)-Richtlinie |
+
+---
+
+<a id="funktionen"></a>
+## Funktionen
 
 - Visueller Graph-Viewer und funktionsfähiger Browser-Editor für n8n-Workflow-JSON.
 - SQLite-basierte Versionshistorie und Entscheidungsprotokoll für jede Änderung.
@@ -54,6 +136,9 @@ Die Anwendung ist lokal ausgerichtet: Sie bindet standardmäßig an `127.0.0.1`
 und speichert Konfiguration sowie Laufzeitdaten in Benutzerverzeichnissen statt
 im installierten Paket oder Quellordner.
 
+---
+
+<a id="installation-und-start"></a>
 ## Installation und Start
 
 ```bash
@@ -73,6 +158,9 @@ python -m pip install -e ".[dev]"
 python -m pytest -q
 ```
 
+---
+
+<a id="cli-beispiele"></a>
 ## CLI-Beispiele
 
 > [!WARNING]
@@ -105,6 +193,9 @@ n8n-manager config --set db_path ./my.db # einzelne Einstellung ändern
 Die TLS-Prüfung ist standardmäßig aktiv. `--no-verify-tls` ist nur für
 kontrollierte lokale Umgebungen mit selbstsignierten Zertifikaten gedacht.
 
+---
+
+<a id="builder-api"></a>
 ## Builder API
 
 ```bash
@@ -123,6 +214,9 @@ curl -X POST http://127.0.0.1:8100/api/workflows/build \
 
 Die vollständigen Verträge stehen in der [API-Referenz](docs/API_REFERENCE.md).
 
+---
+
+<a id="konfiguration-und-daten"></a>
 ## Konfiguration und Daten
 
 `n8n-manager status` zeigt die tatsächlich verwendeten Pfade. Relative
@@ -141,6 +235,9 @@ Die vollständigen Verträge stehen in der [API-Referenz](docs/API_REFERENCE.md)
 authentifizierenden Reverse-Proxy muss dessen geprüfter öffentlicher Hostname
 explizit eingetragen werden.
 
+---
+
+<a id="docker"></a>
 ## Docker
 
 ```bash
@@ -150,6 +247,9 @@ docker compose up --build -d
 Compose bindet an `127.0.0.1:8100`; Daten liegen unter `runtime/`. Das Image
 läuft als unprivilegierter Benutzer.
 
+---
+
+<a id="entfernte-n8n-installation"></a>
 ## Entfernte n8n-Installation
 
 Docker muss auf dem Zielsystem bereits entsprechend dessen Betriebssystemregeln
@@ -164,6 +264,9 @@ n8n-manager setup --host dein-server --user deploy --ssh-key ~/.ssh/id_ed25519
 SSH nutzt Batch-Modus und `StrictHostKeyChecking=accept-new`. Für einen
 öffentlichen Dienst ist ein authentifizierender TLS-Reverse-Proxy erforderlich.
 
+---
+
+<a id="manager-und-mcp-als-paar"></a>
 ## Manager + MCP als Paar
 
 `n8n-workflow-manager` und
@@ -184,6 +287,24 @@ Wer n8n nicht einzeln, sondern als Teil eines selbst gehosteten Stacks betreibt:
 Ollama und einer Dokumentensuche über Docker Compose; dieser Manager verbindet
 sich anschließend wie mit jedem anderen n8n-Server.
 
+---
+
+<a id="geschwister-oekosystem"></a>
+## Geschwister-Ökosystem
+
+`n8n-workflow-manager` ist ein zentraler Baustein der Open-Source-Ökosysteme von [ellmos-ai](https://github.com/ellmos-ai) und [open-bricks](https://github.com/open-bricks):
+
+| Repository | Zweck | Integration |
+|---|---|---|
+| [`ellmos-ai/n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) | MCP-Server für n8n-Workflow-Steuerung | Autonome KI-Aktionsschicht mit Entscheidungsprotokoll |
+| [`ellmos-ai/ellmos-stack`](https://github.com/ellmos-ai/ellmos-stack) | Lokaler KI- & Automations-Stack | Betreibt n8n, Ollama und Chroma per Docker Compose |
+| [`ellmos-ai/ellmos-homebase-mcp`](https://github.com/ellmos-ai/ellmos-homebase-mcp) | Zentrales Wissens- & Gedächtnis-MCP | Sitzungsübergreifendes Gedächtnis und Agentenkoordination |
+| [`ellmos-ai/ellmos-controlcenter-mcp`](https://github.com/ellmos-ai/ellmos-controlcenter-mcp) | Multi-Agenten-Registry & Tool-Orchestrierung | Dynamische Werkzeugbündelung und Routing |
+| [`open-bricks/open-bricks`](https://github.com/open-bricks) | Dachorganisation für Open-Source-Software | Gemeinsame Standards, Sicherheitsrichtlinien und Governance |
+
+---
+
+<a id="pruefung"></a>
 ## Prüfung
 
 Der Releasevertrag steht in [RELEASE_GATE.md](RELEASE_GATE.md). Die zentralen
@@ -197,6 +318,9 @@ python -m pip_audit
 python -m build
 ```
 
+---
+
+<a id="lizenz"></a>
 ## Lizenz
 
 MIT, siehe [LICENSE](LICENSE). Nutzung auf eigenes Risiko; keine Gewähr und
