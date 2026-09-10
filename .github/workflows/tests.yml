@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout
@@ -37,14 +37,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
 
-      - name: Run tests
-        run: python -m pytest -q
-
-      - name: Compile package
+      - name: Bytecode compilation gate
         run: python -m compileall -q n8nManager tests
 
       - name: Lint
         run: python -m ruff check n8nManager tests
+
+      - name: Run tests
+        run: python -m pytest -ra -v
 
       - name: Security scan
         if: matrix.python-version == '3.12'

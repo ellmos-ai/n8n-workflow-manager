@@ -13,9 +13,9 @@
 > zusammenarbeitet.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Version: 0.2.5](https://img.shields.io/badge/version-0.2.5-blue.svg)](pyproject.toml)
+[![Version: 0.2.6](https://img.shields.io/badge/version-0.2.6-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-206%20bestanden-brightgreen.svg)](tests)
+[![Pytest](https://img.shields.io/badge/pytest-210%20bestanden-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Code-Stil: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Local-First](https://img.shields.io/badge/architektur-local--first-blueviolet.svg)](#funktionen)

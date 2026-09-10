@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.6 — 2026-09-10
+
+- **CI Matrix & Bytecode Gate Hardening (Pfad A)**:
+  - Expanded Python test matrix to Python `3.13` alongside `3.10`, `3.11`, and `3.12` in `.github/workflows/tests.yml`.
+  - Reordered CI steps to enforce a fail-fast bytecode compilation gate (`python -m compileall -q n8nManager tests`) and linting before running tests.
+  - Standardized automated test execution with verbose summary flags (`python -m pytest -ra -v`).
+- **PEP 621 Packaging Metadata Standardization**:
+  - Added full platform classifiers (`Operating System :: Microsoft :: Windows`, `POSIX :: Linux`, `MacOS`) and Python 3.13 classifier in `pyproject.toml`.
+  - Added canonical `Changelog` and `Third-Party Licenses` repository URLs under `[project.urls]`.
+  - Configured `[tool.pytest.ini_options]` with `addopts = "-ra -v"` for reproducible local and CI test execution.
+- **Multi-Host Sync & Coordination Lock Hygiene**:
+  - Hardened `.gitignore` with bare `LOCK`, `LOCK*.txt`, `LOCK.permissions.json`, and host-specific sync conflicts (`*-ASUS-GEI.*`, `*-WORKSTATION-LG.*`, `*-WORKSTATION.*`, `* (kopie)*`, `* (copy)*`, `.mypy_cache/`, `*~`, `*.log`).
+- **Expanded Contract & Governance Test Suite**:
+  - Extended `tests/test_metadata.py` with contract tests verifying PEP 621 metadata, CI bytecode compilation gate & Python 3.13 matrix, multi-host conflict `.gitignore` patterns, and 100% test-count parity (expanding test suite from 206 to 210+ tests).
+
 ## 0.2.5 — 2026-09-09
 
 - **Pfad B Discoverability & Documentation Architecture**:

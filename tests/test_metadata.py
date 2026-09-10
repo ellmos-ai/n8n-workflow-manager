@@ -23,11 +23,11 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.marketing_log_text = (ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
 
     def test_version_parity(self):
-        """Verify 0.2.5 version parity across pyproject.toml, __init__.py, changelog and llms.txt."""
-        self.assertIn('version = "0.2.5"', self.pyproject_text)
-        self.assertIn('__version__ = "0.2.5"', self.init_text)
-        self.assertIn("## 0.2.5 — 2026-09-09", self.changelog_text)
-        self.assertIn("Version: 0.2.5", self.llms_text)
+        """Verify 0.2.6 version parity across pyproject.toml, __init__.py, changelog and llms.txt."""
+        self.assertIn('version = "0.2.6"', self.pyproject_text)
+        self.assertIn('__version__ = "0.2.6"', self.init_text)
+        self.assertIn("## 0.2.6 — 2026-09-10", self.changelog_text)
+        self.assertIn("Version: 0.2.6", self.llms_text)
 
     def test_readme_navigation_anchor_parity(self):
         """Verify 14 navigation anchor links exist in both READMEs and point to existing HTML anchor tags."""
@@ -46,7 +46,7 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         """Verify standard Shields.io badges in both README files."""
         for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
             self.assertIn("img.shields.io/badge/python-3.10+", readme, f"Python badge missing in {lang}")
-            self.assertIn("img.shields.io/badge/version-0.2.5", readme, f"Version badge missing in {lang}")
+            self.assertIn("img.shields.io/badge/version-0.2.6", readme, f"Version badge missing in {lang}")
             self.assertIn("img.shields.io/badge/License-MIT", readme, f"License badge missing in {lang}")
             self.assertIn("img.shields.io/badge/FastAPI-0.115+", readme, f"FastAPI badge missing in {lang}")
             self.assertIn("img.shields.io/badge/Ecosystem-ellmos--ai", readme, f"Ecosystem badge missing in {lang}")
@@ -93,18 +93,53 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.assertIn("concurrency:", self.ci_workflow_text)
         self.assertIn("cancel-in-progress: true", self.ci_workflow_text)
 
+    def test_ci_workflow_compileall_gate_and_matrix(self):
+        """Verify bytecode compilation gate and Python 3.13 in CI test matrix."""
+        self.assertIn("Bytecode compilation gate", self.ci_workflow_text)
+        self.assertIn("python -m compileall -q n8nManager tests", self.ci_workflow_text)
+        self.assertIn("python -m pytest -ra -v", self.ci_workflow_text)
+        self.assertIn('"3.13"', self.ci_workflow_text)
+
+    def test_pep621_packaging_compliance(self):
+        """Verify PEP 621 metadata, OS classifiers, and pytest configuration in pyproject.toml."""
+        self.assertIn('Changelog = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CHANGELOG.md"', self.pyproject_text)
+        self.assertIn('"Third-Party Licenses"', self.pyproject_text)
+        self.assertIn('"Operating System :: Microsoft :: Windows"', self.pyproject_text)
+        self.assertIn('"Operating System :: POSIX :: Linux"', self.pyproject_text)
+        self.assertIn('"Operating System :: MacOS"', self.pyproject_text)
+        self.assertIn('addopts = "-ra -v"', self.pyproject_text)
+
     def test_gitignore_hardening(self):
         """Verify .gitignore excludes sync conflicts, locks, and caches."""
         self.assertIn("*.sync-conflict-*", self.gitignore_text)
         self.assertIn("LOCK.*", self.gitignore_text)
+        self.assertIn("LOCK\n", self.gitignore_text)
+        self.assertIn("LOCK*.txt", self.gitignore_text)
+        self.assertIn("LOCK.permissions.json", self.gitignore_text)
+        self.assertIn("*-ASUS-GEI.*", self.gitignore_text)
+        self.assertIn("*-WORKSTATION-LG.*", self.gitignore_text)
         self.assertIn(".pytest_cache/", self.gitignore_text)
+        self.assertIn(".mypy_cache/", self.gitignore_text)
 
     def test_marketing_log_and_llms_txt_freshness(self):
         """Verify MARKETING-LOG.txt and llms.txt are complete and up to date."""
         self.assertIn("Pfad B", self.marketing_log_text)
         self.assertIn("PyPI Distribution", self.marketing_log_text)
-        self.assertIn("2026-09-09", self.llms_text)
-        self.assertIn("206 passed tests", self.llms_text)
+        self.assertIn("2026-09-10", self.llms_text)
+        self.assertIn("210 passed tests", self.llms_text)
+
+    def test_changelog_recent_pfad_a_entry(self):
+        """Verify CHANGELOG.md contains the 0.2.6 Pfad A hardening release entry."""
+        self.assertIn("## 0.2.6 — 2026-09-10", self.changelog_text)
+        self.assertIn("CI Matrix & Bytecode Gate Hardening (Pfad A)", self.changelog_text)
+        self.assertIn("PEP 621 Packaging Metadata Standardization", self.changelog_text)
+        self.assertIn("Multi-Host Sync & Coordination Lock Hygiene", self.changelog_text)
+
+    def test_project_scripts_and_dependencies(self):
+        """Verify project CLI script entry point and core dependencies."""
+        self.assertIn('n8n-manager = "n8nManager.n8n_manager:main"', self.pyproject_text)
+        self.assertIn('"fastapi>=0.115,<1"', self.pyproject_text)
+        self.assertIn('"pydantic>=2.8,<3"', self.pyproject_text)
 
 
 if __name__ == "__main__":

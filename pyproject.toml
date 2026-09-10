@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "n8n-workflow-manager"
-version = "0.2.5"
+version = "0.2.6"
 description = "Local-first n8n workflow manager with visual graph viewer, REST API, CLI, and multi-server sync"
 readme = "README.md"
 license = "MIT"
@@ -18,10 +18,14 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
     "Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries",
     "Topic :: System :: Systems Administration",
 ]
@@ -54,6 +58,8 @@ Homepage = "https://github.com/ellmos-ai/n8n-workflow-manager"
 Documentation = "https://github.com/ellmos-ai/n8n-workflow-manager#readme"
 Repository = "https://github.com/ellmos-ai/n8n-workflow-manager"
 Issues = "https://github.com/ellmos-ai/n8n-workflow-manager/issues"
+Changelog = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CHANGELOG.md"
+"Third-Party Licenses" = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/THIRD_PARTY_LICENSES.md"
 Security = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/SECURITY.md"
 "Parent Organization" = "https://github.com/ellmos-ai"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"
@@ -84,5 +90,6 @@ line-length = 100
 select = ["E4", "E7", "E9", "F"]
 
 [tool.pytest.ini_options]
+addopts = "-ra -v"
 pythonpath = "."
 testpaths = ["tests"]

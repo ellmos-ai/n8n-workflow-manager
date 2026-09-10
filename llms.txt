@@ -2,7 +2,7 @@
 
 Canonical repository: https://github.com/ellmos-ai/n8n-workflow-manager
 Package name: n8n-workflow-manager
-Version: 0.2.5
+Version: 0.2.6
 CLI command: n8n-manager
 Primary audience: n8n users, workflow automation teams, local-first AI agents, and developers who need to inspect, document, create, or sync n8n workflows.
 
@@ -28,7 +28,7 @@ Related projects:
 - https://github.com/open-bricks - umbrella ecosystem.
 
 Verification commands:
-- python -m pytest -q (206 passed tests)
+- python -m pytest -ra -v (210 passed tests)
 - python -m compileall -q n8nManager tests
 - python -m ruff check n8nManager tests
 - python -m bandit -q -r n8nManager -lll
@@ -51,6 +51,6 @@ Notes:
 - The web UI is local-first and binds to 127.0.0.1 unless an operator explicitly acknowledges remote exposure.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
-- Verification status: 206/206 Pytest unit, integration & contract tests passing (100% green).
+- Verification status: 210/210 Pytest unit, integration & contract tests passing (100% green).
 
-## Last-checked: 2026-09-09
+## Last-checked: 2026-09-10

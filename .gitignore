@@ -40,17 +40,28 @@ Thumbs.db
 *-CONFLIT-*
 *-conflict-*
 *.sync-temp-*
+*-ASUS-GEI.*
+*-WORKSTATION-LG.*
+*-WORKSTATION.*
+* (kopie)*
+* (copy)*
 
 # Multi-agent coordination locks
+LOCK
 LOCK.*
 *.lock
+LOCK*.txt
+LOCK.permissions.json
 
 # Test, lint, and packaging caches
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 .coverage
 htmlcov/
 .wheel-smoke/
 wheelhouse/
 *.tmp
 *.bak
+*~
+*.log
