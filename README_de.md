@@ -33,6 +33,9 @@
 - [Systemarchitektur](#systemarchitektur)
 - [Workflow-Lebenszyklus](#workflow-lebenszyklus)
 - [Governance- & Laufzeit-Invarianten](#governance-und-laufzeit-invarianten)
+- [Benutzeroberfläche & Screenshots](#benutzeroberflaeche-und-screenshots)
+- [Zielgruppen-Personas & SEO](#zielgruppen-personas-und-seo)
+- [Architektur- & Funktionsvergleich](#vergleichsmatrix)
 - [Funktionen](#funktionen)
 - [Installation und Start](#installation-und-start)
 - [CLI-Beispiele](#cli-beispiele)
@@ -122,6 +125,54 @@ sequenceDiagram
 
 ---
 
+<a id="benutzeroberflaeche-und-screenshots"></a>
+<a id="screenshots"></a>
+## Benutzeroberfläche & Screenshots
+
+Die browserbasierte Benutzeroberfläche ermöglicht interaktive Workflow-Inspektion, Visualisierung von Node-Abhängigkeiten und Historienverwaltung direkt im lokalen Netzwerk:
+
+| Dashboard & Workflow-Übersicht | Visueller Graph-Viewer & Live-Inspektor |
+|:---:|:---:|
+| ![n8n Workflow Manager Dashboard](docs/screenshots/dashboard.png) | ![n8n Workflow Graph Viewer](docs/screenshots/workflow-viewer.png) |
+| *Workflow-Katalog, Server-Anbindungen, Revisionszähler & Schnellaktionen* | *Interaktiver vis.js-Graph, Node-Parameter, Credentials & Verbindungen* |
+
+---
+
+<a id="zielgruppen-personas-und-seo"></a>
+## Zielgruppen-Personas & SEO
+
+n8n Workflow Manager wurde gezielt für technische Teams, Administratoren und KI-Agenten entwickelt, die strenge Governance über Automatisierungs-Workflows benötigen:
+
+- **`[PERSONA-01]` Workflow-Automatisierungs-Ingenieure & Sysadmins**: Betreiber vielschichtiger n8n-Instanzen über Staging, Testing und Produktion, die Server-Synchronisation, visuelle Graph-Prüfung und Zero-Data-Egress verlangen.
+- **`[PERSONA-02]` KI-Agenten-Architekten & MCP-Integratoren**: Teams, die LLMs (über `n8n-manager-mcp`) zur autonomen Workflow-Erstellung einsetzen, abgesichert durch verbindliche Entscheidungsbegründungen (`--decision`).
+- **`[PERSONA-03]` Sicherheits- & Compliance-Beauftragte**: Auditoren, die unveränderliche SQLite-Historien, automatische Credential-Maskierung, offline bereitgestellte Frontend-Assets und strikte Non-Elevation (`RunAsInvoker`) voraussetzen.
+- **`[PERSONA-04]` DevOps & Site Reliability Engineers (SRE)**: Infrastruktur-Teams, die gepinnte Container-Images (`docker-compose.yml`), automatisierte Backups, cursor-paginierte REST-APIs und deterministisches Rollback benötigen.
+
+#### High-Intent SEO-Suchphrasen & Auffindbarkeit
+- `lokaler n8n workflow manager`, `visueller n8n graph viewer`, `n8n multi-server synchronisation`, `entscheidungsbegruendete workflow automation`, `n8n mcp server integration`, `local-first n8n rollback`, `vis.js n8n editor`, `fastapi n8n steuerung`, `offline n8n dokumentation export`.
+
+---
+
+<a id="vergleichsmatrix"></a>
+## Architektur- & Funktionsvergleich
+
+Technischer Vergleich von `n8n-workflow-manager` mit gängigen Betriebs- und Verwaltungsansätzen entlang von 10 zentralen Kriterien:
+
+| Dimension / Kriterium | Native n8n Web-UI | Reine Git-JSON-Commits | Generische REST-Tools (Postman) | n8n Workflow Manager |
+|:---|:---:|:---:|:---:|:---:|
+| **1. Local-First Ausführung (`127.0.0.1`)** | Server-abhängig | Nicht zutreffend | Lokal | **Ja (Standard Loopback)** |
+| **2. Verbindliche Entscheidungsbegründung** | Nein | Optionale Commit-Message | Nein | **Erzwungen (`--decision`)** |
+| **3. Unveränderliches SQLite-Revisionsbuch** | Nur interne Server-DB | Nur Git-Historie | Nein | **Dedizierte JSON-Snapshots** |
+| **4. Visueller Graph-Viewer (Offline vis.js)** | Online-Browser | Nein | Nein | **Ja (Offline gebündelt)** |
+| **5. Deterministisches Ein-Klick-Rollback** | Manueller JSON-Import | `git checkout` | Manuelle Payload | **Ja (CLI / REST-API)** |
+| **6. Multi-Server Sync & Cursor-Paginierung** | Nur Enterprise-Cloud | Manuell | Manuelle Skripte | **Integriert (Pull/Push)** |
+| **7. Native KI-Agenten-Kopplung (MCP)** | Nein | Nein | Nein | **Ja (`n8n-manager-mcp`)** |
+| **8. Non-Elevation Sicherheit (`RunAsInvoker`)** | Server-Kontext | Nicht zutreffend | User-Space | **Erzwungen (`RunAsInvoker`)** |
+| **9. Plattformparität (Win/macOS/Linux)** | Nur Web | CLI | Desktop | **Vollständige Pfad-Auflösung** |
+| **10. 48h Sicherheits-Reaktions-SLA** | Hersteller-SLA | Community | Nicht zutreffend | **Verbindlich zugesichert** |
+
+---
+
 <a id="funktionen"></a>
 ## Funktionen
 
@@ -135,6 +186,17 @@ sequenceDiagram
 Die Anwendung ist lokal ausgerichtet: Sie bindet standardmäßig an `127.0.0.1`
 und speichert Konfiguration sowie Laufzeitdaten in Benutzerverzeichnissen statt
 im installierten Paket oder Quellordner.
+
+### Schnellstart nach Anwendungsfall
+
+| Ziel / Workflow-Anforderung | Empfohlenes Werkzeug / Oberfläche | Befehl / Ablauf |
+|---|---|---|
+| **Lokale Workflows inspizieren & visualisieren** | Web-Dashboard & vis.js Graph-Viewer | `n8n-manager serve` &rarr; öffne `http://127.0.0.1:8100` |
+| **Workflows für Übergaben dokumentieren** | Markdown- / JSON-Export-Engine | `n8n-manager export <id> --format md` |
+| **Multi-Server-Sync (Staging nach Produktion)** | Server-Register & Pull/Push-Engine | `n8n-manager push <id> --decision "Freigegebenen Stand deployen"` |
+| **Autonome KI-Workflow-Generierung** | Builder REST-API & MCP-Server | `POST /api/workflows/build` via `n8n-manager-mcp` |
+| **Sofortiges Rollback & Ausfallsicherheit** | SQLite-Snapshots & REST-Rollback | `n8n-manager rollback <id> <ziel-version> --decision "Defekt rückgängig machen"` |
+| **Zero-Config Remote-n8n-Installation** | Automatisierter SSH-Setup-Befehl | `n8n-manager setup --host <server> --user <deploy>` |
 
 ---
 
@@ -300,6 +362,8 @@ sich anschließend wie mit jedem anderen n8n-Server.
 | [`ellmos-ai/ellmos-stack`](https://github.com/ellmos-ai/ellmos-stack) | Lokaler KI- & Automations-Stack | Betreibt n8n, Ollama und Chroma per Docker Compose |
 | [`ellmos-ai/ellmos-homebase-mcp`](https://github.com/ellmos-ai/ellmos-homebase-mcp) | Zentrales Wissens- & Gedächtnis-MCP | Sitzungsübergreifendes Gedächtnis und Agentenkoordination |
 | [`ellmos-ai/ellmos-controlcenter-mcp`](https://github.com/ellmos-ai/ellmos-controlcenter-mcp) | Multi-Agenten-Registry & Tool-Orchestrierung | Dynamische Werkzeugbündelung und Routing |
+| [`dev-bricks/automation-master`](https://github.com/dev-bricks/automation-master) | Zentrale Automations- & Task-Überwachung | Systemweite Health-Orchestrierung und Watchdog |
+| [`ellmos-ai/clirec`](https://github.com/ellmos-ai/clirec) | Deterministischer CLI-Session-Recorder & Replay-Engine | Interaktives Terminal-Audit und Sitzungsverifikation |
 | [`open-bricks/open-bricks`](https://github.com/open-bricks) | Dachorganisation für Open-Source-Software | Gemeinsame Standards, Sicherheitsrichtlinien und Governance |
 
 ---
@@ -331,3 +395,7 @@ Distributionen enthalten zusätzlich die Browser-Bibliothek **vis-network** (dua
 lizenziert Apache-2.0 oder MIT; hier unter der MIT-Option genutzt) mit eigenen
 Rechteinhabern. Vollständige Hinweise:
 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
+
+### Gesetzlicher Hinweis (§ 521 BGB Gefälligkeitsrecht)
+
+Die Bereitstellung dieser Open-Source-Software erfolgt unentgeltlich im Sinne einer Gefälligkeit gemäß § 521 BGB. Die Haftung des Autors ist auf Vorsatz und grobe Fahrlässigkeit beschränkt. Die Nutzung erfolgt auf eigenes Risiko und ohne Mängelhaftung oder Pflegeverpflichtung.

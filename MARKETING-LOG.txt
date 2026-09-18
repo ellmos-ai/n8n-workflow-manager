@@ -31,3 +31,17 @@ Status: COMPLETED / VERIFIED
    - Record a 30-second animated GIF or webm demonstrating importing a workflow, viewing it in the vis.js network viewer, mutating with --decision, and rolling back via CLI, then embed in the README header.
 5. GitHub Topics Optimization:
    - Verify GitHub topics include: n8n, n8n-workflows, workflow-automation, fastapi, local-first, ai-agents, mcp-server, python-cli, sqlite.
+
+## 4. Pfad B Audit & Implementation (2026-09-18)
+- Cycle: Pfad B (Discoverability, Visual Architecture, Bilingual Navigation & Metadata Parity)
+- Status: COMPLETED / VERIFIED
+- Measures Executed:
+  - [x] Visual Interface Walkthrough: Integrated Web Dashboard (`docs/screenshots/dashboard.png`) and interactive vis.js Graph Viewer (`docs/screenshots/workflow-viewer.png`) into both `README.md` and `README_de.md`.
+  - [x] 17-Point Symmetrical Navigation: Expanded navigation structure with 1:1 anchor parity (`<a id="..."></a>`) covering screenshots, personas, and feature comparison.
+  - [x] Target Audience Personas & SEO: Defined 4 core personas (`[PERSONA-01]` Workflow Automation Engineers, `[PERSONA-02]` AI Architects, `[PERSONA-03]` Compliance Officers, `[PERSONA-04]` DevOps/SRE) with bilingual high-intent keywords.
+  - [x] 10-Dimension Architectural Comparison Matrix: Formulated technical benchmark table against native web UI, git JSON commits, and REST clients.
+  - [x] Quick Start by Use Case: Added intuitive task-based decision table in "What it does" / "Funktionen".
+  - [x] Sibling Ecosystem Expansion: Cross-linked `dev-bricks/automation-master` and `ellmos-ai/clirec`.
+  - [x] Legal Disclaimer: Embedded statutory disclaimer pursuant to § 521 BGB Gefälligkeitsrecht in `README_de.md`.
+  - [x] SEO Packaging Keywords: Enriched keywords in `pyproject.toml` with `mcp-companion`, `sqlite-audit`, `workflow-rollback`.
+  - [x] Automated Contract Tests: Updated `tests/test_metadata.py` to enforce 17 navigation links, screenshot asset availability, personas, and comparison matrix.

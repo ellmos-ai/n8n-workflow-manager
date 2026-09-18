@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased] - 2026-09-18
+
+- **Pfad B Discoverability, Visual Architecture & Navigation Parity**:
+  - Embedded visual interface walkthrough with screenshots (`docs/screenshots/dashboard.png` and `docs/screenshots/workflow-viewer.png`) showcasing the Web Dashboard and interactive vis.js Workflow Graph Viewer.
+  - Expanded bilingual quick navigation to 17 points with 1:1 anchor parity (`<a id="..."></a>`) in `README.md` and `README_de.md`.
+  - Added structured Target Audience Personas (`[PERSONA-01]` Workflow Automation Engineers & Sysadmins, `[PERSONA-02]` AI Agent Framework Architects & MCP Integrators, `[PERSONA-03]` Security & Compliance Officers, `[PERSONA-04]` DevOps & SREs) with bilingual high-intent discoverability search phrases.
+  - Added 10-Dimension Architectural Comparison Matrix benchmarking `n8n-workflow-manager` against native n8n Web UI, raw Git JSON commits, and generic REST tools.
+  - Added Quick Start by Use Case decision table to provide immediate onboarding for local inspection, handoff documentation, multi-server sync, AI builder APIs, and zero-config remote deployments.
+  - Added statutory disclaimer (§ 521 BGB Gefälligkeitsrecht) to `README_de.md` and expanded Sibling Ecosystem with `dev-bricks/automation-master` and `ellmos-ai/clirec`.
+  - Enriched PEP 621 packaging keywords in `pyproject.toml` (`mcp-companion`, `sqlite-audit`, `workflow-rollback`).
+  - Extended contract test suite in `tests/test_metadata.py` validating screenshot assets, 17-point anchor parity, personas, comparison matrix, and refreshed metadata.
+
 ## 0.2.6 — 2026-09-10
 
 - **CI Matrix & Bytecode Gate Hardening (Pfad A)**:

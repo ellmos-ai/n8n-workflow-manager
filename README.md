@@ -32,6 +32,9 @@
 - [System Architecture](#system-architecture)
 - [Workflow Lifecycle](#workflow-lifecycle)
 - [Governance & Runtime Invariants](#governance-and-runtime-invariants)
+- [Visual Interface & Screenshots](#visual-interface-and-screenshots)
+- [Target Audience Personas & SEO](#target-personas-and-seo)
+- [Architecture & Feature Comparison](#comparison-matrix)
 - [What it does](#what-it-does)
 - [Install and start](#install-and-start)
 - [CLI examples](#cli-examples)
@@ -121,6 +124,54 @@ sequenceDiagram
 
 ---
 
+<a id="visual-interface-and-screenshots"></a>
+<a id="screenshots"></a>
+## Visual Interface & Screenshots
+
+The browser UI provides interactive workflow inspection, node dependency graphing, and history management without leaving your local environment:
+
+| Dashboard & Workflow Overview | Visual Graph Viewer & Live Inspector |
+|:---:|:---:|
+| ![n8n Workflow Manager Dashboard](docs/screenshots/dashboard.png) | ![n8n Workflow Graph Viewer](docs/screenshots/workflow-viewer.png) |
+| *Workflow catalog, server bindings, revision counts & quick actions* | *Interactive vis.js graph, node parameters, credentials & connections* |
+
+---
+
+<a id="target-personas-and-seo"></a>
+## Target Audience Personas & SEO
+
+n8n Workflow Manager is purpose-built for technical teams, operators, and AI agents requiring strict governance over automation workflows:
+
+- **`[PERSONA-01]` Workflow Automation Engineers & Sysadmins**: Operators managing complex multi-stage n8n instances across staging, testing, and production who require cross-server syncing, visual graph diffing, and zero data egress.
+- **`[PERSONA-02]` AI Agent Framework Architects & MCP Integrators**: Teams integrating LLMs (via `n8n-manager-mcp`) to autonomously construct or modify workflows, governed by mandatory human-in-the-loop decision rationales (`--decision`).
+- **`[PERSONA-03]` Security & Compliance Officers**: Security teams requiring immutable SQLite audit trails, redaction of sensitive credentials, offline vendored frontend assets, and strict adherence to non-elevation (`RunAsInvoker`).
+- **`[PERSONA-04]` DevOps & Site Reliability Engineers (SRE)**: Infrastructure teams deploying pinned container images (`docker-compose.yml`), automated backups, cursor-paginated REST APIs, and instant deterministic rollback.
+
+#### High-Intent Discoverability & Search Keywords
+- `local n8n workflow manager`, `visual n8n graph viewer`, `n8n multi-server sync`, `decision-tracked workflow automation`, `n8n-manager-mcp companion`, `local-first workflow rollback`, `vis.js n8n editor`, `fastapi n8n controller`, `offline n8n documentation export`.
+
+---
+
+<a id="comparison-matrix"></a>
+## Architecture & Feature Comparison
+
+Comparison of `n8n-workflow-manager` with standard deployment and management alternatives across core operational dimensions:
+
+| Dimension / Capability | Native n8n Web UI | Raw Git JSON Commits | Generic REST Tools (Postman) | n8n Workflow Manager |
+|:---|:---:|:---:|:---:|:---:|
+| **1. Local-First Execution (`127.0.0.1`)** | Server-dependent | N/A | Local | **Yes (Default loopback)** |
+| **2. Mandatory Decision Rationale** | No | Optional commit msg | No | **Enforced (`--decision`)** |
+| **3. Immutable SQLite Revision Ledger** | Internal DB only | Git history only | No | **Dedicated JSON snapshots** |
+| **4. Visual Graph Viewer (Offline vis.js)** | Online browser | No | No | **Yes (Offline vendored)** |
+| **5. Deterministic One-Click Rollback** | Manual JSON import | `git checkout` | Manual payload | **Yes (CLI / REST API)** |
+| **6. Multi-Server Sync & Cursor Pagination** | Enterprise Cloud only | Manual | Manual script | **Built-in (Pull/Push)** |
+| **7. Native AI Agent Pairing (MCP Protocol)** | No | No | No | **Yes (`n8n-manager-mcp`)** |
+| **8. Non-Elevation Security (`RunAsInvoker`)** | Server context | N/A | User space | **Enforced (`RunAsInvoker`)** |
+| **9. Cross-Platform Parity (Win/macOS/Linux)** | Web only | CLI | Desktop | **Full native path resolution** |
+| **10. 48-Hour Coordinated Security SLA** | Vendor SLA | Community | N/A | **Formally committed** |
+
+---
+
 <a id="what-it-does"></a>
 ## What it does
 
@@ -134,6 +185,17 @@ sequenceDiagram
 The application is local-first: it binds to `127.0.0.1` by default and stores
 configuration and runtime data in per-user directories rather than inside the
 installed package or source checkout.
+
+### Quick Start by Use Case
+
+| Goal / Workflow Need | Recommended Tool / Surface | Command / Workflow |
+|---|---|---|
+| **Inspect & Visualize Local Workflows** | Web Dashboard & vis.js Graph Viewer | `n8n-manager serve` &rarr; open `http://127.0.0.1:8100` |
+| **Document Workflows for Handoff** | Markdown / JSON Export Engine | `n8n-manager export <id> --format md` |
+| **Multi-Server Sync (Staging to Prod)** | Server Registry & Pull/Push Engine | `n8n-manager push <id> --decision "Deploy reviewed changes"` |
+| **Autonomous AI Workflow Authoring** | Builder REST API & MCP Server | `POST /api/workflows/build` via `n8n-manager-mcp` |
+| **Instant Disaster Recovery / Rollback** | SQLite Snapshots & REST Rollback | `n8n-manager rollback <id> <target-version> --decision "Revert defect"` |
+| **Zero-Config Remote n8n Deployment** | Automated SSH Setup Command | `n8n-manager setup --host <server> --user <deploy>` |
 
 ---
 
@@ -299,6 +361,8 @@ such as [ctx](https://github.com/ctxrs/ctx) (Apache-2.0).
 | [`ellmos-ai/ellmos-stack`](https://github.com/ellmos-ai/ellmos-stack) | All-in-one local AI & automation stack | Runs n8n, Ollama, and Chroma via Docker Compose |
 | [`ellmos-ai/ellmos-homebase-mcp`](https://github.com/ellmos-ai/ellmos-homebase-mcp) | Central knowledge base & memory MCP | Cross-session agent memory and coordination |
 | [`ellmos-ai/ellmos-controlcenter-mcp`](https://github.com/ellmos-ai/ellmos-controlcenter-mcp) | Multi-agent registry and tool orchestration | Dynamic tool bundling and routing |
+| [`dev-bricks/automation-master`](https://github.com/dev-bricks/automation-master) | Central automation health & task supervisor | System-level health orchestration and watchdog |
+| [`ellmos-ai/clirec`](https://github.com/ellmos-ai/clirec) | Deterministic CLI session recorder & replay engine | Interactive terminal auditing and session verification |
 | [`open-bricks/open-bricks`](https://github.com/open-bricks) | Umbrella open-source organization | Shared standards, security guidelines, and governance |
 
 ---

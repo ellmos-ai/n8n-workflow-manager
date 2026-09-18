@@ -12,7 +12,25 @@ requires-python = ">=3.10"
 authors = [
     {name = "Lukas Geiger", email = "lukisch@users.noreply.github.com"}
 ]
-keywords = ["n8n", "n8n-workflows", "workflow", "workflow-manager", "workflow-sync", "automation", "workflow-automation", "manager", "visualization", "vis.js", "fastapi", "local-first", "ai-agents", "python-cli"]
+keywords = [
+    "n8n",
+    "n8n-workflows",
+    "workflow",
+    "workflow-manager",
+    "workflow-sync",
+    "automation",
+    "workflow-automation",
+    "manager",
+    "visualization",
+    "vis.js",
+    "fastapi",
+    "local-first",
+    "ai-agents",
+    "mcp-companion",
+    "sqlite-audit",
+    "workflow-rollback",
+    "python-cli",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

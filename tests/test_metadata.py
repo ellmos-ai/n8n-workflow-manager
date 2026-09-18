@@ -30,12 +30,12 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.assertIn("Version: 0.2.6", self.llms_text)
 
     def test_readme_navigation_anchor_parity(self):
-        """Verify 14 navigation anchor links exist in both READMEs and point to existing HTML anchor tags."""
+        """Verify 17 navigation anchor links exist in both READMEs and point to existing HTML anchor tags."""
         for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
             nav_match = re.search(r"## Navigation\s*\n\n((?:- \[.*?\]\(#.*?\)\n)+)", readme)
             self.assertIsNotNone(nav_match, f"Navigation section missing in {lang} README")
             nav_links = re.findall(r"- \[(.*?)\]\(#(.*?)\)", nav_match.group(1))
-            self.assertEqual(len(nav_links), 14, f"Expected 14 navigation links in {lang} README, found {len(nav_links)}")
+            self.assertEqual(len(nav_links), 17, f"Expected 17 navigation links in {lang} README, found {len(nav_links)}")
             for label, anchor in nav_links:
                 self.assertTrue(
                     f'<a id="{anchor}"></a>' in readme or f"#{anchor}" in readme.lower(),
@@ -125,8 +125,40 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         """Verify MARKETING-LOG.txt and llms.txt are complete and up to date."""
         self.assertIn("Pfad B", self.marketing_log_text)
         self.assertIn("PyPI Distribution", self.marketing_log_text)
-        self.assertIn("2026-09-10", self.llms_text)
-        self.assertIn("210 passed tests", self.llms_text)
+        self.assertIn("2026-09-18", self.marketing_log_text)
+        self.assertIn("2026-09-18", self.llms_text)
+        self.assertIn("210+ Pytest", self.llms_text)
+
+    def test_readme_visual_screenshots_and_use_case_table(self):
+        """Verify screenshots exist on disk and are embedded in both README files alongside use-case quick start."""
+        for path in [
+            ROOT / "docs" / "screenshots" / "dashboard.png",
+            ROOT / "docs" / "screenshots" / "workflow-viewer.png",
+            ROOT / "README" / "screenshots" / "dashboard.png",
+            ROOT / "README" / "screenshots" / "workflow-viewer.png",
+        ]:
+            self.assertTrue(path.exists(), f"Screenshot file missing: {path}")
+
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            self.assertIn("docs/screenshots/dashboard.png", readme, f"Dashboard screenshot missing in {lang}")
+            self.assertIn("docs/screenshots/workflow-viewer.png", readme, f"Workflow viewer screenshot missing in {lang}")
+            self.assertIn("Quick Start by Use Case" if lang == "EN" else "Schnellstart nach Anwendungsfall", readme)
+
+    def test_readme_personas_and_comparison_matrix(self):
+        """Verify target audience personas, SEO, and comparison matrix in both README files."""
+        for readme, lang in [(self.readme_en, "EN"), (self.readme_de, "DE")]:
+            for persona in ["[PERSONA-01]", "[PERSONA-02]", "[PERSONA-03]", "[PERSONA-04]"]:
+                self.assertIn(persona, readme, f"Persona {persona} missing in {lang} README")
+            self.assertIn("127.0.0.1", readme)
+            self.assertIn("RunAsInvoker", readme)
+
+        self.assertIn("§ 521 BGB Gefälligkeitsrecht", self.readme_de)
+
+    def test_pyproject_keywords_enrichment(self):
+        """Verify pyproject.toml includes high-intent SEO discoverability keywords."""
+        self.assertIn('"mcp-companion"', self.pyproject_text)
+        self.assertIn('"sqlite-audit"', self.pyproject_text)
+        self.assertIn('"workflow-rollback"', self.pyproject_text)
 
     def test_changelog_recent_pfad_a_entry(self):
         """Verify CHANGELOG.md contains the 0.2.6 Pfad A hardening release entry."""
