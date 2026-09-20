@@ -1,0 +1,491 @@
+<!-- alternate banner: assets/banner-b.svg (swap on occasion) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 680" width="2400" height="680">
+  <defs>
+    <!-- Background Sky Gradient -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="35%" stop-color="#7dd3fc" />
+      <stop offset="68%" stop-color="#bae6fd" />
+      <stop offset="92%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#fed7aa" />
+    </linearGradient>
+
+    <!-- Sun Glow -->
+    <radialGradient id="sunGlow" cx="68%" cy="0%" r="58%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="25%" stop-color="#fef08a" stop-opacity="0.65" />
+      <stop offset="55%" stop-color="#fde047" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Sunray Linear Fade -->
+    <linearGradient id="sunRayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45" />
+      <stop offset="40%" stop-color="#fef08a" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#fde047" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Golden Halo & Accessories Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb" />
+      <stop offset="25%" stop-color="#fde047" />
+      <stop offset="60%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+
+    <!-- Steel / Metal Gradient for Hammer -->
+    <linearGradient id="steelHammer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="20%" stop-color="#94a3b8" />
+      <stop offset="50%" stop-color="#f1f5f9" />
+      <stop offset="80%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+
+    <!-- Steel / Metal Gradient for Sickle -->
+    <linearGradient id="steelSickle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="25%" stop-color="#e2e8f0" />
+      <stop offset="60%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+
+    <!-- Wood Grain for Tool Handles -->
+    <linearGradient id="woodHandle" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#92400e" />
+      <stop offset="28%" stop-color="#d97706" />
+      <stop offset="58%" stop-color="#fbbf24" />
+      <stop offset="85%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+
+    <!-- Wing Gradient -->
+    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="65%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+
+    <!-- Robe Gradient -->
+    <linearGradient id="robeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="75%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+
+    <!-- Cloud Gradients -->
+    <linearGradient id="cloudGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="65%" stop-color="#f0f9ff" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+
+    <linearGradient id="cloudGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.75" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0284c7" flood-opacity="0.14" />
+    </filter>
+
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#0369a1" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <!-- ==================== BACKGROUND & ATMOSPHERE ==================== -->
+  <!-- Base Sky -->
+  <rect width="2400" height="680" fill="url(#skyGrad)" />
+
+  <!-- Heavenly Sun Glow from Upper Right -->
+  <circle cx="1680" cy="-40" r="620" fill="url(#sunGlow)" />
+
+  <!-- Radiating Sun Beams -->
+  <polygon points="1680,-40 380,680 620,680" fill="url(#sunRayGrad)" opacity="0.4" />
+  <polygon points="1680,-40 850,680 1100,680" fill="url(#sunRayGrad)" opacity="0.45" />
+  <polygon points="1680,-40 1350,680 1620,680" fill="url(#sunRayGrad)" opacity="0.5" />
+  <polygon points="1680,-40 1880,680 2160,680" fill="url(#sunRayGrad)" opacity="0.45" />
+  <polygon points="1680,-40 2340,680 2400,620 2400,340" fill="url(#sunRayGrad)" opacity="0.35" />
+
+  <!-- Distant Golden Sparkles in Heaven -->
+  <!-- Sparkle 1 -->
+  <path d="M 280,105 Q 280,118 293,118 Q 280,118 280,131 Q 280,118 267,118 Q 280,118 280,105 Z" fill="#fffbeb" filter="url(#goldGlow)" />
+  <!-- Sparkle 2 -->
+  <path d="M 680,85 Q 680,97 692,97 Q 680,97 680,109 Q 680,97 668,97 Q 680,97 680,85 Z" fill="#fef08a" opacity="0.85" />
+  <!-- Sparkle 3 -->
+  <path d="M 1240,65 Q 1240,79 1254,79 Q 1240,79 1240,93 Q 1240,79 1226,79 Q 1240,79 1240,65 Z" fill="#fffbeb" filter="url(#goldGlow)" />
+  <!-- Sparkle 4 -->
+  <path d="M 1680,140 Q 1680,154 1694,154 Q 1680,154 1680,168 Q 1680,154 1666,154 Q 1680,154 1680,140 Z" fill="#fef08a" opacity="0.9" />
+  <!-- Sparkle 5 -->
+  <path d="M 2240,90 Q 2240,103 2253,103 Q 2240,103 2240,116 Q 2240,103 2227,103 Q 2240,103 2240,90 Z" fill="#fffbeb" filter="url(#goldGlow)" />
+
+  <!-- ==================== BACKGROUND CLOUDS ==================== -->
+  <!-- Rolling Soft Distant Horizon Cloud Bank -->
+  <path d="M 0,440 Q 180,380 390,410 Q 640,360 880,390 Q 1150,340 1420,380 Q 1690,340 1960,380 Q 2190,350 2400,390 L 2400,680 L 0,680 Z" fill="url(#cloudGrad2)" opacity="0.65" />
+
+  <!-- ==================== LEFT TYPOGRAPHY & CLOUD PLATEAU ==================== -->
+  <!-- Luminous Cloud Plateau for Typography -->
+  <path d="M 60,190 C 180,150 360,150 490,170 C 610,140 760,160 810,230 C 860,290 850,390 820,445 C 770,505 640,535 520,545 C 380,555 220,565 120,525 C 50,485 40,400 40,300 C 40,240 48,205 60,190 Z" fill="#ffffff" fill-opacity="0.88" filter="url(#cardShadow)" />
+
+  <!-- Brand Typography -->
+  <g id="brand-text">
+    <!-- Wortmarke "n8n-workflow-manager" -->
+    <text x="110" y="315" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="56" font-weight="900" fill="#0f172a" letter-spacing="-1.2">n8n-workflow-manager</text>
+
+    <!-- Tagline from README -->
+    <text x="112" y="388" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="31" font-weight="600" fill="#334155" letter-spacing="-0.2">Local-first workflow review &amp; control</text>
+  </g>
+
+  <!-- ==================== CHARACTER 1: TRAINER PETRUS (COACH) ==================== -->
+  <g id="petrus-coach">
+    <!-- Cloud Floor Shadow -->
+    <ellipse cx="960" cy="540" rx="115" ry="20" fill="#0284c7" opacity="0.18" />
+
+    <!-- Robe / Gown Body -->
+    <path d="M 890,265 C 920,260 1000,260 1030,265 C 1055,340 1075,440 1080,525 C 1040,540 980,545 920,540 C 870,535 845,525 840,520 C 848,440 868,340 890,265 Z" fill="url(#robeGrad)" stroke="#cbd5e1" stroke-width="2" />
+
+    <!-- Drapery Fold Lines on Robe -->
+    <path d="M 915,285 Q 925,410 905,530" fill="none" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" />
+    <path d="M 955,395 Q 965,470 955,535" fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 1005,285 Q 1025,410 1040,525" fill="none" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Heavenly Gold Border at Gown Hem -->
+    <path d="M 840,520 Q 960,548 1080,525 L 1080,534 Q 960,557 840,530 Z" fill="url(#goldGrad)" />
+
+    <!-- Trainer Coach Sash across Chest -->
+    <path d="M 892,268 L 920,265 L 1035,400 L 1005,405 Z" fill="#0284c7" opacity="0.9" />
+    <path d="M 892,268 L 920,265 L 1035,400 L 1005,405 Z" fill="none" stroke="url(#goldGrad)" stroke-width="2" />
+
+    <!-- Coach Belt -->
+    <path d="M 872,375 Q 960,392 1042,375 L 1042,398 Q 960,415 872,398 Z" fill="#78350f" stroke="#451a03" stroke-width="2" />
+    <!-- Belt Buckle -->
+    <rect x="944" y="375" width="28" height="26" rx="4" fill="url(#goldGrad)" stroke="#b45309" stroke-width="2" />
+    <rect x="951" y="381" width="14" height="14" rx="2" fill="#78350f" />
+
+    <!-- Key Ring at Belt (St. Peter's Golden Keys / Schlüsselbund) -->
+    <g id="petrus-keys">
+      <!-- Ring -->
+      <circle cx="896" cy="410" r="16" fill="none" stroke="url(#goldGrad)" stroke-width="5" filter="url(#goldGlow)" />
+      
+      <!-- Key 1: Straight Downward Master Key -->
+      <path d="M 896,426 L 896,482 M 896,462 L 912,462 M 896,474 L 910,474" stroke="url(#goldGrad)" stroke-width="4.5" stroke-linecap="round" />
+      <circle cx="896" cy="426" r="4" fill="url(#goldGrad)" />
+
+      <!-- Key 2: Slanted Left Antique Key -->
+      <path d="M 890,424 L 872,475 M 878,458 L 865,464 M 875,469 L 863,475" stroke="url(#goldGrad)" stroke-width="4" stroke-linecap="round" />
+
+      <!-- Key 3: Slanted Right Antique Key -->
+      <path d="M 902,424 L 918,472 M 912,456 L 924,452 M 915,465 L 926,461" stroke="url(#goldGrad)" stroke-width="4" stroke-linecap="round" />
+    </g>
+
+    <!-- Head & Neck -->
+    <circle cx="960" cy="205" r="40" fill="#fed7aa" />
+
+    <!-- Rosy Cheeks -->
+    <circle cx="938" cy="214" r="10" fill="#f43f5e" opacity="0.22" />
+    <circle cx="982" cy="214" r="10" fill="#f43f5e" opacity="0.22" />
+
+    <!-- Happy Eyes -->
+    <path d="M 936,200 Q 945,193 954,200" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 966,200 Q 975,193 984,200" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- White Hair Framing Head -->
+    <path d="M 915,210 C 900,185 910,145 935,140 C 955,135 975,135 990,140 C 1015,145 1025,185 1010,210 C 1025,225 1020,260 1000,265 C 990,268 980,260 975,250 C 945,255 930,245 915,210 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+
+    <!-- White Flowing Beard -->
+    <path d="M 920,225 C 905,260 910,310 935,345 C 950,360 970,360 985,345 C 1010,310 1015,260 1000,225 C 990,245 975,255 960,255 C 945,255 930,245 920,225 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+    <!-- Beard Texture Curls -->
+    <path d="M 945,280 Q 960,305 975,280" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+    <path d="M 935,310 Q 960,335 985,310" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+
+    <!-- White Mustache -->
+    <path d="M 960,223 Q 940,220 924,233 Q 945,242 960,230 Q 975,242 996,233 Q 980,220 960,223 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+
+    <!-- Trainer Whistle in Mouth (Trillerpfeife) -->
+    <g id="petrus-whistle">
+      <!-- Whistle Body -->
+      <rect x="965" y="222" width="16" height="8" rx="2" fill="#e2e8f0" stroke="#475569" stroke-width="1.5" />
+      <circle cx="989" cy="226" r="9.5" fill="url(#steelHammer)" stroke="#334155" stroke-width="2" />
+      <rect x="978" y="220" width="4" height="6" fill="#0f172a" />
+      
+      <!-- Whistle Cord / Lanyard Around Neck -->
+      <path d="M 932,220 Q 920,265 956,285 Q 982,275 986,235" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" />
+
+      <!-- Sound Waves Radiating from Whistle -->
+      <path d="M 1004,217 Q 1012,226 1004,235" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round" />
+      <path d="M 1012,211 Q 1023,226 1012,241" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round" />
+      <path d="M 1021,205 Q 1035,226 1021,247" fill="none" stroke="#facc15" stroke-width="3.5" stroke-linecap="round" />
+    </g>
+
+    <!-- Right Arm (Raised Coaching / Instruction Gestus) -->
+    <g id="petrus-right-arm">
+      <!-- Shoulder to Elbow -->
+      <path d="M 885,270 L 850,225 L 830,175" fill="none" stroke="#ffffff" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 885,270 L 850,225 L 830,175" fill="none" stroke="#cbd5e1" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" opacity="0.3" />
+      <!-- Hand / Pointing Finger -->
+      <circle cx="830" cy="175" r="14" fill="#fed7aa" />
+      <path d="M 830,175 L 830,150" stroke="#fed7aa" stroke-width="9" stroke-linecap="round" />
+    </g>
+
+    <!-- Left Arm Holding Coach Clipboard (Klemmbrett mit Workflow-Playbook) -->
+    <g id="petrus-clipboard">
+      <!-- Arm to Clipboard -->
+      <path d="M 1025,275 Q 1050,320 1045,360" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" />
+      
+      <!-- Wooden Clipboard -->
+      <rect x="1035" y="290" width="115" height="150" rx="8" fill="#92400e" stroke="#78350f" stroke-width="3" transform="rotate(6 1035 290)" />
+      <!-- Metal Clip at Top -->
+      <rect x="1070" y="280" width="45" height="18" rx="4" fill="#94a3b8" stroke="#475569" stroke-width="2" transform="rotate(6 1035 290)" />
+      <!-- White Sheet of Paper on Clipboard -->
+      <rect x="1045" y="302" width="95" height="130" rx="3" fill="#ffffff" transform="rotate(6 1035 290)" />
+      
+      <!-- Workflow Diagram / Drill Playbook on Paper -->
+      <g transform="rotate(6 1035 290)">
+        <!-- Node 1: Trigger (Cyan) -->
+        <rect x="1055" y="325" width="26" height="16" rx="4" fill="#0284c7" />
+        <!-- Connector 1 -->
+        <path d="M 1081,333 L 1098,333" stroke="#64748b" stroke-width="2" stroke-dasharray="2 2" />
+        <polygon points="1098,330 1104,333 1098,336" fill="#64748b" />
+
+        <!-- Node 2: Action / Review (Orange) -->
+        <rect x="1104" y="325" width="26" height="16" rx="4" fill="#ea580c" />
+        
+        <!-- Connector 2 down to Node 3 -->
+        <path d="M 1117,341 L 1117,368 L 1090,368" stroke="#64748b" stroke-width="2" stroke-dasharray="2 2" />
+        <polygon points="1090,365 1084,368 1090,371" fill="#64748b" />
+
+        <!-- Node 3: Output / Control (Green) -->
+        <rect x="1055" y="360" width="28" height="16" rx="4" fill="#16a34a" />
+
+        <!-- Training Checklist Lines -->
+        <line x1="1055" y1="395" x2="1125" y2="395" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="1055" y1="407" x2="1115" y2="407" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="1055" y1="419" x2="1100" y2="419" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+      </g>
+
+      <!-- Coach's Hand Gripping Clipboard -->
+      <circle cx="1040" cy="370" r="13" fill="#fed7aa" />
+    </g>
+
+    <!-- Petrus's Golden Halo -->
+    <ellipse cx="960" cy="130" rx="66" ry="16" fill="none" stroke="url(#goldGrad)" stroke-width="9" filter="url(#goldGlow)" />
+    <ellipse cx="960" cy="130" rx="66" ry="16" fill="none" stroke="#ffffff" stroke-width="2.5" opacity="0.85" />
+  </g>
+
+  <!-- ==================== CHARACTER 2: HAMMER-ENGEL ==================== -->
+  <g id="hammer-angel">
+    <!-- Cloud Floor Shadow -->
+    <ellipse cx="1480" cy="520" rx="85" ry="17" fill="#0284c7" opacity="0.16" />
+
+    <!-- Angel Wings (White feathered wings attached to upper handle) -->
+    <!-- Left Wing -->
+    <g id="hammer-left-wing">
+      <!-- Base Layer -->
+      <path d="M 1435,270 C 1380,240 1310,180 1280,145 C 1270,185 1290,230 1325,260 C 1300,270 1320,310 1360,315 C 1390,320 1420,300 1435,285 Z" fill="url(#wingGrad)" stroke="#cbd5e1" stroke-width="2" />
+      <!-- Feather Details -->
+      <path d="M 1340,195 Q 1380,240 1430,275" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 1325,240 Q 1365,275 1425,290" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 1355,285 Q 1390,305 1430,300" fill="none" stroke="#bae6fd" stroke-width="2" stroke-linecap="round" />
+    </g>
+
+    <!-- Right Wing -->
+    <g id="hammer-right-wing">
+      <!-- Base Layer -->
+      <path d="M 1525,270 C 1580,240 1650,180 1680,145 C 1690,185 1670,230 1635,260 C 1660,270 1640,310 1600,315 C 1570,320 1540,300 1525,285 Z" fill="url(#wingGrad)" stroke="#cbd5e1" stroke-width="2" />
+      <!-- Feather Details -->
+      <path d="M 1620,195 Q 1580,240 1530,275" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 1635,240 Q 1595,275 1535,290" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 1605,285 Q 1570,305 1530,300" fill="none" stroke="#bae6fd" stroke-width="2" stroke-linecap="round" />
+    </g>
+
+    <!-- Wooden Handle (Body) -->
+    <path d="M 1462,235 L 1498,235 L 1500,490 C 1500,505 1460,505 1460,490 Z" fill="url(#woodHandle)" stroke="#78350f" stroke-width="2.5" />
+    <!-- Handle Specular Highlight -->
+    <path d="M 1475,245 L 1485,245 L 1485,490 L 1475,490 Z" fill="#ffffff" opacity="0.3" />
+
+    <!-- Red Athletic Sweatband on Handle -->
+    <rect x="1458" y="365" width="44" height="24" rx="5" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5" />
+    <rect x="1458" y="374" width="44" height="6" fill="#ffffff" />
+
+    <!-- Arms in Overhead Stretch Workout Pose -->
+    <g id="hammer-arms">
+      <!-- Left Arm Reaching High -->
+      <path d="M 1460,330 Q 1420,310 1405,235" fill="none" stroke="#fed7aa" stroke-width="16" stroke-linecap="round" />
+      <!-- Left Wristband -->
+      <rect x="1405" y="240" width="16" height="10" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" transform="rotate(-20 1405 240)" />
+      <!-- Left Hand -->
+      <circle cx="1402" cy="228" r="10" fill="#fed7aa" />
+
+      <!-- Right Arm Reaching High -->
+      <path d="M 1500,330 Q 1540,310 1555,235" fill="none" stroke="#fed7aa" stroke-width="16" stroke-linecap="round" />
+      <!-- Right Wristband -->
+      <rect x="1540" y="240" width="16" height="10" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" transform="rotate(20 1540 240)" />
+      <!-- Right Hand -->
+      <circle cx="1558" cy="228" r="10" fill="#fed7aa" />
+    </g>
+
+    <!-- Hammer Head (The Head of the Character) -->
+    <g id="hammer-head-group">
+      <!-- Steel Head Block -->
+      <!-- Left Striking Face (Cylindrical Bevel) -->
+      <path d="M 1400,185 L 1435,180 L 1435,235 L 1400,230 C 1392,230 1392,185 1400,185 Z" fill="url(#steelHammer)" stroke="#334155" stroke-width="2" />
+      <ellipse cx="1400" cy="207" rx="8" ry="22" fill="#cbd5e1" stroke="#334155" stroke-width="2" />
+
+      <!-- Center Eye Block -->
+      <rect x="1435" y="175" width="70" height="62" rx="6" fill="url(#steelHammer)" stroke="#334155" stroke-width="2" />
+
+      <!-- Right Curved Claw -->
+      <path d="M 1505,178 C 1535,178 1565,190 1580,225 C 1565,220 1545,215 1505,222 Z" fill="url(#steelHammer)" stroke="#334155" stroke-width="2" />
+
+      <!-- Top Wedge / Connection Pin -->
+      <ellipse cx="1470" cy="175" rx="14" ry="5" fill="#475569" />
+
+      <!-- Metallic Highlights -->
+      <line x1="1410" y1="183" x2="1550" y2="183" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+
+      <!-- Friendly Personified Face on Hammer Head -->
+      <g id="hammer-face">
+        <!-- Left Eye (Attentive looking towards Coach Petrus) -->
+        <ellipse cx="1454" cy="204" rx="7" ry="10" fill="#0f172a" />
+        <circle cx="1452" cy="201" r="3" fill="#ffffff" />
+        <circle cx="1456" cy="207" r="1.5" fill="#ffffff" />
+
+        <!-- Right Eye -->
+        <ellipse cx="1482" cy="204" rx="7" ry="10" fill="#0f172a" />
+        <circle cx="1480" cy="201" r="3" fill="#ffffff" />
+        <circle cx="1484" cy="207" r="1.5" fill="#ffffff" />
+
+        <!-- Cheerful Smile -->
+        <path d="M 1458,218 Q 1468,230 1478,218" fill="#f43f5e" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+
+        <!-- Rosy Blushing Cheeks -->
+        <ellipse cx="1445" cy="216" rx="6" ry="4" fill="#f472b6" opacity="0.55" />
+        <ellipse cx="1491" cy="216" rx="6" ry="4" fill="#f472b6" opacity="0.55" />
+      </g>
+    </g>
+
+    <!-- Hammer's Golden Halo -->
+    <ellipse cx="1470" cy="132" rx="58" ry="15" fill="none" stroke="url(#goldGrad)" stroke-width="8" filter="url(#goldGlow)" />
+    <ellipse cx="1470" cy="132" rx="58" ry="15" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.85" />
+  </g>
+
+  <!-- ==================== CHARACTER 3: SICHEL-ENGEL ==================== -->
+  <g id="sickle-angel">
+    <!-- Cloud Floor Shadow -->
+    <ellipse cx="1940" cy="520" rx="85" ry="17" fill="#0284c7" opacity="0.16" />
+
+    <!-- Angel Wings (White feathered wings attached to ferrule / back) -->
+    <!-- Left Wing -->
+    <g id="sickle-left-wing">
+      <!-- Base Layer -->
+      <path d="M 1910,310 C 1860,270 1790,210 1760,175 C 1750,215 1770,260 1805,290 C 1780,300 1800,340 1840,345 C 1870,350 1895,335 1910,320 Z" fill="url(#wingGrad)" stroke="#cbd5e1" stroke-width="2" />
+      <!-- Feathers -->
+      <path d="M 1820,225 Q 1860,270 1905,305" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 1805,270 Q 1845,305 1900,320" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+
+    <!-- Right Wing -->
+    <g id="sickle-right-wing">
+      <!-- Base Layer -->
+      <path d="M 1970,310 C 2020,270 2090,210 2120,175 C 2130,215 2110,260 2075,290 C 2100,300 2080,340 2040,345 C 2010,350 1985,335 1970,320 Z" fill="url(#wingGrad)" stroke="#cbd5e1" stroke-width="2" />
+      <!-- Feathers -->
+      <path d="M 2060,225 Q 2020,270 1975,305" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 2075,270 Q 2035,305 1980,320" fill="none" stroke="#bae6fd" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+
+    <!-- Turned Wooden Handle -->
+    <path d="M 1928,345 C 1924,380 1918,440 1922,490 C 1924,505 1958,505 1960,490 C 1964,440 1958,380 1954,345 Z" fill="url(#woodHandle)" stroke="#78350f" stroke-width="2.5" />
+    <!-- Specular Highlight on Handle -->
+    <path d="M 1938,350 L 1946,350 L 1944,490 L 1938,490 Z" fill="#ffffff" opacity="0.3" />
+
+    <!-- Golden Brass Ferrule / Collar -->
+    <rect x="1924" y="328" width="34" height="18" rx="3" fill="url(#goldGrad)" stroke="#b45309" stroke-width="2" />
+
+    <!-- Red Athletic Sweatband on Handle -->
+    <rect x="1920" y="390" width="42" height="24" rx="5" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5" />
+    <rect x="1920" y="399" width="42" height="6" fill="#ffffff" />
+
+    <!-- Arms in Workout Stretch Pose -->
+    <g id="sickle-arms">
+      <!-- Left Arm Reaching High in Stretch Drill -->
+      <path d="M 1924,350 Q 1870,320 1845,235" fill="none" stroke="#fed7aa" stroke-width="16" stroke-linecap="round" />
+      <!-- Left Wristband -->
+      <rect x="1845" y="240" width="16" height="10" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" transform="rotate(-25 1845 240)" />
+      <!-- Left Hand -->
+      <circle cx="1842" cy="228" r="10" fill="#fed7aa" />
+
+      <!-- Right Arm Placed Confidently on Hip -->
+      <path d="M 1958,355 Q 1995,380 1980,410 Q 1965,415 1954,410" fill="none" stroke="#fed7aa" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Right Wristband -->
+      <rect x="1960" y="405" width="15" height="10" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+    </g>
+
+    <!-- Sickle Blade (Crescent Steel Blade) -->
+    <g id="sickle-blade-group">
+      <!-- Polished Crescent Blade Body -->
+      <path d="M 1941,330 C 1930,290 1880,270 1855,230 C 1830,190 1850,140 1910,135 C 1970,130 2035,160 2045,195 C 2045,195 2005,185 1960,190 C 1915,195 1885,225 1900,265 C 1910,290 1930,315 1941,330 Z" fill="url(#steelSickle)" stroke="#334155" stroke-width="2.5" />
+
+      <!-- Shimmering Sharp Inner Bevel -->
+      <path d="M 1941,330 C 1925,300 1905,275 1900,250 C 1890,215 1915,185 1960,180 C 2000,175 2035,190 2045,195" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8" />
+
+      <!-- Friendly Personified Face on the Sickle Blade -->
+      <g id="sickle-face">
+        <!-- Left Eye (Looking attentively towards Coach Petrus) -->
+        <ellipse cx="1885" cy="222" rx="7" ry="10" fill="#0f172a" />
+        <circle cx="1883" cy="219" r="3" fill="#ffffff" />
+        <circle cx="1887" cy="225" r="1.5" fill="#ffffff" />
+
+        <!-- Right Eye -->
+        <ellipse cx="1912" cy="225" rx="7" ry="10" fill="#0f172a" />
+        <circle cx="1910" cy="222" r="3" fill="#ffffff" />
+        <circle cx="1914" cy="228" r="1.5" fill="#ffffff" />
+
+        <!-- Happy Smile -->
+        <path d="M 1888,238 Q 1899,250 1910,240" fill="#f43f5e" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+
+        <!-- Rosy Blushing Cheeks -->
+        <ellipse cx="1875" cy="232" rx="6" ry="4" fill="#f472b6" opacity="0.55" />
+        <ellipse cx="1922" cy="236" rx="6" ry="4" fill="#f472b6" opacity="0.55" />
+      </g>
+    </g>
+
+    <!-- Sickle's Golden Halo -->
+    <ellipse cx="1940" cy="108" rx="55" ry="14" fill="none" stroke="url(#goldGrad)" stroke-width="8" filter="url(#goldGlow)" />
+    <ellipse cx="1940" cy="108" rx="55" ry="14" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.85" />
+  </g>
+
+  <!-- ==================== FOREGROUND PILLOWY CLOUDS ==================== -->
+  <!-- Bottom Billowing Clouds Carpet -->
+  <g id="foreground-clouds">
+    <!-- Cloud Puff 1 -->
+    <circle cx="200" cy="670" r="160" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 2 -->
+    <circle cx="500" cy="650" r="140" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 3 -->
+    <circle cx="800" cy="660" r="150" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 4 -->
+    <circle cx="1100" cy="650" r="160" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 5 -->
+    <circle cx="1400" cy="670" r="170" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 6 -->
+    <circle cx="1700" cy="650" r="150" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 7 -->
+    <circle cx="2000" cy="660" r="160" fill="url(#cloudGrad1)" />
+    <!-- Cloud Puff 8 -->
+    <circle cx="2300" cy="650" r="170" fill="url(#cloudGrad1)" />
+
+    <!-- Mid Foreground Cloud Wave -->
+    <path d="M 0,590 Q 250,530 500,565 Q 800,520 1100,560 Q 1400,520 1700,555 Q 2050,520 2400,565 L 2400,680 L 0,680 Z" fill="#ffffff" />
+    <path d="M 0,620 Q 300,570 600,600 Q 950,560 1300,600 Q 1650,560 2000,595 Q 2250,570 2400,595 L 2400,680 L 0,680 Z" fill="#ffffff" />
+  </g>
+
+  <!-- Elegant Clean Outer Border -->
+  <rect width="2396" height="676" x="2" y="2" rx="16" fill="none" stroke="#bae6fd" stroke-width="2" opacity="0.6" />
+</svg>
