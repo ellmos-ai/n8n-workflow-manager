@@ -20,8 +20,6 @@ jobs:
     timeout-minutes: 15
     env:
       PYTHONIOENCODING: utf-8
-      N8N_MANAGER_CONFIG_DIR: ${{ runner.temp }}/n8n-manager-config
-      N8N_MANAGER_DATA_DIR: ${{ runner.temp }}/n8n-manager-data
     strategy:
       fail-fast: false
       matrix:
@@ -50,6 +48,9 @@ jobs:
         run: python -m ruff check n8nManager tests
 
       - name: Run tests
+        env:
+          N8N_MANAGER_CONFIG_DIR: ${{ runner.temp }}/n8n-manager-config
+          N8N_MANAGER_DATA_DIR: ${{ runner.temp }}/n8n-manager-data
         run: python -m pytest -ra -v
 
       - name: Security scan
