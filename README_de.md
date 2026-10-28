@@ -2,7 +2,7 @@
 
 # n8n Workflow Manager
 
-**[English version](README.md)** · **Deutsch**
+**[English version](README.md)** · **[Versión en español](README_es.md)** · **Deutsch**
 
 > Lokale Workflow-Durchsicht, visuelle Prüfung, entscheidungsbegründete Bearbeitung, Historie und Multi-Server-Sync für n8n.
 
