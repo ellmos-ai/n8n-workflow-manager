@@ -2,6 +2,8 @@
 
 ## [Unreleased] - 2026-09-18
 
+- French, Simplified Chinese, and Hindi documentation (2026-11-02): complete guides with reciprocal navigation, discovery entries, and source-distribution inclusion across eight languages. Runtime and version unchanged.
+
 - Japanese and Russian documentation (2026-11-02): complete guides, reciprocal five-language navigation, discovery entries, and source-distribution inclusion. Clarified the remote setup label as SSH setup. Runtime and version unchanged.
 
 - Documentation contract correction (2026-11-02): aligned EN/DE/ES and llms.txt with local-only rollback/delete, separate explicit remote push, decision defaults, ordinary SQLite history, and outbound REST/SSH networking. Replaced unsupported competitor claims with project capabilities and corrected the lifecycle diagram. Runtime and version are unchanged. Included all three existing README languages in source distributions and aligned the existing metadata assertion with the checked documentation date.
