@@ -2,6 +2,8 @@
 
 ## [Unreleased] - 2026-09-18
 
+- Spanish documentation (2026-11-02): added a complete Spanish README and reciprocal language navigation; indexed all three README languages in llms.txt and included README_es.md in source distributions. Runtime interfaces remain unchanged.
+
 - **Pfad B Discoverability, Visual Architecture & Navigation Parity**:
   - Embedded visual interface walkthrough with screenshots (`docs/screenshots/dashboard.png` and `docs/screenshots/workflow-viewer.png`) showcasing the Web Dashboard and interactive vis.js Workflow Graph Viewer.
   - Expanded bilingual quick navigation to 17 points with 1:1 anchor parity (`<a id="..."></a>`) in `README.md` and `README_de.md`.

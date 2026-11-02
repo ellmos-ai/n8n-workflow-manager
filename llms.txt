@@ -21,6 +21,12 @@ Good search phrases:
 - AI agent n8n workflow builder
 - ellmos n8n workflow manager
 
+Documentation languages:
+- [English README](README.md)
+- [German README](README_de.md)
+- [Spanish README](README_es.md)
+- README translations do not change the English web UI, CLI, or REST API.
+
 Related projects:
 - https://github.com/ellmos-ai/n8n-manager-mcp - MCP server for AI-powered n8n workflow management.
 - https://github.com/ellmos-ai/ellmos-stack - local AI and automation stack context.
