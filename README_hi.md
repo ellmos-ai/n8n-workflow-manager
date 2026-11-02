@@ -2,7 +2,7 @@
 
 # n8n वर्कफ़्लो मैनेजर
 
-**[English](README.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [日本語](README_ja.md) · [Русский](README_ru.md) · [Français](README_fr.md) · [简体中文](README_zh.md) · [हिन्दी](README_hi.md)**
+**[English](README.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [日本語](README_ja.md) · [Русский](README_ru.md) · [Français](README_fr.md) · [简体中文](README_zh.md) · [हिन्दी](README_hi.md) · [العربية](README_ar.md) · [বাংলা](README_bn.md) · [Português](README_pt.md)**
 
 > n8n के लिए स्थानीय वर्कफ़्लो समीक्षा, दृश्य निरीक्षण, निर्णय-ट्रैकिंग के साथ संपादन, इतिहास और कई सर्वरों के बीच समन्वय।
 

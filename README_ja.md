@@ -2,7 +2,7 @@
 
 # n8n Workflow Manager
 
-**[English](README.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [日本語](README_ja.md) · [Русский](README_ru.md) · [Français](README_fr.md) · [简体中文](README_zh.md) · [हिन्दी](README_hi.md)**
+**[English](README.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [日本語](README_ja.md) · [Русский](README_ru.md) · [Français](README_fr.md) · [简体中文](README_zh.md) · [हिन्दी](README_hi.md) · [العربية](README_ar.md) · [বাংলা](README_bn.md) · [Português](README_pt.md)**
 
 > n8n 向けのローカル優先ワークフロー管理ツールです。ワークフローのレビューと視覚的な確認、判断理由を記録した編集、履歴管理、複数サーバーとの同期を行えます。
 

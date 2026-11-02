@@ -2,6 +2,8 @@
 
 ## [Unreleased] - 2026-09-18
 
+- Arabic, Bengali, and Portuguese documentation (2026-11-02): complete guides, reciprocal navigation, discovery index, and source-distribution inclusion across eleven languages. Runtime and version unchanged.
+
 - French, Simplified Chinese, and Hindi documentation (2026-11-02): complete guides with reciprocal navigation, discovery entries, and source-distribution inclusion across eight languages. Runtime and version unchanged.
 
 - Japanese and Russian documentation (2026-11-02): complete guides, reciprocal five-language navigation, discovery entries, and source-distribution inclusion. Clarified the remote setup label as SSH setup. Runtime and version unchanged.

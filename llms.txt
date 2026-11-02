@@ -30,6 +30,9 @@ Documentation languages:
 - [French README](README_fr.md)
 - [Simplified Chinese README](README_zh.md)
 - [Hindi README](README_hi.md)
+- [Arabic README](README_ar.md)
+- [Bengali README](README_bn.md)
+- [Portuguese README](README_pt.md)
 - README translations do not change the English web UI, CLI, or REST API.
 
 Related projects:
@@ -53,7 +56,7 @@ Architecture & Invariants:
 - Decision history: mutations record non-empty rationales; some creation/import/template/pull paths use defaults. SQLite rows are ordinary local data, not immutable or tamper-proof, and a rationale is not human approval.
 - Local rollback: restores a retained workflow version in the local database only. A separate explicit push updates remote n8n; deletion removes local workflow versions, and history is not a disaster-recovery guarantee.
 - Dual-Mermaid Modeling: high-level architecture diagram and interactive sequence diagram with autonumber.
-- All eight README languages retain their 17-item navigation and section structure.
+- All eleven README languages retain their 17-item navigation and section structure.
 - Visual Interface Walkthrough: bundled screenshots of dashboard and interactive vis.js graph inspector.
 - Target Audience Personas: tailored for sysadmins, AI architects, compliance officers, and SREs.
 - 10-row project capability and boundary table; it makes no competitor product claims.
@@ -61,7 +64,7 @@ Architecture & Invariants:
 
 Notes:
 - This repository is not the n8n project itself. It is a companion manager for imported or connected n8n workflows. It is an independent community project, not affiliated with, endorsed by, or sponsored by n8n GmbH; "n8n" is a trademark of its respective owner.
-- The web UI, CLI, and REST API are English; README documentation is available in the eight languages listed above. The bundled browser library vis-network is third-party code under its own license, see THIRD_PARTY_LICENSES.md.
+- The web UI, CLI, and REST API are English; README documentation is available in the eleven languages listed above. The bundled browser library vis-network is third-party code under its own license, see THIRD_PARTY_LICENSES.md.
 - The FastAPI service binds to 127.0.0.1 by default and can be configured to bind elsewhere. Loopback binding does not block configured n8n REST or SSH connections.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
