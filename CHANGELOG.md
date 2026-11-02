@@ -2,6 +2,8 @@
 
 ## [Unreleased] - 2026-09-18
 
+- Documentation contract correction (2026-11-02): aligned EN/DE/ES and llms.txt with local-only rollback/delete, separate explicit remote push, decision defaults, ordinary SQLite history, and outbound REST/SSH networking. Replaced unsupported competitor claims with project capabilities and corrected the lifecycle diagram. Runtime and version are unchanged. Included all three existing README languages in source distributions and aligned the existing metadata assertion with the checked documentation date.
+
 - Spanish documentation (2026-11-02): added a complete Spanish README and reciprocal language navigation; indexed all three README languages in llms.txt and included README_es.md in source distributions. Runtime interfaces remain unchanged.
 
 - **Pfad B Discoverability, Visual Architecture & Navigation Parity**:

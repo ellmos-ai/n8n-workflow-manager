@@ -26,7 +26,7 @@
 [![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
 
 > [!NOTE]
-> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung. Jede ändernde Mutation verlangt zwingend eine explizite Entscheidungsbegründung (`--decision`), um vollständige Auditierbarkeit zu gewährleisten.
+> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung. Änderungen protokollieren eine nicht leere Entscheidungsbegründung, sind aber keine menschliche Freigabe: Für Erstellen, Build, Import, Vorlagen und Pull gibt es Standardwerte; Update, Rollback, Delete und Push verlangen einen nicht leeren Eingabewert.
 
 ## Navigation
 
@@ -72,37 +72,32 @@ graph TD
 <a id="workflow-lebenszyklus"></a>
 ## Workflow-Lebenszyklus
 
-Das folgende Sequenzdiagramm illustriert, wie Änderungen (wie das Erstellen oder Modifizieren eines Workflows) eine explizite Entscheidungsbegründung erfordern, unveränderliche Snapshots in SQLite speichern, mit Remote-Servern synchronisieren und ein deterministisches Rollback ermöglichen.
+Die Abfolge trennt lokales Rollback und entfernte Synchronisierung. Ein Rollback spielt eine gespeicherte SQLite-Version zurück und protokolliert die angegebene Begründung. Es ändert nur die lokale Datenbank; um den Stand an n8n zu senden, ist ein separater Push nötig.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as "Operator / KI-Agent (MCP)"
-    participant API as "FastAPI-Gateway (127.0.0.1:8100)"
-    participant Engine as "n8nManager Engine"
-    participant SQLite as "SQLite Historie-DB"
-    participant n8n as "Remote n8n-API"
+    actor User as "Operator / AI Agent (MCP)"
+    participant API as "FastAPI Application (127.0.0.1:8100)"
+    participant SQLite as "Local SQLite History DB"
+    participant n8n as "Configured Remote n8n API"
 
-    Note over User,n8n: "1. Entscheidungsbegründete Änderung & Sync-Push"
-    User->>API: "POST /api/workflows/build (Name, Nodes, Decision)"
-    API->>Engine: "Validiere Workflow-Graph & Payload"
-    Engine->>SQLite: "Erfasse Revisions-Snapshot & Entscheidungsbegründung"
-    SQLite-->>Engine: "Gespeichert als Version N"
-    Engine->>n8n: "Sync Push Workflow (Öffentliche REST-API)"
-    n8n-->>Engine: "HTTP 200 OK (Remote Workflow-ID)"
-    Engine-->>API: "Erfolgsquittung & Aktualisierte Version"
-    API-->>User: "JSON-Status (ID, Version, Audit-Hash)"
-
-    Note over User,n8n: "2. Sicherer Rollback-Ablauf"
-    User->>API: "POST /api/workflows/{id}/rollback (Zielversion, Decision)"
-    API->>Engine: "Lade Snapshot der Zielversion"
-    Engine->>SQLite: "Frage Historie-Snapshot ab (Version K)"
-    SQLite-->>Engine: "Historisches Workflow-JSON-Payload"
-    Engine->>SQLite: "Protokolliere Rollback-Ereignis im Audit-Trail"
-    Engine->>n8n: "Übertrage wiederhergestellten Zustand an Server"
-    n8n-->>Engine: "HTTP 200 OK (Aktiver Zustand wiederhergestellt)"
-    Engine-->>API: "Rollback bestätigt"
-    API-->>User: "Wiederherstellungsquittung"
+    Note over User,SQLite: "1. Local Rollback (No Remote Call)"
+    User->>API: "POST /api/workflows/{workflow_id}/rollback/{version_number} (Decision)"
+    API->>SQLite: "Read retained target version"
+    SQLite-->>API: "Stored workflow JSON"
+    API->>SQLite: "Update local workflow; record version and decision"
+    SQLite-->>API: "Local transaction committed"
+    API-->>User: "Rollback response (message, history URL)"
+    Note over User,n8n: "Remote n8n remains unchanged after rollback"
+    Note over User,n8n: "2. Separate Explicit Push (Optional)"
+    User->>API: "POST /api/export/{workflow_id}/to-server?decision=...&server_id=..."
+    API->>SQLite: "Read local workflow and remote binding"
+    SQLite-->>API: "Workflow JSON and binding (if any)"
+    API->>n8n: "Create or update via n8n REST API"
+    n8n-->>API: "Remote result (success or error)"
+    API->>SQLite: "Record sync result; update binding on success"
+    API-->>User: "Push response"
 ```
 
 ---
@@ -110,18 +105,18 @@ sequenceDiagram
 <a id="governance-und-laufzeit-invarianten"></a>
 ## Governance- & Laufzeit-Invarianten
 
-| # | Invariante | Beschreibung | Durchsetzungs-Mechanismus |
+| Nr. | Funktion / Richtlinie | Verhalten des Projekts | Grenze |
 |---|---|---|---|
-| 1 | **100% Local-First & Null Telemetrie** | Vollständige Ausführung auf Loopback `127.0.0.1` ohne externe Tracking- oder Telemetriesignale. | FastAPI Host-Bindung & Test-Suite |
-| 2 | **Pflicht-Entscheidungsaudit** | Jede zustandsändernde Operation (`import`, `build`, `push`, `rollback`, `delete`) verlangt eine Begründung (`--decision`). | CLI-Prüfung & REST-Validierung |
-| 3 | **SQLite Ereignis- & Snapshot-Ledger** | Vollständige JSON-Snapshots aller Versionen werden dauerhaft und unveränderlich in SQLite geführt. | `n8nManager.core.database`-Schema |
-| 4 | **Deterministische Rollback-Garantie** | Jeder frühere Versionsstand kann verlustfrei geprüft und restauriert werden. | `/api/workflows/{id}/rollback` & CLI `rollback` |
-| 5 | **Keine Administratorrechte** | Läuft vollständig im Benutzerkontext (RunAsInvoker); unprivilegierter Benutzer im Docker-Container. | User-Space & Docker `USER appuser` |
-| 6 | **Plattform-Pfadparität** | Verwendet native Konfigurations- und Datenpfade unter Windows, macOS und Linux. | Platformdirs-Auflösung |
-| 7 | **API-Schlüssel-Maskierung** | Sensible Server-Token werden in UI und API maskiert und nur in lokalen Benutzerdaten gehalten. | Serialisierungs-Maskierung |
-| 8 | **Lokale Offline-Bibliotheken** | Frontend-Komponenten (vis-network 10.1.0) sind lokal gebündelt für uneingeschränkten Offline-Betrieb. | Statisch eingebettete vis-network Assets |
-| 9 | **Agenten- & MCP-Interoperabilität** | Nahtlose Kopplung mit `n8n-manager-mcp` für autonome KI-Steuerung bei voller menschlicher Nachvollziehbarkeit. | REST-Verträge & `llms.txt` |
-| 10 | **48-Stunden Sicherheits-SLA** | Koordinierte Schwachstellenbehandlung und schnelle Patches im ellmos-ai- & open-bricks-Verbund. | [SECURITY.md](SECURITY.md)-Richtlinie |
+| 1 | **Local-First-Standard** | Der Dienst bindet standardmäßig an 127.0.0.1. | Konfigurierte n8n-Verbindungen nutzen REST; die entfernte Einrichtung nutzt SSH. Das garantiert nicht, dass keinerlei Daten nach außen gehen. |
+| 2 | **Entscheidungsprotokolle** | Workflow-Änderungen speichern eine nicht leere Begründung. | Für Erstellen, Build, Import, Vorlage und Pull gibt es Standardwerte; Update, Rollback, Delete und Push verlangen einen nicht leeren Eingabewert. Eine Begründung protokolliert Absicht, ist aber keine menschliche Freigabe. |
+| 3 | **SQLite-Historie** | Workflow-Versionen und Entscheidungszeilen werden in SQLite gespeichert. | Es sind normale lokale Datenbankeinträge, nicht unveränderlich oder manipulationssicher. Beim Löschen eines Workflows werden seine Versionen entfernt. |
+| 4 | **Rollback** | Eine gespeicherte Version kann in den lokalen Workflow-Datensatz zurückgespielt werden. | Das Rollback ändert den entfernten n8n-Workflow nicht. Push ist separat; die Historie garantiert keine Wiederherstellung nach Datenverlust. |
+| 5 | **n8n-Synchronisierung** | Workflow-bezogener Pull und Push nutzen die n8n-REST-API. | Ein konfigurierter Server und Netzwerkzugriff sind erforderlich; Push erfolgt ausdrücklich. |
+| 6 | **Ressourcen zur visuellen Prüfung** | Die vis-network-Browserbibliothek ist lokal eingebunden. | Dadurch entfällt ein CDN-Abruf dieser Bibliothek; Remote-Sync benötigt weiterhin Netzwerkzugriff. |
+| 7 | **Umgang mit API-Schlüsseln** | Registrierte n8n-Schlüssel liegen in lokalen Benutzerdaten und werden in API/UI-Antworten maskiert. | Schlüssel werden unverschlüsselt gespeichert; das Benutzerdatenverzeichnis ist wie in SECURITY.md beschrieben zu schützen. |
+| 8 | **Schnittstellen** | Das Projekt bietet Browser-UI, REST-API und CLI; ein MCP-Begleiter wird separat gepflegt. | Der Begleiter nutzt die API dieses Projekts und ändert das beschriebene Verhalten lokal/remote nicht. |
+| 9 | **Rechte** | Anwendung und Docker-Image sind für den Betrieb ohne erhöhte Rechte ausgelegt. | Dies beschreibt die dokumentierte Laufzeitkonfiguration. |
+| 10 | **Richtlinie zur Sicherheitsreaktion** | SECURITY.md sagt eine Erstreaktion innerhalb von 48 Stunden und eine Triage innerhalb von fünf Werktagen zu. | Richtlinienzusage, keine Laufzeitgarantie und keine Zusage für einen Patch innerhalb von 48 Stunden. |
 
 ---
 
@@ -141,35 +136,35 @@ Die browserbasierte Benutzeroberfläche ermöglicht interaktive Workflow-Inspekt
 <a id="zielgruppen-personas-und-seo"></a>
 ## Zielgruppen-Personas & SEO
 
-n8n Workflow Manager wurde gezielt für technische Teams, Administratoren und KI-Agenten entwickelt, die strenge Governance über Automatisierungs-Workflows benötigen:
+n8n Workflow Manager richtet sich an technische Teams, Betreiber und KI-Agenten, die n8n-Workflows mit lokaler Entscheidungs- und Versionshistorie prüfen, dokumentieren, bearbeiten und synchronisieren müssen:
 
-- **`[PERSONA-01]` Workflow-Automatisierungs-Ingenieure & Sysadmins**: Betreiber vielschichtiger n8n-Instanzen über Staging, Testing und Produktion, die Server-Synchronisation, visuelle Graph-Prüfung und Zero-Data-Egress verlangen.
-- **`[PERSONA-02]` KI-Agenten-Architekten & MCP-Integratoren**: Teams, die LLMs (über `n8n-manager-mcp`) zur autonomen Workflow-Erstellung einsetzen, abgesichert durch verbindliche Entscheidungsbegründungen (`--decision`).
-- **`[PERSONA-03]` Sicherheits- & Compliance-Beauftragte**: Auditoren, die unveränderliche SQLite-Historien, automatische Credential-Maskierung, offline bereitgestellte Frontend-Assets und strikte Non-Elevation (`RunAsInvoker`) voraussetzen.
-- **`[PERSONA-04]` DevOps & Site Reliability Engineers (SRE)**: Infrastruktur-Teams, die gepinnte Container-Images (`docker-compose.yml`), automatisierte Backups, cursor-paginierte REST-APIs und deterministisches Rollback benötigen.
+- **`[PERSONA-01]` Workflow-Automatisierungs-Ingenieure & Sysadmins**: Betreiber von n8n-Instanzen in Staging, Test und Produktion, die lokale Workflow-Prüfung, visuelle Inspektion und serverbezogene Synchronisierung benötigen.
+- **`[PERSONA-02]` KI-Agenten-Architekten & MCP-Integratoren**: Teams, die LLMs über n8n-manager-mcp zum Erstellen oder Ändern von Workflows einsetzen. Der Manager protokolliert eine Begründung; einige Wege nutzen Standardwerte, und eine Begründung ist keine menschliche Freigabe.
+- **`[PERSONA-03]` Sicherheits- & Compliance-Beauftragte**: Teams, die eine lokale SQLite-Versions- und Entscheidungshistorie, maskierte API-Schlüssel in Antworten, lokal gebündelte Frontend-Assets und einen Betrieb ohne erhöhte Rechte benötigen. Die SQLite-Historie ist weder unveränderlich noch manipulationssicher.
+- **`[PERSONA-04]` DevOps & Site Reliability Engineers (SRE)**: Teams, die REST-API, serverbezogenen Sync und lokales Rollback aus gespeicherten Versionen nutzen. Für Notfallwiederherstellung sind unabhängige Backups nötig; die Workflow-Historie ist keine Backup-Garantie.
 
 #### High-Intent SEO-Suchphrasen & Auffindbarkeit
-- `lokaler n8n workflow manager`, `visueller n8n graph viewer`, `n8n multi-server synchronisation`, `entscheidungsbegruendete workflow automation`, `n8n mcp server integration`, `local-first n8n rollback`, `vis.js n8n editor`, `fastapi n8n steuerung`, `offline n8n dokumentation export`.
+- `lokaler n8n workflow manager`, `visueller n8n graph viewer`, `n8n multi-server synchronisation`, `entscheidungsbegründete workflow automation`, `n8n mcp server integration`, `local-first n8n rollback`, `vis.js n8n editor`, `fastapi n8n steuerung`, `offline n8n dokumentation export`
 
 ---
 
 <a id="vergleichsmatrix"></a>
 ## Architektur- & Funktionsvergleich
 
-Technischer Vergleich von `n8n-workflow-manager` mit gängigen Betriebs- und Verwaltungsansätzen entlang von 10 zentralen Kriterien:
+Projektfähigkeiten und Grenzen. Diese Tabelle enthält keine unbelegten Vergleiche mit anderen Produkten.
 
-| Dimension / Kriterium | Native n8n Web-UI | Reine Git-JSON-Commits | Generische REST-Tools (Postman) | n8n Workflow Manager |
-|:---|:---:|:---:|:---:|:---:|
-| **1. Local-First Ausführung (`127.0.0.1`)** | Server-abhängig | Nicht zutreffend | Lokal | **Ja (Standard Loopback)** |
-| **2. Verbindliche Entscheidungsbegründung** | Nein | Optionale Commit-Message | Nein | **Erzwungen (`--decision`)** |
-| **3. Unveränderliches SQLite-Revisionsbuch** | Nur interne Server-DB | Nur Git-Historie | Nein | **Dedizierte JSON-Snapshots** |
-| **4. Visueller Graph-Viewer (Offline vis.js)** | Online-Browser | Nein | Nein | **Ja (Offline gebündelt)** |
-| **5. Deterministisches Ein-Klick-Rollback** | Manueller JSON-Import | `git checkout` | Manuelle Payload | **Ja (CLI / REST-API)** |
-| **6. Multi-Server Sync & Cursor-Paginierung** | Nur Enterprise-Cloud | Manuell | Manuelle Skripte | **Integriert (Pull/Push)** |
-| **7. Native KI-Agenten-Kopplung (MCP)** | Nein | Nein | Nein | **Ja (`n8n-manager-mcp`)** |
-| **8. Non-Elevation Sicherheit (`RunAsInvoker`)** | Server-Kontext | Nicht zutreffend | User-Space | **Erzwungen (`RunAsInvoker`)** |
-| **9. Plattformparität (Win/macOS/Linux)** | Nur Web | CLI | Desktop | **Vollständige Pfad-Auflösung** |
-| **10. 48h Sicherheits-Reaktions-SLA** | Hersteller-SLA | Community | Nicht zutreffend | **Verbindlich zugesichert** |
+| Nr. | Funktion / Richtlinie | Verhalten des Projekts | Grenze |
+|---|---|---|---|
+| 1 | **Local-First-Standard** | Der Dienst bindet standardmäßig an 127.0.0.1. | Konfigurierte n8n-Verbindungen nutzen REST; die entfernte Einrichtung nutzt SSH. Das garantiert nicht, dass keinerlei Daten nach außen gehen. |
+| 2 | **Entscheidungsprotokolle** | Workflow-Änderungen speichern eine nicht leere Begründung. | Für Erstellen, Build, Import, Vorlage und Pull gibt es Standardwerte; Update, Rollback, Delete und Push verlangen einen nicht leeren Eingabewert. Eine Begründung protokolliert Absicht, ist aber keine menschliche Freigabe. |
+| 3 | **SQLite-Historie** | Workflow-Versionen und Entscheidungszeilen werden in SQLite gespeichert. | Es sind normale lokale Datenbankeinträge, nicht unveränderlich oder manipulationssicher. Beim Löschen eines Workflows werden seine Versionen entfernt. |
+| 4 | **Rollback** | Eine gespeicherte Version kann in den lokalen Workflow-Datensatz zurückgespielt werden. | Das Rollback ändert den entfernten n8n-Workflow nicht. Push ist separat; die Historie garantiert keine Wiederherstellung nach Datenverlust. |
+| 5 | **n8n-Synchronisierung** | Workflow-bezogener Pull und Push nutzen die n8n-REST-API. | Ein konfigurierter Server und Netzwerkzugriff sind erforderlich; Push erfolgt ausdrücklich. |
+| 6 | **Ressourcen zur visuellen Prüfung** | Die vis-network-Browserbibliothek ist lokal eingebunden. | Dadurch entfällt ein CDN-Abruf dieser Bibliothek; Remote-Sync benötigt weiterhin Netzwerkzugriff. |
+| 7 | **Umgang mit API-Schlüsseln** | Registrierte n8n-Schlüssel liegen in lokalen Benutzerdaten und werden in API/UI-Antworten maskiert. | Schlüssel werden unverschlüsselt gespeichert; das Benutzerdatenverzeichnis ist wie in SECURITY.md beschrieben zu schützen. |
+| 8 | **Schnittstellen** | Das Projekt bietet Browser-UI, REST-API und CLI; ein MCP-Begleiter wird separat gepflegt. | Der Begleiter nutzt die API dieses Projekts und ändert das beschriebene Verhalten lokal/remote nicht. |
+| 9 | **Rechte** | Anwendung und Docker-Image sind für den Betrieb ohne erhöhte Rechte ausgelegt. | Dies beschreibt die dokumentierte Laufzeitkonfiguration. |
+| 10 | **Richtlinie zur Sicherheitsreaktion** | SECURITY.md sagt eine Erstreaktion innerhalb von 48 Stunden und eine Triage innerhalb von fünf Werktagen zu. | Richtlinienzusage, keine Laufzeitgarantie und keine Zusage für einen Patch innerhalb von 48 Stunden. |
 
 ---
 
@@ -177,8 +172,8 @@ Technischer Vergleich von `n8n-workflow-manager` mit gängigen Betriebs- und Ver
 ## Funktionen
 
 - Visueller Graph-Viewer und funktionsfähiger Browser-Editor für n8n-Workflow-JSON.
-- SQLite-basierte Versionshistorie und Entscheidungsprotokoll für jede Änderung.
-- Rollback über REST API oder CLI.
+- SQLite-Versionshistorie und protokollierte Entscheidungsbegründungen für Workflow-Änderungen; einige Erstellungs- und Importwege verwenden Standardwerte.
+- Lokales Rollback über REST-API oder CLI; um n8n remote zu aktualisieren, ist ein separater Push nötig.
 - Eigene Pull/Push-Bindungen je Workflow und Server über die öffentliche n8n API mit Cursor-Paginierung.
 - Validierter Import, JSON-/Markdown-Export und generische mitgelieferte Vorlagen.
 - FastAPI REST API, Swagger UI und Kommandozeile.
@@ -186,6 +181,8 @@ Technischer Vergleich von `n8n-workflow-manager` mit gängigen Betriebs- und Ver
 Die Anwendung ist lokal ausgerichtet: Sie bindet standardmäßig an `127.0.0.1`
 und speichert Konfiguration sowie Laufzeitdaten in Benutzerverzeichnissen statt
 im installierten Paket oder Quellordner.
+
+Die Loopback-Bindung des Managers verhindert keine ausgehenden Verbindungen zu einem konfigurierten n8n-Server oder SSH-Host.
 
 ### Schnellstart nach Anwendungsfall
 
@@ -195,7 +192,7 @@ im installierten Paket oder Quellordner.
 | **Workflows für Übergaben dokumentieren** | Markdown- / JSON-Export-Engine | `n8n-manager export <id> --format md` |
 | **Multi-Server-Sync (Staging nach Produktion)** | Server-Register & Pull/Push-Engine | `n8n-manager push <id> --decision "Freigegebenen Stand deployen"` |
 | **Autonome KI-Workflow-Generierung** | Builder REST-API & MCP-Server | `POST /api/workflows/build` via `n8n-manager-mcp` |
-| **Sofortiges Rollback & Ausfallsicherheit** | SQLite-Snapshots & REST-Rollback | `n8n-manager rollback <id> <ziel-version> --decision "Defekt rückgängig machen"` |
+| **Gespeicherte lokale Version wiederherstellen** | Lokale Workflow-Historie und Rollback | `n8n-manager rollback <id> <ziel-version> --decision "Defekt rückgängig machen"` (n8n remote bleibt unverändert; Push bei Bedarf separat ausführen) |
 | **Zero-Config Remote-n8n-Installation** | Automatisierter SSH-Setup-Befehl | `n8n-manager setup --host <server> --user <deploy>` |
 
 ---
@@ -226,15 +223,16 @@ python -m pytest -q
 ## CLI-Beispiele
 
 > [!WARNING]
-> `push`, `rollback` und `delete` verändern oder löschen Workflows **auf dem
-> verbundenen n8n-Server**, nicht nur in der lokalen Datenbank. Richte sie nur
-> dann auf eine Produktivinstanz, wenn klar ist, welcher Server der Standard ist
-> (`n8n-manager status`). Mit `servers --add` hinterlegte API-Schlüssel werden
-> **unverschlüsselt** im Benutzerdatenverzeichnis abgelegt; schütze dieses
-> Verzeichnis wie einen SSH-Schlüssel. Siehe [SECURITY.md](SECURITY.md).
+> push sendet den lokalen Workflow an den konfigurierten n8n-Server. rollback
+> ändert nur die lokale Datenbank. delete entfernt den lokalen Workflow, seine
+> Versionshistorie und lokalen Serverbindungen; es sendet keine Löschanfrage an
+> n8n. Um einen lokal zurückgespielten Stand an n8n zu senden, ist ein separater
+> push nötig. Prüfe vor einem Push in Produktion den Standardserver mit
+> n8n-manager status. Mit servers --add registrierte API-Schlüssel werden
+> unverschlüsselt im Benutzerdatenverzeichnis gespeichert; schütze es wie einen
+> SSH-Schlüssel. Siehe [SECURITY.md](SECURITY.md).
 
-Änderungen, die Zustand ersetzen oder entfernen, verlangen eine kurze
-Begründung. Sie wird in der Workflow-Historie gespeichert.
+Für Erstellen, Build, Import, Vorlagen und Pull können nicht leere Standardbegründungen gespeichert werden. Update, Rollback, Delete und Push verlangen eine nicht leere Begründung vom Aufrufer. Eine Entscheidung protokolliert die angegebene Absicht, sie ist keine menschliche Freigabe.
 
 ```bash
 n8n-manager import workflow.json --decision "Geprüften Kundenworkflow importieren"
@@ -335,9 +333,7 @@ SSH nutzt Batch-Modus und `StrictHostKeyChecking=accept-new`. Für einen
 [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp) sind als Paar
 gedacht: Der MCP-Server bildet die KI-Aktionsschicht; dieses Projekt ist die
 Zustands- und Verlaufsschicht für Menschen mit visueller Prüfung,
-Entscheidungsprotokoll, Versionen und Rollback. Ein Client kann zuerst
-`/api/workflows/{id}/history` lesen und anschließend die erforderliche
-Begründung für eine Änderung übermitteln.
+Entscheidungsprotokoll, Versionen und Rollback. Ein Client kann vor einer Änderung die Historie unter `/api/workflows/{id}/history` lesen. Einige Wege setzen eine Standardbegründung; Update, Rollback, Delete und Push verlangen eine nicht leere Begründung des Aufrufers. Entscheidungszeilen protokollieren Absicht und bestätigen keine menschliche Freigabe.
 
 Das maßgebliche Entscheidungsprotokoll liegt hier und ist client-unabhängig. Es
 kann daher MCP, `curl`, CLI und Web-UI gleichermaßen abdecken. Zusätzlicher
@@ -359,7 +355,7 @@ sich anschließend wie mit jedem anderen n8n-Server.
 | Repository | Zweck | Integration |
 |---|---|---|
 | [`ellmos-ai/n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) | MCP-Server für n8n-Workflow-Steuerung | Autonome KI-Aktionsschicht mit Entscheidungsprotokoll |
-| [`ellmos-ai/ellmos-stack`](https://github.com/ellmos-ai/ellmos-stack) | Lokaler KI- & Automations-Stack | Betreibt n8n, Ollama und Chroma per Docker Compose |
+| [`ellmos-ai/ellmos-stack`](https://github.com/ellmos-ai/ellmos-stack) | Lokaler KI- & Automations-Stack | Betreibt n8n, Ollama und KnowledgeDigest per Docker Compose |
 | [`ellmos-ai/ellmos-homebase-mcp`](https://github.com/ellmos-ai/ellmos-homebase-mcp) | Zentrales Wissens- & Gedächtnis-MCP | Sitzungsübergreifendes Gedächtnis und Agentenkoordination |
 | [`ellmos-ai/ellmos-controlcenter-mcp`](https://github.com/ellmos-ai/ellmos-controlcenter-mcp) | Multi-Agenten-Registry & Tool-Orchestrierung | Dynamische Werkzeugbündelung und Routing |
 | [`dev-bricks/automation-master`](https://github.com/dev-bricks/automation-master) | Zentrale Automations- & Task-Überwachung | Systemweite Health-Orchestrierung und Watchdog |

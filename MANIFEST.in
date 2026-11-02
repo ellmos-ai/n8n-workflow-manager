@@ -1,3 +1,5 @@
+include README.md
+include README_de.md
 include README_es.md
 include CHANGELOG.md
 include CONTRIBUTING.md
