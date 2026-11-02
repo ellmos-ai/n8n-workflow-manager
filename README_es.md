@@ -2,7 +2,7 @@
 
 # n8n Workflow Manager
 
-**[English](README.md)** · **[Versión en alemán](README_de.md)** · **Español**
+**[English](README.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [日本語](README_ja.md) · [Русский](README_ru.md)**
 
 > Revisión local de flujos de trabajo, inspección visual, edición con decisiones registradas, historial y sincronización entre varios servidores de n8n.
 
@@ -189,7 +189,7 @@ La vinculación del administrador a loopback no impide conexiones salientes al s
 | **Sincronizar varios servidores (preproducción a producción)** | Registro de servidores y motor Pull/Push | `n8n-manager push <id> --decision "Deploy reviewed changes"` |
 | **Crear flujos de trabajo con un agente de IA** | API REST del creador y servidor MCP | `POST /api/workflows/build` mediante `n8n-manager-mcp` |
 | **Restaurar una versión local conservada** | Historial local del flujo y reversión | `n8n-manager rollback <id> <target-version> --decision "Revert defect"` (n8n remoto no cambia; ejecuta push por separado si hace falta) |
-| **Desplegar n8n remoto sin configuración manual** | Comando de configuración automática por SSH | `n8n-manager setup --host <server> --user <deploy>` |
+| **Configurar n8n remoto mediante SSH** | Comando de configuración automática por SSH | `n8n-manager setup --host <server> --user <deploy>` |
 
 ---
 

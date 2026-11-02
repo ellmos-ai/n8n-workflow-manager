@@ -2,7 +2,7 @@
 
 # n8n Workflow Manager
 
-**[Deutsche Version](README_de.md)** · **[Versión en español](README_es.md)** · **English**
+**[English](README.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [日本語](README_ja.md) · [Русский](README_ru.md)**
 
 > Local-first workflow review, visual inspection, decision-tracked editing, history, and multi-server sync for n8n.
 
@@ -192,7 +192,7 @@ Binding the manager to loopback does not prevent outbound connections to a confi
 | **Multi-Server Sync (Staging to Prod)** | Server Registry & Pull/Push Engine | `n8n-manager push <id> --decision "Deploy reviewed changes"` |
 | **Autonomous AI Workflow Authoring** | Builder REST API & MCP Server | `POST /api/workflows/build` via `n8n-manager-mcp` |
 | **Restore a retained local version** | Local workflow history and rollback | `n8n-manager rollback <id> <target-version> --decision "Revert defect"` (remote n8n remains unchanged; push separately if needed) |
-| **Zero-Config Remote n8n Deployment** | Automated SSH Setup Command | `n8n-manager setup --host <server> --user <deploy>` |
+| **Remote n8n setup via SSH** | Automated SSH Setup Command | `n8n-manager setup --host <server> --user <deploy>` |
 
 ---
 
