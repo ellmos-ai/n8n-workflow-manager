@@ -1,3 +1,6 @@
+include README.md
+include README_de.md
+include README_es.md
 include CHANGELOG.md
 include CONTRIBUTING.md
 include THIRD_PARTY_LICENSES.md
@@ -12,3 +15,11 @@ recursive-include assets *.svg
 recursive-include docs *.md
 recursive-include README *.png
 recursive-include n8nManager/templates *.json
+include README_ja.md
+include README_ru.md
+include README_fr.md
+include README_zh.md
+include README_hi.md
+include README_ar.md
+include README_bn.md
+include README_pt.md

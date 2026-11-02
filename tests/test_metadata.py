@@ -126,7 +126,7 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.assertIn("Pfad B", self.marketing_log_text)
         self.assertIn("PyPI Distribution", self.marketing_log_text)
         self.assertIn("2026-09-18", self.marketing_log_text)
-        self.assertIn("2026-09-18", self.llms_text)
+        self.assertIn("## Last-checked: 2026-11-02", self.llms_text)
         self.assertIn("210+ Pytest", self.llms_text)
 
     def test_readme_visual_screenshots_and_use_case_table(self):
