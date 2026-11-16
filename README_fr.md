@@ -85,7 +85,7 @@ sequenceDiagram
     User->>API: "POST /api/workflows/{workflow_id}/rollback/{version_number} (Decision)"
     API->>SQLite: "Read retained target version"
     SQLite-->>API: "Stored workflow JSON"
-    API->>SQLite: "Update local workflow; record version and decision"
+    API->>SQLite: "Update local workflow — record version and decision"
     SQLite-->>API: "Local transaction committed"
     API-->>User: "Rollback response (message, history URL)"
     Note over User,n8n: "Remote n8n remains unchanged after rollback"
@@ -95,7 +95,7 @@ sequenceDiagram
     SQLite-->>API: "Workflow JSON and binding (if any)"
     API->>n8n: "Create or update via n8n REST API"
     n8n-->>API: "Remote result (success or error)"
-    API->>SQLite: "Record sync result; update binding on success"
+    API->>SQLite: "Record sync result — update binding on success"
     API-->>User: "Push response"
 ```
 
