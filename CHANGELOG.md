@@ -2,6 +2,16 @@
 
 ## [Unreleased] - 2026-09-18
 
+- Arabic, Bengali, and Portuguese documentation (2026-11-02): complete guides, reciprocal navigation, discovery index, and source-distribution inclusion across eleven languages. Runtime and version unchanged.
+
+- French, Simplified Chinese, and Hindi documentation (2026-11-02): complete guides with reciprocal navigation, discovery entries, and source-distribution inclusion across eight languages. Runtime and version unchanged.
+
+- Japanese and Russian documentation (2026-11-02): complete guides, reciprocal five-language navigation, discovery entries, and source-distribution inclusion. Clarified the remote setup label as SSH setup. Runtime and version unchanged.
+
+- Documentation contract correction (2026-11-02): aligned EN/DE/ES and llms.txt with local-only rollback/delete, separate explicit remote push, decision defaults, ordinary SQLite history, and outbound REST/SSH networking. Replaced unsupported competitor claims with project capabilities and corrected the lifecycle diagram. Runtime and version are unchanged. Included all three existing README languages in source distributions and aligned the existing metadata assertion with the checked documentation date.
+
+- Spanish documentation (2026-11-02): added a complete Spanish README and reciprocal language navigation; indexed all three README languages in llms.txt and included README_es.md in source distributions. Runtime interfaces remain unchanged.
+
 - **Pfad B Discoverability, Visual Architecture & Navigation Parity**:
   - Embedded visual interface walkthrough with screenshots (`docs/screenshots/dashboard.png` and `docs/screenshots/workflow-viewer.png`) showcasing the Web Dashboard and interactive vis.js Workflow Graph Viewer.
   - Expanded bilingual quick navigation to 17 points with 1:1 anchor parity (`<a id="..."></a>`) in `README.md` and `README_de.md`.
