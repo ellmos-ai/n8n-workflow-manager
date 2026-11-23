@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability / Sicherheitslücke (Private)
+    url: https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new
+    about: Please report security vulnerabilities privately via GitHub Security Advisories (see SECURITY.md).
+  - name: Documentation & Skill Entry (llms.txt / SKILL.md)
+    url: https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/SKILL.md
+    about: Operational CLI and REST API guide for operators and AI agents.

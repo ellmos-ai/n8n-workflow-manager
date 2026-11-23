@@ -14,7 +14,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Version: 0.2.6](https://img.shields.io/badge/version-0.2.6-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-210%20passed-brightgreen.svg)](tests)
+[![Pytest](https://img.shields.io/badge/pytest-218%20passed-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Local-First](https://img.shields.io/badge/architecture-local--first-blueviolet.svg)](#what-it-does)
@@ -25,7 +25,7 @@
 [![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
 
 > [!NOTE]
-> **AI Agent & LLM Context**: Machine-readable specification and RAG search phrases are indexed in [`llms.txt`](llms.txt). Pairs with [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) for autonomous AI workflow operations with decision tracking. Mutations record a non-empty decision rationale, but this is not a human-approval step: some create, build, import, template, and pull paths provide defaults, while update, rollback, delete, and push require a non-empty caller value.
+> **AI Agent & LLM Context**: Machine-readable specification and RAG search phrases are indexed in [`llms.txt`](llms.txt) (compatibility pointer: [`llm.txt`](llm.txt)) and the operational agent guide in [`SKILL.md`](SKILL.md). Pairs with [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) for autonomous AI workflow operations with decision tracking. Mutations record a non-empty decision rationale, but this is not a human-approval step: some create, build, import, template, and pull paths provide defaults, while update, rollback, delete, and push require a non-empty caller value.
 
 ## Navigation
 
@@ -366,7 +366,7 @@ such as [ctx](https://github.com/ctxrs/ctx) (Apache-2.0).
 <a id="verification"></a>
 ## Verification
 
-The release contract is documented in [RELEASE_GATE.md](RELEASE_GATE.md). The
+The release contract is documented in [RELEASE_GATE.md](RELEASE_GATE.md). See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for contribution workflow and community standards. The
 core local gates are:
 
 ```bash

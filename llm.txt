@@ -1,0 +1,8 @@
+# llm.txt — Compatibility Redirect
+
+Canonical LLM context for **n8n Workflow Manager** is maintained in [`llms.txt`](llms.txt).
+Operational agent usage instructions are maintained in [`SKILL.md`](SKILL.md).
+
+- Canonical index: https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/llms.txt
+- Product skill: https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/SKILL.md
+- API reference: https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/docs/API_REFERENCE.md

@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+- **Repository Hygiene, CI, PEP 621/639 & P-022 Governance (Pfad A, 2026-11-23)**:
+  - Untracked `MARKETING-LOG.txt` via `git rm --cached` and hardened `.gitignore` with `MARKETING-LOG.txt`, `.pytest_temp/`, `.pytest_tmp*/`, `TASKPLAN_*.md`, and multi-host assistant/cache ignores.
+  - Added `CODE_OF_CONDUCT.md` (bilingual EN/DE), `SKILL.md` (P-022 machine-callable product skill), `llm.txt`, expanded bilingual `CONTRIBUTING.md`, and `.github/ISSUE_TEMPLATE/{config.yml,bug_report.md,feature_request.md}`.
+  - Standardized `pyproject.toml` with PEP 639 `license-files`, `Contributing`/`Code of Conduct` URLs, `--strict-markers`, `xfail_strict = true`, `asyncio_default_fixture_loop_scope = "function"`, and `norecursedirs` (without relative `--basetemp`).
+  - Hardened `.github/workflows/tests.yml` with `python -m pip check` and updated `MANIFEST.in`, `llms.txt`, `README*.md` test counts, and contract tests in `tests/test_metadata.py`.
+
 ## [Unreleased] - 2026-09-18
 
 - Arabic, Bengali, and Portuguese documentation (2026-11-02): complete guides, reciprocal navigation, discovery index, and source-distribution inclusion across eleven languages. Runtime and version unchanged.
@@ -33,7 +41,7 @@
   - Added canonical `Changelog` and `Third-Party Licenses` repository URLs under `[project.urls]`.
   - Configured `[tool.pytest.ini_options]` with `addopts = "-ra -v"` for reproducible local and CI test execution.
 - **Multi-Host Sync & Coordination Lock Hygiene**:
-  - Hardened `.gitignore` with bare `LOCK`, `LOCK*.txt`, `LOCK.permissions.json`, and host-specific sync conflicts (`*-ASUS-GEI.*`, `*-WORKSTATION-LG.*`, `*-WORKSTATION.*`, `* (kopie)*`, `* (copy)*`, `.mypy_cache/`, `*~`, `*.log`).
+  - Hardened `.gitignore` with bare `LOCK`, `LOCK*.txt`, `LOCK.permissions.json`, and host-specific sync conflict patterns (`* (kopie)*`, `* (copy)*`, `.mypy_cache/`, `*~`, `*.log`).
 - **Expanded Contract & Governance Test Suite**:
   - Extended `tests/test_metadata.py` with contract tests verifying PEP 621 metadata, CI bytecode compilation gate & Python 3.13 matrix, multi-host conflict `.gitignore` patterns, and 100% test-count parity (expanding test suite from 206 to 210+ tests).
 

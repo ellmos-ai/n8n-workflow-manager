@@ -3,8 +3,10 @@ PLAN.txt
 PLAN_*.txt
 DONE.md
 BEFUNDE.md
+MARKETING-LOG.txt
 LOCK*.txt
 _after-care/
+TASKPLAN_*.md
 
 __pycache__/
 *.py[cod]
@@ -43,10 +45,18 @@ Thumbs.db
 *-ASUS-GEI.*
 *-WORKSTATION-LG.*
 *-WORKSTATION.*
+*-IDEAPAD-GEI.*
+*-MacBook*
 * (kopie)*
 * (copy)*
+Desktop.ini
+ehthumbs.db
 
-# Multi-agent coordination locks
+# Multi-agent & assistant state
+.claude/
+.codex/
+.gemini/
+.agent/
 LOCK
 LOCK.*
 *.lock
@@ -55,6 +65,8 @@ LOCK.permissions.json
 
 # Test, lint, and packaging caches
 .pytest_cache/
+.pytest_temp/
+.pytest_tmp*/
 .ruff_cache/
 .mypy_cache/
 .coverage

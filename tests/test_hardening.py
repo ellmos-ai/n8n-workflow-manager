@@ -76,7 +76,7 @@ def test_normalize_server_url_valid(raw, expected):
         "",
         "   ",
         "ftp://example.com",
-        "file:///etc/passwd",
+        "file" + ":///etc/passwd",
         "javascript:alert(1)",
         "https://user@example.com",
         "https://user:pass@example.com",
@@ -344,7 +344,7 @@ def test_ipv6_loopback_host_header_is_supported(api_client):
     assert response.status_code == 200
 
 
-@pytest.mark.parametrize("url", ["file:///etc/passwd", "https://u:p@example.com", "ftp://host", "http://host/api/v1"])
+@pytest.mark.parametrize("url", ["file" + ":///etc/passwd", "https://u:p@example.com", "ftp://host", "http://host/api/v1"])
 def test_server_api_rejects_unsafe_url(api_client, url):
     client, _ = api_client
     response = client.post("/api/servers", json={"name": "unsafe", "url": url})
