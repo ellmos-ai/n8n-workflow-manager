@@ -54,9 +54,10 @@ an individual is representing the community in public spaces.
 ### Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the project team responsible for enforcement at
-`support@lukasgeiger.com` or `security@ellmos.ai`. All complaints will be
-reviewed and investigated promptly and fairly.
+reported to the project team responsible for enforcement privately via
+[GitHub private vulnerability reporting](https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new)
+(there is currently no monitored mailbox). All complaints will be reviewed and
+investigated promptly and fairly.
 
 ### Attribution
 
@@ -117,9 +118,10 @@ Requests, Diskussionen und zugehörige Kommunikationskanäle) sowie bei der
 
 ### Meldung von Verstößen
 
-Vorfälle können vertraulich per E-Mail an `support@lukasgeiger.com` oder
-`security@ellmos.ai` gemeldet werden. Alle Meldungen werden zeitnah, vertraulich
-und fair geprüft.
+Vorfälle können vertraulich über die
+[private Meldefunktion von GitHub](https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new)
+gemeldet werden (derzeit gibt es kein überwachtes Postfach). Alle Meldungen werden
+zeitnah, vertraulich und fair geprüft.
 
 ### Herkunft
 

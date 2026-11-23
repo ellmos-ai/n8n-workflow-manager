@@ -117,6 +117,15 @@ testpaths = ["tests"]
 xfail_strict = true
 asyncio_default_fixture_loop_scope = "function"
 norecursedirs = [
+    # pytest defaults (a custom list replaces them, so they are repeated here)
+    "*.egg",
+    ".*",
+    "_darcs",
+    "CVS",
+    "node_modules",
+    "venv",
+    "{arch}",
+    # project-specific
     ".git",
     ".pytest_cache",
     ".pytest_temp",

@@ -93,8 +93,7 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.assertIn("0.2.x", self.security_text)
         self.assertIn("48 hours", self.security_text)
         self.assertIn("5 business days", self.security_text)
-        self.assertIn("security@open-bricks.org", self.security_text)
-        self.assertIn("security@ellmos.ai", self.security_text)
+        self.assertIn("security/advisories/new", self.security_text)
         self.assertIn("48 Stunden", self.security_text)
         self.assertIn("5 Werktagen", self.security_text)
 
@@ -147,7 +146,7 @@ class TestMetadataAndDocumentation(unittest.TestCase):
             ).stdout.strip()
             self.assertEqual(tracked, "", "MARKETING-LOG.txt must not be tracked in git")
         self.assertIn("## Last-checked: 2026-11-23", self.llms_text)
-        self.assertIn("218 passed tests", self.llms_text)
+        self.assertIn("219 passed tests", self.llms_text)
 
     def test_readme_visual_screenshots_and_use_case_table(self):
         """Verify screenshots exist on disk and are embedded in both README files alongside use-case quick start."""
@@ -253,7 +252,27 @@ class TestMetadataAndDocumentation(unittest.TestCase):
             self.assertEqual(data["project"]["license"], "MIT")
             pytest_opts = data["tool"]["pytest"]["ini_options"]
             self.assertNotIn("--basetemp", pytest_opts.get("addopts", ""))
-            self.assertIn(".pytest_temp", pytest_opts.get("norecursedirs", []))
+            norecursedirs = pytest_opts.get("norecursedirs", [])
+            for expected in (".*", "build", "dist", "node_modules", "venv", ".pytest_temp"):
+                self.assertIn(expected, norecursedirs, f"Missing norecursedirs entry: {expected}")
+
+    def test_no_undeliverable_contacts_20261123(self):
+        """Reports must use a channel that exists.
+
+        `ellmos.ai` and `open-bricks.org` do not resolve and `lukasgeiger.com` has no
+        mail exchanger (see ellmos-ai/ellmos-homebase-mcp#21); the supported channel
+        is GitHub private vulnerability reporting.
+        """
+        dead = (
+            "security@ellmos.ai",
+            "security@open-bricks.org",
+            "lukas@open-bricks.org",
+            "support@lukasgeiger.com",
+        )
+        for name in ("SECURITY.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "SKILL.md"):
+            text = (ROOT / name).read_text(encoding="utf-8")
+            for address in dead:
+                self.assertNotIn(address, text, f"{name} still advertises {address}")
 
     def test_cli_help_and_version_contract(self):
         """Verify CLI parser exposes all documented subcommands and reports version 0.2.6."""
