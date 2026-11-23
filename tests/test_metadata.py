@@ -1,14 +1,20 @@
 """Metadata, documentation, and contract tests for n8n-workflow-manager."""
 
 import re
+import subprocess
 import unittest
 from pathlib import Path
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python 3.10 fallback
+    tomllib = None
 
 ROOT = Path(__file__).resolve().parent.parent
 
 
 class TestMetadataAndDocumentation(unittest.TestCase):
-    """Contract tests for Pfad B discoverability and repository governance."""
+    """Contract tests for repository hygiene, discoverability, and governance."""
 
     def setUp(self):
         self.pyproject_text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
@@ -20,7 +26,11 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.llms_text = (ROOT / "llms.txt").read_text(encoding="utf-8")
         self.gitignore_text = (ROOT / ".gitignore").read_text(encoding="utf-8")
         self.ci_workflow_text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
-        self.marketing_log_text = (ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+        self.manifest_text = (ROOT / "MANIFEST.in").read_text(encoding="utf-8")
+        self.contributing_text = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        self.coc_text = (ROOT / "CODE_OF_CONDUCT.md").read_text(encoding="utf-8")
+        self.skill_text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.llm_redirect_text = (ROOT / "llm.txt").read_text(encoding="utf-8")
 
     def test_version_parity(self):
         """Verify 0.2.6 version parity across pyproject.toml, __init__.py, changelog and llms.txt."""
@@ -101,33 +111,43 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.assertIn('"3.13"', self.ci_workflow_text)
 
     def test_pep621_packaging_compliance(self):
-        """Verify PEP 621 metadata, OS classifiers, and pytest configuration in pyproject.toml."""
+        """Verify PEP 621/639 metadata, OS classifiers, and pytest configuration in pyproject.toml."""
         self.assertIn('Changelog = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CHANGELOG.md"', self.pyproject_text)
+        self.assertIn('Contributing = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CONTRIBUTING.md"', self.pyproject_text)
+        self.assertIn('"Code of Conduct" = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CODE_OF_CONDUCT.md"', self.pyproject_text)
         self.assertIn('"Third-Party Licenses"', self.pyproject_text)
         self.assertIn('"Operating System :: Microsoft :: Windows"', self.pyproject_text)
         self.assertIn('"Operating System :: POSIX :: Linux"', self.pyproject_text)
         self.assertIn('"Operating System :: MacOS"', self.pyproject_text)
-        self.assertIn('addopts = "-ra -v"', self.pyproject_text)
+        self.assertIn('addopts = "-ra -v --strict-markers"', self.pyproject_text)
 
     def test_gitignore_hardening(self):
-        """Verify .gitignore excludes sync conflicts, locks, and caches."""
+        """Verify .gitignore excludes sync conflicts, locks, marketing logs, and caches."""
+        self.assertIn("MARKETING-LOG.txt", self.gitignore_text)
         self.assertIn("*.sync-conflict-*", self.gitignore_text)
         self.assertIn("LOCK.*", self.gitignore_text)
         self.assertIn("LOCK\n", self.gitignore_text)
         self.assertIn("LOCK*.txt", self.gitignore_text)
         self.assertIn("LOCK.permissions.json", self.gitignore_text)
-        self.assertIn("*-ASUS-GEI.*", self.gitignore_text)
-        self.assertIn("*-WORKSTATION-LG.*", self.gitignore_text)
         self.assertIn(".pytest_cache/", self.gitignore_text)
+        self.assertIn(".pytest_temp/", self.gitignore_text)
+        self.assertIn(".ruff_cache/", self.gitignore_text)
         self.assertIn(".mypy_cache/", self.gitignore_text)
 
-    def test_marketing_log_and_llms_txt_freshness(self):
-        """Verify MARKETING-LOG.txt and llms.txt are complete and up to date."""
-        self.assertIn("Pfad B", self.marketing_log_text)
-        self.assertIn("PyPI Distribution", self.marketing_log_text)
-        self.assertIn("2026-09-18", self.marketing_log_text)
-        self.assertIn("## Last-checked: 2026-11-02", self.llms_text)
-        self.assertIn("210+ Pytest", self.llms_text)
+    def test_marketing_log_untracked_and_llms_txt_freshness(self):
+        """Verify MARKETING-LOG.txt is untracked/ignored and llms.txt reflects current verified state."""
+        self.assertIn("MARKETING-LOG.txt", self.gitignore_text)
+        if (ROOT / ".git").exists():
+            tracked = subprocess.run(
+                ["git", "ls-files", "MARKETING-LOG.txt"],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout.strip()
+            self.assertEqual(tracked, "", "MARKETING-LOG.txt must not be tracked in git")
+        self.assertIn("## Last-checked: 2026-11-23", self.llms_text)
+        self.assertIn("218 passed tests", self.llms_text)
 
     def test_readme_visual_screenshots_and_use_case_table(self):
         """Verify screenshots exist on disk and are embedded in both README files alongside use-case quick start."""
@@ -172,6 +192,100 @@ class TestMetadataAndDocumentation(unittest.TestCase):
         self.assertIn('n8n-manager = "n8nManager.n8n_manager:main"', self.pyproject_text)
         self.assertIn('"fastapi>=0.115,<1"', self.pyproject_text)
         self.assertIn('"pydantic>=2.8,<3"', self.pyproject_text)
+
+    def test_p022_product_skill_and_governance_docs(self):
+        """Verify P-022 SKILL.md, llm.txt, bilingual CONTRIBUTING.md, and CODE_OF_CONDUCT.md."""
+        self.assertIn("name: n8n-workflow-manager", self.skill_text)
+        self.assertIn('version: "0.2.6"', self.skill_text)
+        self.assertIn("n8n-manager status", self.skill_text)
+        self.assertIn("docs/API_REFERENCE.md", self.skill_text)
+        self.assertNotIn("OneDrive", self.skill_text)
+        self.assertNotIn("_Local_DEV", self.skill_text)
+
+        self.assertIn("llms.txt", self.llm_redirect_text)
+        self.assertIn("SKILL.md", self.llm_redirect_text)
+        self.assertIn("SKILL.md", self.llms_text)
+        self.assertIn("SKILL.md", self.readme_en)
+        self.assertIn("SKILL.md", self.readme_de)
+
+        self.assertIn("## English", self.coc_text)
+        self.assertIn("## Deutsch", self.coc_text)
+        self.assertIn("Contributor Covenant", self.coc_text)
+        self.assertIn("## English", self.contributing_text)
+        self.assertIn("## Deutsch", self.contributing_text)
+        self.assertIn("python -m pytest -ra -v", self.contributing_text)
+
+    def test_issue_templates_and_manifest_completeness(self):
+        """Verify GitHub issue templates and MANIFEST.in sdist inclusions."""
+        template_dir = ROOT / ".github" / "ISSUE_TEMPLATE"
+        config_yml = (template_dir / "config.yml").read_text(encoding="utf-8")
+        bug_tpl = (template_dir / "bug_report.md").read_text(encoding="utf-8")
+        feat_tpl = (template_dir / "feature_request.md").read_text(encoding="utf-8")
+
+        self.assertIn("blank_issues_enabled: false", config_yml)
+        self.assertIn("security/advisories/new", config_yml)
+        self.assertIn("labels: bug", bug_tpl)
+        self.assertIn("labels: enhancement", feat_tpl)
+
+        for required_include in [
+            "CODE_OF_CONDUCT.md",
+            "CONTRIBUTING.md",
+            "SKILL.md",
+            "llm.txt",
+            "llms.txt",
+            "SECURITY.md",
+        ]:
+            self.assertIn(f"include {required_include}", self.manifest_text)
+
+    def test_pep639_and_pytest_basetemp_hygiene(self):
+        """Verify PEP 639 license-files without OSI license classifier and no relative --basetemp."""
+        self.assertNotIn("License :: OSI Approved", self.pyproject_text)
+        self.assertNotIn("--basetemp", self.pyproject_text)
+        self.assertIn('license = "MIT"', self.pyproject_text)
+        self.assertIn('license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md"]', self.pyproject_text)
+        self.assertIn('asyncio_default_fixture_loop_scope = "function"', self.pyproject_text)
+        self.assertIn("xfail_strict = true", self.pyproject_text)
+        self.assertIn('".pytest_temp"', self.pyproject_text)
+
+        if tomllib is not None:
+            data = tomllib.loads(self.pyproject_text)
+            self.assertEqual(data["project"]["version"], "0.2.6")
+            self.assertEqual(data["project"]["license"], "MIT")
+            pytest_opts = data["tool"]["pytest"]["ini_options"]
+            self.assertNotIn("--basetemp", pytest_opts.get("addopts", ""))
+            self.assertIn(".pytest_temp", pytest_opts.get("norecursedirs", []))
+
+    def test_cli_help_and_version_contract(self):
+        """Verify CLI parser exposes all documented subcommands and reports version 0.2.6."""
+        from n8nManager.n8n_manager import build_parser
+
+        parser = build_parser()
+        help_text = parser.format_help()
+        for subcommand in [
+            "list",
+            "import",
+            "export",
+            "push",
+            "pull",
+            "history",
+            "rollback",
+            "status",
+            "servers",
+            "config",
+            "serve",
+            "setup",
+        ]:
+            self.assertIn(subcommand, help_text)
+
+    def test_ci_workflow_pip_check_and_permissions(self):
+        """Verify CI workflow enforces least-privilege permissions and pip dependency checks."""
+        self.assertIn("contents: read", self.ci_workflow_text)
+        self.assertIn("workflow_dispatch:", self.ci_workflow_text)
+        self.assertIn("python -m pip check", self.ci_workflow_text)
+        self.assertIn("python -m ruff check n8nManager tests", self.ci_workflow_text)
+        self.assertIn("python -m bandit -q -r n8nManager -lll", self.ci_workflow_text)
+        self.assertIn("python -m pip_audit", self.ci_workflow_text)
+        self.assertIn("python -m build", self.ci_workflow_text)
 
 
 if __name__ == "__main__":

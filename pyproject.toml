@@ -8,6 +8,7 @@ version = "0.2.6"
 description = "Local-first n8n workflow manager with visual graph viewer, REST API, CLI, and multi-server sync"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md"]
 requires-python = ">=3.10"
 authors = [
     {name = "Lukas Geiger", email = "lukisch@users.noreply.github.com"}
@@ -77,6 +78,8 @@ Documentation = "https://github.com/ellmos-ai/n8n-workflow-manager#readme"
 Repository = "https://github.com/ellmos-ai/n8n-workflow-manager"
 Issues = "https://github.com/ellmos-ai/n8n-workflow-manager/issues"
 Changelog = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CHANGELOG.md"
+Contributing = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CONTRIBUTING.md"
+"Code of Conduct" = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/CODE_OF_CONDUCT.md"
 "Third-Party Licenses" = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/THIRD_PARTY_LICENSES.md"
 Security = "https://github.com/ellmos-ai/n8n-workflow-manager/blob/main/SECURITY.md"
 "Parent Organization" = "https://github.com/ellmos-ai"
@@ -108,6 +111,18 @@ line-length = 100
 select = ["E4", "E7", "E9", "F"]
 
 [tool.pytest.ini_options]
-addopts = "-ra -v"
+addopts = "-ra -v --strict-markers"
 pythonpath = "."
 testpaths = ["tests"]
+xfail_strict = true
+asyncio_default_fixture_loop_scope = "function"
+norecursedirs = [
+    ".git",
+    ".pytest_cache",
+    ".pytest_temp",
+    ".ruff_cache",
+    ".venv",
+    "build",
+    "dist",
+    "_after-care",
+]

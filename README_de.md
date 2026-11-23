@@ -15,7 +15,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Version: 0.2.6](https://img.shields.io/badge/version-0.2.6-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-210%20bestanden-brightgreen.svg)](tests)
+[![Pytest](https://img.shields.io/badge/pytest-218%20bestanden-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Code-Stil: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Local-First](https://img.shields.io/badge/architektur-local--first-blueviolet.svg)](#funktionen)
@@ -26,7 +26,7 @@
 [![LLM-Ready](https://img.shields.io/badge/LLM--Ready-llms.txt-success.svg)](llms.txt)
 
 > [!NOTE]
-> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung. Änderungen protokollieren eine nicht leere Entscheidungsbegründung, sind aber keine menschliche Freigabe: Für Erstellen, Build, Import, Vorlagen und Pull gibt es Standardwerte; Update, Rollback, Delete und Push verlangen einen nicht leeren Eingabewert.
+> **KI-Agenten & LLM-Kontext**: Maschinenlesbare Spezifikationen und RAG-Suchphrasen sind in [`llms.txt`](llms.txt) (Kompatibilitätsverweis: [`llm.txt`](llm.txt)) sowie als direkt ausführbarer Produkt-Skill in [`SKILL.md`](SKILL.md) indiziert. Ergänzt sich ideal mit [`n8n-manager-mcp`](https://github.com/ellmos-ai/n8n-manager-mcp) für autonome KI-Workflow-Steuerung mit Entscheidungsverfolgung. Änderungen protokollieren eine nicht leere Entscheidungsbegründung, sind aber keine menschliche Freigabe: Für Erstellen, Build, Import, Vorlagen und Pull gibt es Standardwerte; Update, Rollback, Delete und Push verlangen einen nicht leeren Eingabewert.
 
 ## Navigation
 
@@ -367,7 +367,7 @@ sich anschließend wie mit jedem anderen n8n-Server.
 <a id="pruefung"></a>
 ## Prüfung
 
-Der Releasevertrag steht in [RELEASE_GATE.md](RELEASE_GATE.md). Die zentralen
+Der Releasevertrag steht in [RELEASE_GATE.md](RELEASE_GATE.md). Hinweise zu Beiträgen und Verhaltensregeln stehen in [CONTRIBUTING.md](CONTRIBUTING.md) und [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Die zentralen
 lokalen Gates sind:
 
 ```bash

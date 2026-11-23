@@ -42,13 +42,22 @@ Related projects:
 - https://github.com/open-bricks - umbrella ecosystem.
 
 Verification commands:
-- python -m pytest -ra -v (213 passed tests)
+- python -m pytest -ra -v (218 passed tests)
 - python -m compileall -q n8nManager tests
 - python -m ruff check n8nManager tests
 - python -m bandit -q -r n8nManager -lll
+- python -m pip_audit
 - python -m build
 - python -m n8nManager status
 - python -m n8nManager serve --port 8100
+
+Product skill & governance documents:
+- [Product Skill](SKILL.md) - machine-callable CLI and REST API guide for AI agents.
+- [Compatibility Redirect](llm.txt) - points to this canonical file and SKILL.md.
+- [Contributing Guidelines](CONTRIBUTING.md) - development setup and quality gates.
+- [Code of Conduct](CODE_OF_CONDUCT.md) - bilingual community standards.
+- [Security Policy](SECURITY.md) - response SLAs and local data boundaries.
+- [Release Gate](RELEASE_GATE.md) - clean-checkout release checks.
 
 Architecture & Invariants:
 - Local-first default: binds to 127.0.0.1:8100 by default. Configured n8n REST connections and remote setup over SSH use the network; there is no zero-egress guarantee.
@@ -68,6 +77,6 @@ Notes:
 - The FastAPI service binds to 127.0.0.1 by default and can be configured to bind elsewhere. Loopback binding does not block configured n8n REST or SSH connections.
 - The MCP server is maintained separately as n8n-manager-mcp.
 - Search engines may surface ellmos-ai/n8n-manager-mcp or third-party n8n deployment tools first; this repository is the Python dashboard and CLI package for visual inspection, documentation export, and multi-server workflow sync.
-- Verification status: 210+ Pytest unit, integration & contract tests passing (100% green).
+- Verification status: 218 Pytest unit, integration & contract tests passing (100% green).
 
-## Last-checked: 2026-11-02
+## Last-checked: 2026-11-23
