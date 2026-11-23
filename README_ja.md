@@ -13,7 +13,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![バージョン: 0.2.6](https://img.shields.io/badge/version-0.2.6-blue.svg)](pyproject.toml)
 [![ライセンス: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Pytest](https://img.shields.io/badge/pytest-218%20passed-brightgreen.svg)](tests)
+[![Pytest](https://img.shields.io/badge/pytest-219%20passed-brightgreen.svg)](tests)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![コードスタイル: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![ローカル優先](https://img.shields.io/badge/architecture-local--first-blueviolet.svg)](#what-it-does)

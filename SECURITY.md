@@ -22,11 +22,7 @@ If you discover a security vulnerability in **n8n-workflow-manager**, please rep
 
 1. **Do NOT open a public GitHub issue.**
 2. **Preferred Method**: Use GitHub's [Private Vulnerability Reporting](https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new).
-3. **Alternative Email Disclosure**:
-   - `security@open-bricks.org`
-   - `security@ellmos.ai`
-   - `support@lukasgeiger.com`
-   - `lukas@open-bricks.org`
+3. **No e-mail channel**: There is currently no monitored mailbox for security reports. Please use [Report a vulnerability](https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new) instead of e-mail.
 
 ### Response SLA & Coordination Commitment
 
@@ -67,11 +63,7 @@ Wenn Sie eine Sicherheitslücke in **n8n-workflow-manager** entdecken:
 
 1. **Erstellen Sie KEIN öffentliches GitHub-Issue.**
 2. **Bevorzugter Weg**: Nutzen Sie GitHubs [Private Schwachstellenmeldung](https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new).
-3. **Alternative E-Mail-Meldung**:
-   - `security@open-bricks.org`
-   - `security@ellmos.ai`
-   - `support@lukasgeiger.com`
-   - `lukas@open-bricks.org`
+3. **Kein E-Mail-Kanal**: Derzeit gibt es kein überwachtes Postfach für Sicherheitsmeldungen. Bitte nutzen Sie statt E-Mail [Schwachstelle melden](https://github.com/ellmos-ai/n8n-workflow-manager/security/advisories/new).
 
 ### SLA-Zusage & Reaktionszeiten
 

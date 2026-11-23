@@ -6,6 +6,7 @@
   - Untracked `MARKETING-LOG.txt` via `git rm --cached` and hardened `.gitignore` with `MARKETING-LOG.txt`, `.pytest_temp/`, `.pytest_tmp*/`, `TASKPLAN_*.md`, and multi-host assistant/cache ignores.
   - Added `CODE_OF_CONDUCT.md` (bilingual EN/DE), `SKILL.md` (P-022 machine-callable product skill), `llm.txt`, expanded bilingual `CONTRIBUTING.md`, and `.github/ISSUE_TEMPLATE/{config.yml,bug_report.md,feature_request.md}`.
   - Standardized `pyproject.toml` with PEP 639 `license-files`, `Contributing`/`Code of Conduct` URLs, `--strict-markers`, `xfail_strict = true`, `asyncio_default_fixture_loop_scope = "function"`, and `norecursedirs` (without relative `--basetemp`).
+  - Review follow-up: `CODE_OF_CONDUCT.md` and `SECURITY.md` no longer advertise undeliverable addresses (`security@ellmos.ai`, `security@open-bricks.org`, `lukas@open-bricks.org`, `support@lukasgeiger.com`); reports go through GitHub private vulnerability reporting, and a contract test forbids the dead addresses. `norecursedirs` repeats the pytest defaults (`.*`, `venv`, `node_modules`, …), because a custom list replaces them.
   - Hardened `.github/workflows/tests.yml` with `python -m pip check` and updated `MANIFEST.in`, `llms.txt`, `README*.md` test counts, and contract tests in `tests/test_metadata.py`.
 
 ## [Unreleased] - 2026-09-18
